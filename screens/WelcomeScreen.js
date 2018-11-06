@@ -14,7 +14,7 @@ class WelcomeScreen extends Component {
         const { navigate } = navigation
         
         return {
-            tabBarVisible: false
+            tabBarVisible: true
         }
 
     }

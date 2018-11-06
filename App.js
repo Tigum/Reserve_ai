@@ -5,12 +5,13 @@ import { Provider } from 'react-redux'
 
 import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen'
+import LoginScreen from './screens/LoginScreen'
 
 export default class App extends React.Component {
   render() {
     const MainNavigator = createBottomTabNavigator({
-      welcome: WelcomeScreen,
-      // auth: AuthScreen,
+      // welcome: WelcomeScreen,
+      auth: LoginScreen,
       // main: {
       //   screen: createBottomTabNavigator({
       //     map: MapScreen,
