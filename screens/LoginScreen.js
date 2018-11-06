@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Button, SocialIcon } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged } from '../actions'
+import { emailChanged, passwordChanged, loginUser } from '../actions'
+import { Spinner } from '../components/Spinner'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -23,6 +24,49 @@ class LoginScreen extends Component {
         this.props.passwordChanged(text)
     }
 
+    onLoginButtonPress() {
+        const { email, password } = this.props;
+        this.props.loginUser({ email, password })
+    }
+
+    renderButton() {
+        if (this.props.loading) {
+            return <Spinner size='small' />
+        }
+
+        return (
+            <View>
+                <Button
+                    borderRadius={50}
+                    backgroundColor='#0089e3'
+                    style={styles.loginButton}
+                    title='Entrar'
+                    onPress={this.onLoginButtonPress.bind(this)}
+                />
+                <SocialIcon
+                    style={styles.socialIconStyle}
+                    title='Sign In With Facebook'
+                    button
+                    type='facebook'
+                    returnKeyType={"return"}
+                />
+                <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
+            </View>
+        )
+    }
+
+    renderError() {
+        if (this.props.error) {
+            return (
+                <View style={{ backgroundColor: 'white' }}>
+                    <Text style={styles.error}>
+                        {this.props.error}
+                    </Text>
+                </View>
+            )
+        }
+    }
+
     render() {
         return (
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">
@@ -34,7 +78,7 @@ class LoginScreen extends Component {
                     />
                 </View>
                 <View>
-
+                    {this.renderError()}
                     <FormLabel>EMAIL</FormLabel>
 
                     <FormInput onPress={() => this.setState({ emailInputFocus: true })}
@@ -50,20 +94,8 @@ class LoginScreen extends Component {
                         onChangeText={this.onPasswordChange.bind(this)}
                         value={this.props.password}
                     />
-                    <Button
-                        borderRadius={50}
-                        backgroundColor='#0089e3'
-                        style={styles.loginButton}
-                        title='Entrar'
-                    />
-                    <SocialIcon
-                        style={styles.socialIconStyle}
-                        title='Sign In With Facebook'
-                        button
-                        type='facebook'
-                        returnKeyType={"return"}
-                    />
-                    <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
+                    {this.renderButton()}
+
                 </View>
                 {/* </View> */}
 
@@ -100,6 +132,10 @@ const styles = {
         alignSelf: 'center',
         paddingTop: 20,
         textDecorationLine: 'underline'
+    },
+    error: {
+        alignSelf: 'center',
+        color: 'red'
     }
 }
 
@@ -113,4 +149,4 @@ const mapStateToProps = ({ auth }) => {
     }
 }
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged })(LoginScreen);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginScreen);
