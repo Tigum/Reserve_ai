@@ -19,6 +19,12 @@ class WelcomeScreen extends Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.routeName !== nextProps.routeName){
+            this.props.navigation.navigate(nextProps.routeName)
+        }
+    }
+
     render() {
         return (
             <Slides

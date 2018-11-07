@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
+import Slides from './components/Slides'
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -23,8 +24,10 @@ export default class App extends React.Component {
 
   render() {
     const MainNavigator = createBottomTabNavigator({
-      // welcome: WelcomeScreen,
+      
       auth: LoginScreen,
+      welcome: WelcomeScreen,
+      slides: Slides
       // main: {
       //   screen: createBottomTabNavigator({
       //     map: MapScreen,

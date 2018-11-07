@@ -1,10 +1,15 @@
 import firebase from 'firebase';
+import { AsyncStorage } from 'react-native'
+import { Facebook } from 'expo'
 import {
     EMAIL_CHANGED,
     PASSWORD_CHANGED,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
-    LOGIN_USER
+    LOGIN_USER,
+    FACEBOOK_LOGIN_FAIL,
+    FACEBOOK_LOGIN_SUCCESS,
+    FACEBOOK_LOGOUT_SUCCESS
 } from './types';
 
 
@@ -35,6 +40,62 @@ export const loginUser = ({ email, password }) => {
                 //     .catch(() => loginUserFail(dispatch))
             })
     }
+}
+
+export const facebookLogin = () => async (dispatch) => {
+    const token = await AsyncStorage.getItem('fb_token_reserve');
+
+    if (token) {
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        const userName = (await response.json()).name
+        const routeName = 'welcome'
+
+        await facebookLoginSuccess(dispatch, token, userName, routeName)
+    }
+};
+
+export const facebookLogout = () => async (dispatch) => {
+    const token = await AsyncStorage.getItem('fb_token_reserve');
+    if (token) {
+    
+        const routeName = 'auth'
+        await AsyncStorage.setItem('fb_token_reserve', '');
+        facebookLogoutSuccess(dispatch, routeName)
+    }
+};
+
+export const doFacebookLogin = () => async (dispatch) => {
+
+    let { type, token } = await Facebook.logInWithReadPermissionsAsync('361785537896831', {
+        permissions: ['public_profile']
+    });
+
+    if (type === 'cancel') {
+        return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: { token, userName } })
+    }
+    
+    const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+    const userName = (await response.json()).name
+    const routeName = 'welcome'
+
+    await AsyncStorage.setItem('fb_token_reserve', token);
+
+    await facebookLoginSuccess(dispatch, token, userName, routeName)
+
+}
+
+const facebookLoginSuccess = (dispatch, token, userName, routeName) => {
+    dispatch({
+        type: FACEBOOK_LOGIN_SUCCESS,
+        payload: { token, userName, routeName }
+    })
+}
+
+const facebookLogoutSuccess = (dispatch, routeName) => {
+    dispatch({
+        type: FACEBOOK_LOGOUT_SUCCESS,
+        payload: routeName
+    })
 }
 
 const loginUserFail = (dispatch) => {

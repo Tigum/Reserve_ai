@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Button, SocialIcon } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser } from '../actions'
+import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin } from '../actions'
 import { Spinner } from '../components/Spinner'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -13,6 +13,16 @@ class LoginScreen extends Component {
 
         return {
             tabBarVisible: false
+        }
+    }
+    
+    componentDidMount() {
+        this.props.facebookLogin()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.routeName !== nextProps.routeName){
+            this.props.navigation.navigate(nextProps.routeName)
         }
     }
 
@@ -29,9 +39,18 @@ class LoginScreen extends Component {
         this.props.loginUser({ email, password })
     }
 
+    onFacebookButtonPress() {
+        this.props.doFacebookLogin()
+        // this.props.navigation.navigate('welcome')
+    }
+
     renderButton() {
         if (this.props.loading) {
-            return <Spinner size='small' />
+            return (
+                <View style={styles.spinnerView}>
+                    <Spinner />
+                </View>
+            )
         }
 
         return (
@@ -45,10 +64,11 @@ class LoginScreen extends Component {
                 />
                 <SocialIcon
                     style={styles.socialIconStyle}
-                    title='Sign In With Facebook'
+                    title='Entrar com Facebook'
                     button
                     type='facebook'
                     returnKeyType={"return"}
+                    onPress={this.onFacebookButtonPress.bind(this)}
                 />
                 <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
             </View>
@@ -58,7 +78,7 @@ class LoginScreen extends Component {
     renderError() {
         if (this.props.error) {
             return (
-                <View style={{ backgroundColor: 'white' }}>
+                <View style={{ backgroundColor: 'transparent' }}>
                     <Text style={styles.error}>
                         {this.props.error}
                     </Text>
@@ -70,7 +90,6 @@ class LoginScreen extends Component {
     render() {
         return (
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">
-                {/* <View> */}
                 <View style={styles.logoView}>
                     <Image
                         style={styles.logo}
@@ -86,19 +105,20 @@ class LoginScreen extends Component {
                         returnKeyType={"next"}
                         onChangeText={this.onEmailChange.bind(this)}
                         value={this.props.email}
+                        autoCapitalize = 'none'
                     />
 
                     <FormLabel>SENHA</FormLabel>
                     <FormInput
+                        secureTextEntry
                         placeholder='Digite seu password'
                         onChangeText={this.onPasswordChange.bind(this)}
                         value={this.props.password}
+                        autoCapitalize = 'none'
                     />
                     {this.renderButton()}
 
                 </View>
-                {/* </View> */}
-
             </KeyboardAvoidingView>
         )
     }
@@ -135,18 +155,29 @@ const styles = {
     },
     error: {
         alignSelf: 'center',
-        color: 'red'
+        color: 'red',
+        fontSize: 15
+    },
+    spinnerView: {
+        marginTop: 60
     }
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { email, password, error, loading } = auth;
+    const { email, password, error, loading, routeName } = auth;
     return {
         email,
         password,
         error,
-        loading
+        loading,
+        routeName
     }
 }
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginScreen);
+export default connect(mapStateToProps, { 
+    emailChanged, 
+    passwordChanged, 
+    loginUser, 
+    facebookLogin,
+    doFacebookLogin,
+})(LoginScreen);

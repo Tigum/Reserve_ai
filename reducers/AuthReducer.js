@@ -3,7 +3,10 @@ import {
     PASSWORD_CHANGED,
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
-    LOGIN_USER_FAIL
+    LOGIN_USER_FAIL,
+    FACEBOOK_LOGIN_FAIL,
+    FACEBOOK_LOGIN_SUCCESS,
+    FACEBOOK_LOGOUT_SUCCESS
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -11,7 +14,10 @@ const INITIAL_STATE = {
     password: '',
     user: null,
     error: '',
-    loading: false
+    loading: false,
+    token: '',
+    userName: '',
+    routeName: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -27,6 +33,12 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, ...INITIAL_STATE, user: action.payload };
         case LOGIN_USER_FAIL:
             return { ...state, error: 'Login ou senha incorretos', loading: false };
+        case FACEBOOK_LOGIN_SUCCESS:
+            return { ...state, loading: false, error: '', token: action.payload.token, userName: action.payload.userName, routeName: action.payload.routeName };
+        case FACEBOOK_LOGIN_FAIL:
+            return { ...state, error: 'Não foi possível acessar o Facebook. Tente novamente', loading: false };
+        case FACEBOOK_LOGOUT_SUCCESS:
+            return { ...state, ...INITIAL_STATE, routeName: action.payload };
         default:
             return state;
     }

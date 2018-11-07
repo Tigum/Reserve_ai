@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { facebookLogout } from '../actions'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class Slides extends Component {
+    onFacebookLogOut() {
+        console.log('this.props', this.props)
+        this.props.facebookLogout()
+            .then(() => this.props.navigation.navigate('auth'))
+    }
+
     renderSlides() {
         return this.props.data.map((slide) => {
             return (
                 <View key={slide.text} style={[styles.slideStyle, { backgroundColor: slide.color }]}>
                     <Text style={styles.slideText}>{slide.text}</Text>
+                    <Button 
+                        onPress={this.onFacebookLogOut.bind(this)}
+                        title='LOG OUT FACEBOOK'
+                    />
                 </View>
             )
         })
@@ -36,8 +49,15 @@ const styles = {
     slideText: {
         fontSize: 30,
         color: 'white'
-    }
+    },
 
 }
 
-export default Slides;
+const mapStateToProps = ({ auth }) => {
+    const { routeName } = auth;
+    return {
+        routeName
+    }
+}
+
+export default connect(mapStateToProps, { facebookLogout })(Slides);
