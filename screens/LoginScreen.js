@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Image, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Button, SocialIcon } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin } from '../actions'
@@ -15,13 +15,13 @@ class LoginScreen extends Component {
             tabBarVisible: false
         }
     }
-    
+
     componentDidMount() {
         this.props.facebookLogin()
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.routeName !== nextProps.routeName){
+        if (this.props.routeName !== nextProps.routeName) {
             this.props.navigation.navigate(nextProps.routeName)
         }
     }
@@ -54,7 +54,7 @@ class LoginScreen extends Component {
         }
 
         return (
-            <View>
+            <View style={styles.formView}>
                 <Button
                     borderRadius={50}
                     backgroundColor='#0089e3'
@@ -70,7 +70,6 @@ class LoginScreen extends Component {
                     returnKeyType={"return"}
                     onPress={this.onFacebookButtonPress.bind(this)}
                 />
-                <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
             </View>
         )
     }
@@ -85,6 +84,10 @@ class LoginScreen extends Component {
                 </View>
             )
         }
+    }
+
+    onAdminRegisterPress() {
+        this.props.navigation.navigate('adminForm')
     }
 
     render() {
@@ -105,7 +108,7 @@ class LoginScreen extends Component {
                         returnKeyType={"next"}
                         onChangeText={this.onEmailChange.bind(this)}
                         value={this.props.email}
-                        autoCapitalize = 'none'
+                        autoCapitalize='none'
                     />
 
                     <FormLabel>SENHA</FormLabel>
@@ -114,9 +117,22 @@ class LoginScreen extends Component {
                         placeholder='Digite seu password'
                         onChangeText={this.onPasswordChange.bind(this)}
                         value={this.props.password}
-                        autoCapitalize = 'none'
+                        autoCapitalize='none'
                     />
                     {this.renderButton()}
+
+                </View>
+                <View style={styles.registerLinkView}>
+
+                    <TouchableWithoutFeedback>
+                        <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
+                    </TouchableWithoutFeedback>
+
+                    <Text style={styles.registerLink}>ou</Text>
+
+                    <TouchableWithoutFeedback onPress={this.onAdminRegisterPress.bind(this)}>
+                        <Text style={styles.registerLink}>Cadastre-se como profissional!</Text>
+                    </TouchableWithoutFeedback>
 
                 </View>
             </KeyboardAvoidingView>
@@ -128,12 +144,12 @@ const styles = {
     mainView: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         backgroundColor: '#d8edff'
     },
     logoView: {
         width: SCREEN_WIDTH,
-        // paddingBottom: 60
+        paddingTop: 80
     },
     logo: {
         justifyContent: 'center',
@@ -150,8 +166,11 @@ const styles = {
     },
     registerLink: {
         alignSelf: 'center',
-        paddingTop: 20,
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+        fontSize: 17
+    },
+    registerLinkView: {
+        paddingBottom: 20
     },
     error: {
         alignSelf: 'center',
@@ -160,24 +179,28 @@ const styles = {
     },
     spinnerView: {
         marginTop: 60
+    },
+    formView: {
+        paddingBottom: 100
     }
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { email, password, error, loading, routeName } = auth;
+    const { email, password, error, loading, routeName, user } = auth;
     return {
         email,
         password,
         error,
         loading,
-        routeName
+        routeName,
+        user
     }
 }
 
-export default connect(mapStateToProps, { 
-    emailChanged, 
-    passwordChanged, 
-    loginUser, 
+export default connect(mapStateToProps, {
+    emailChanged,
+    passwordChanged,
+    loginUser,
     facebookLogin,
     doFacebookLogin,
 })(LoginScreen);

@@ -8,7 +8,6 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class Slides extends Component {
     onFacebookLogOut() {
-        console.log('this.props', this.props)
         this.props.facebookLogout()
             .then(() => this.props.navigation.navigate('auth'))
     }
@@ -54,9 +53,10 @@ const styles = {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { routeName } = auth;
+    const { routeName, user } = auth;
     return {
-        routeName
+        routeName,
+        user
     }
 }
 

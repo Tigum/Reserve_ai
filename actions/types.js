@@ -7,3 +7,11 @@ export const FACEBOOK_LOGIN_SUCCESS = 'facebook_login_success';
 export const FACEBOOK_LOGIN_FAIL = 'facebook_login_fail';
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
+
+export const NAME_ADMIN_REGISTER_CHANGED = 'name_admin_register_changed'
+export const EMAIL_ADMIN_REGISTER_CHANGED = 'email_admin_register_changed'
+export const COMPANY_NAME_ADMIN_REGISTER_CHANGED = 'company_name_admin_register_changed'
+export const PASSWORD_ADMIN_REGISTER_CHANGED = 'password_admin_register_changed'
+export const PASSWORD_CONFIRMATION_ADMIN_REGISTER_CHANGED = 'password_confirmation_admin_register_changed'
+export const ADMIN_USER_REGISTERED_SUCCESS = 'admin_user_registered_success'
+export const ADMIN_USER_REGISTERED_FAILED = 'admin_user_registered_failed'

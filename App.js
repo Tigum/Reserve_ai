@@ -8,6 +8,7 @@ import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import Slides from './components/Slides'
+import RegisterAdminFormScreen from './screens/RegisterAdminFormScreen'
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -24,22 +25,34 @@ export default class App extends React.Component {
 
   render() {
     const MainNavigator = createBottomTabNavigator({
+
+      auth: {
+
+        screen: createStackNavigator({
+          auth: {
+            screen: LoginScreen,
+            navigationOptions: () => ({
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
+          adminForm: {
+            screen: RegisterAdminFormScreen,
+            navigationOptions: () => ({
+              title: 'Cadastre-se',
+            })
+          },
+          welcome: WelcomeScreen,
+
+        }),
+        navigationOptions: {
+          tabBarVisible: false
+        }
+      },
+
+      slides: Slides,
       
-      auth: LoginScreen,
-      welcome: WelcomeScreen,
-      slides: Slides
-      // main: {
-      //   screen: createBottomTabNavigator({
-      //     map: MapScreen,
-      //     deck: DeckScreen,
-      //     review: {
-      //       screen: createStackNavigator({
-      //         review: ReviewScreen,
-      //         settings: SettingsScreen
-      //       })
-      //     }
-      //   })
-      // }
     });
 
     return (
