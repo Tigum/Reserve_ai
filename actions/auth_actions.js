@@ -11,7 +11,8 @@ import {
     FACEBOOK_LOGIN_SUCCESS,
     FACEBOOK_LOGOUT_SUCCESS,
     AUTH_LOADING_ON,
-    AUTH_LOADING_OFF
+    AUTH_LOADING_OFF,
+    CLEAR_FORM
 } from './types';
 
 
@@ -94,7 +95,7 @@ export const doFacebookLogin = () => async (dispatch) => {
         const user = result.user;
         const name = user.displayName
         const routeName = 'welcome'
-        await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true })
+        await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
     }).catch((err) => {
         console.log(err)
@@ -142,5 +143,11 @@ const authLoadingOff = (dispatch) => {
     dispatch({
         type: AUTH_LOADING_OFF,
         payload: false
+    })
+}
+
+const clearForm = (dispatch) => {
+    dispatch({
+        type: CLEAR_FORM,
     })
 }

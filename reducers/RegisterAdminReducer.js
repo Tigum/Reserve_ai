@@ -8,7 +8,8 @@ import {
     ADMIN_USER_REGISTERED_FAILED,
     PHONE_ADMIN_REGISTER_CHANGED,
     REGISTER_ADMIN_LOADING_ON,
-    REGISTER_ADMIN_LOADING_OFF
+    REGISTER_ADMIN_LOADING_OFF,
+    CLEAR_FORM
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -46,6 +47,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: action.payload };
         case REGISTER_ADMIN_LOADING_OFF:
             return { ...state, loading: action.payload };
+        case CLEAR_FORM:
+            return { ...state, ...INITIAL_STATE };
         default:
             return state;
     }

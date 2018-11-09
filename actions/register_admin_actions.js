@@ -10,7 +10,8 @@ import {
     ADMIN_USER_REGISTERED_FAILED,
     PHONE_ADMIN_REGISTER_CHANGED,
     REGISTER_ADMIN_LOADING_ON,
-    REGISTER_ADMIN_LOADING_OFF
+    REGISTER_ADMIN_LOADING_OFF,
+    CLEAR_FORM
 } from './types';
 
 
@@ -69,10 +70,11 @@ export const registerAdminUser = ({ name, email, companyName, phone, password, p
         await firebase.auth().createUserWithEmailAndPassword(email, password)
         const { currentUser } = await firebase.auth()
         await currentUser.updateProfile({ displayName: name })
-        await firebase.database().ref(`/users/${currentUser.uid}`).set({ name, email, companyName, phone })
+        await firebase.database().ref(`/users/${currentUser.uid}`).set({ name, email, companyName, phone, seenWelcomePage: false, role: 'admin' })
         const user = currentUser
         console.log('user', user)
         await adminUserRegisteredSuccess(dispatch, user)
+        clearForm(dispatch)
         registerAdminLoadingOff(dispatch)
 
     } catch (err) {
@@ -105,4 +107,8 @@ const registerAdminLoadingOff = (dispatch) => {
     })
 }
 
-
+const clearForm = (dispatch) => {
+    dispatch({
+        type: CLEAR_FORM,
+    })
+}

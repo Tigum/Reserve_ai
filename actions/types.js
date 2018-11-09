@@ -9,6 +9,7 @@ export const AUTH_LOADING_ON = 'auth_loading_on'
 export const AUTH_LOADING_OFF = 'auth_loading_off'
 export const REGISTER_ADMIN_LOADING_ON = 'register_admin_loading_on'
 export const REGISTER_ADMIN_LOADING_OFF = 'register_admin_loading_off'
+export const CLEAR_FORM = 'clear_form'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 
