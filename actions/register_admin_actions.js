@@ -8,7 +8,9 @@ import {
     PASSWORD_CONFIRMATION_ADMIN_REGISTER_CHANGED,
     ADMIN_USER_REGISTERED_SUCCESS,
     ADMIN_USER_REGISTERED_FAILED,
-    PHONE_ADMIN_REGISTER_CHANGED
+    PHONE_ADMIN_REGISTER_CHANGED,
+    REGISTER_ADMIN_LOADING_ON,
+    REGISTER_ADMIN_LOADING_OFF
 } from './types';
 
 
@@ -54,38 +56,53 @@ export const phoneAdminChanged = (text) => {
     }
 }
 
-export const registerAdminUser = ({ name, email, companyName, password, passwordConfirmation }) => async (dispatch) => {
+export const registerAdminUser = ({ name, email, companyName, phone, password, passwordConfirmation }) => async (dispatch) => {
     if (!name) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome não informado' })
     if (!email) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'E-mail não informado' })
     if (!companyName) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome do empreendimento não informado' })
+    if (!phone) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Telefone não informado' })
     if (!password || !passwordConfirmation) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Senha ou confirmação de senha não informado' })
     if (password !== passwordConfirmation) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Confirmação de senha incorreta' })
 
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
-
-    const { currentUser } = await firebase.auth()
-
     try {
-        await firebase.database().ref(`/users/${currentUser.uid}`)
-            .on('value', async snapshot => {
+        registerAdminLoadingOn(dispatch)
+        await firebase.auth().createUserWithEmailAndPassword(email, password)
+        const { currentUser } = await firebase.auth()
+        await currentUser.updateProfile({ displayName: name })
+        await firebase.database().ref(`/users/${currentUser.uid}`).set({ name, email, companyName, phone })
+        const user = currentUser
+        console.log('user', user)
+        await adminUserRegisteredSuccess(dispatch, user)
+        registerAdminLoadingOff(dispatch)
 
-                if (snapshot.val()) {
-                    await firebase.database().ref(`/users/${currentUser.uid}`).set({ name, email, companyName })
-                    const user = snapshot.val()
-                    adminUserRegisteredSuccess(dispatch, user)
-                }
-
-            })
-    } catch(err){
+    } catch (err) {
+        registerAdminLoadingOn(dispatch)
         console.log(err)
+        await dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
+        registerAdminLoadingOff(dispatch)
     }
 
 };
 
-const adminUserRegisteredSuccess = ({ dispatch, user }) => {
+const adminUserRegisteredSuccess = (dispatch, user) => {
     dispatch({
         type: ADMIN_USER_REGISTERED_SUCCESS,
         payload: user
     })
 }
+
+const registerAdminLoadingOn = (dispatch) => {
+    dispatch({
+        type: REGISTER_ADMIN_LOADING_ON,
+        payload: true
+    })
+}
+
+const registerAdminLoadingOff = (dispatch) => {
+    dispatch({
+        type: REGISTER_ADMIN_LOADING_OFF,
+        payload: false
+    })
+}
+
 

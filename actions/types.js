@@ -7,6 +7,8 @@ export const FACEBOOK_LOGIN_SUCCESS = 'facebook_login_success';
 export const FACEBOOK_LOGIN_FAIL = 'facebook_login_fail';
 export const AUTH_LOADING_ON = 'auth_loading_on'
 export const AUTH_LOADING_OFF = 'auth_loading_off'
+export const REGISTER_ADMIN_LOADING_ON = 'register_admin_loading_on'
+export const REGISTER_ADMIN_LOADING_OFF = 'register_admin_loading_off'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 

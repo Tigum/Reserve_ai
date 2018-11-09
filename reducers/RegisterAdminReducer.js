@@ -6,7 +6,9 @@ import {
     PASSWORD_CONFIRMATION_ADMIN_REGISTER_CHANGED,
     ADMIN_USER_REGISTERED_SUCCESS,
     ADMIN_USER_REGISTERED_FAILED,
-    PHONE_ADMIN_REGISTER_CHANGED
+    PHONE_ADMIN_REGISTER_CHANGED,
+    REGISTER_ADMIN_LOADING_ON,
+    REGISTER_ADMIN_LOADING_OFF
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -17,7 +19,8 @@ const INITIAL_STATE = {
     password: '',
     passwordConfirmation: '',
     user: null,
-    error: ''
+    error: '',
+    loading: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -39,6 +42,10 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, user: action.payload };
         case ADMIN_USER_REGISTERED_FAILED:
             return { ...state, error: action.payload };
+        case REGISTER_ADMIN_LOADING_ON:
+            return { ...state, loading: action.payload };
+        case REGISTER_ADMIN_LOADING_OFF:
+            return { ...state, loading: action.payload };
         default:
             return state;
     }

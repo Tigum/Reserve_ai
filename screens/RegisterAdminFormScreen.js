@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import {
@@ -11,6 +11,9 @@ import {
     passwordConfirmationAdminChanged,
     registerAdminUser
 } from '../actions'
+import { Spinner } from '../components/Spinner'
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class RegisterAdminFormScreen extends Component {
 
@@ -39,8 +42,8 @@ class RegisterAdminFormScreen extends Component {
     }
 
     onRegisterButtonPress() {
-        const { name, email, companyName, password, passwordConfirmation } = this.props
-        this.props.registerAdminUser({ name, email, companyName, password, passwordConfirmation })
+        const { name, email, companyName, phone, password, passwordConfirmation } = this.props
+        this.props.registerAdminUser({ name, email, companyName, phone, password, passwordConfirmation })
     }
 
     renderError() {
@@ -55,10 +58,19 @@ class RegisterAdminFormScreen extends Component {
         }
     }
 
-    render() {
+    renderContent() {
+        if (this.props.loading) {
+            return (
+                <View style={styles.spinnerView}>
+                    <Spinner />
+                </View>
+            )
+        }
+
         return (
             
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">
+                {this.renderError()}
                 <View>
                     <FormLabel>NOME</FormLabel>
 
@@ -137,17 +149,12 @@ class RegisterAdminFormScreen extends Component {
                     />
                 </View>
 
-                {/* <View>
-                    <Button
-                        borderRadius={50}
-                        backgroundColor='#0089e3'
-                        style={styles.registerButton}
-                        title='Cadastrar'
-                    // onPress={this.onLoginButtonPress.bind(this)}
-                    />
-                </View> */}
             </KeyboardAvoidingView>
         )
+    }
+
+    render() {
+        return this.renderContent()
     }
 }
 
@@ -166,11 +173,19 @@ const styles = {
         fontSize: 20,
         alignSelf: 'center',
         color: 'red'
+    },
+    spinnerView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        backgroundColor: '#d8edff',
+        alignSelf: 'center',
+        width: SCREEN_WIDTH
     }
 }
 
 const mapStateToProps = ({ registerAdmin }) => {
-    const { name, email, companyName, phone, password, passwordConfirmation, user, error } = registerAdmin;
+    const { name, email, companyName, phone, password, passwordConfirmation, user, error, loading } = registerAdmin;
     return {
         name,
         email,
@@ -179,7 +194,8 @@ const mapStateToProps = ({ registerAdmin }) => {
         password,
         passwordConfirmation,
         user,
-        error
+        error,
+        loading
     }
 }
 
