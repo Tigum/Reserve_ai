@@ -6,6 +6,7 @@ import {
     nameAdminChanged,
     emailAdminChanged,
     companyNameAdminChanged,
+    phoneAdminChanged,
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
     registerAdminUser
@@ -23,6 +24,10 @@ class RegisterAdminFormScreen extends Component {
 
     onCompanyNameChange(text) {
         this.props.companyNameAdminChanged(text)
+    }
+
+    onPhoneChange(text) {
+        this.props.phoneAdminChanged(text)
     }
 
     onPasswordChange(text) {
@@ -86,6 +91,18 @@ class RegisterAdminFormScreen extends Component {
                         onChangeText={this.onCompanyNameChange.bind(this)}
                         value={this.props.companyName}
                         onBlur={() => Keyboard.dismiss()}
+                    />
+                </View>
+                <View>
+                    <FormLabel>TELEFONE</FormLabel>
+
+                    <FormInput
+                        placeholder='Digite seu telefone'
+                        returnKeyType={"next"}
+                        onChangeText={this.onPhoneChange.bind(this)}
+                        value={this.props.phone}
+                        onBlur={() => Keyboard.dismiss()}
+                        keyboardType='numeric'
                     />
                 </View>
                 <View>
@@ -153,11 +170,12 @@ const styles = {
 }
 
 const mapStateToProps = ({ registerAdmin }) => {
-    const { name, email, companyName, password, passwordConfirmation, user, error } = registerAdmin;
+    const { name, email, companyName, phone, password, passwordConfirmation, user, error } = registerAdmin;
     return {
         name,
         email,
         companyName,
+        phone,
         password,
         passwordConfirmation,
         user,
@@ -169,6 +187,7 @@ export default connect(mapStateToProps, {
     nameAdminChanged,
     emailAdminChanged,
     companyNameAdminChanged,
+    phoneAdminChanged,
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
     registerAdminUser

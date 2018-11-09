@@ -7,7 +7,8 @@ import {
     PASSWORD_ADMIN_REGISTER_CHANGED,
     PASSWORD_CONFIRMATION_ADMIN_REGISTER_CHANGED,
     ADMIN_USER_REGISTERED_SUCCESS,
-    ADMIN_USER_REGISTERED_FAILED
+    ADMIN_USER_REGISTERED_FAILED,
+    PHONE_ADMIN_REGISTER_CHANGED
 } from './types';
 
 
@@ -46,6 +47,13 @@ export const passwordConfirmationAdminChanged = (text) => {
     }
 }
 
+export const phoneAdminChanged = (text) => {
+    return {
+        type: PHONE_ADMIN_REGISTER_CHANGED,
+        payload: text
+    }
+}
+
 export const registerAdminUser = ({ name, email, companyName, password, passwordConfirmation }) => async (dispatch) => {
     if (!name) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome não informado' })
     if (!email) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'E-mail não informado' })
@@ -68,8 +76,8 @@ export const registerAdminUser = ({ name, email, companyName, password, password
                 }
 
             })
-    } catch{
-        console.log('error')
+    } catch(err){
+        console.log(err)
     }
 
 };
