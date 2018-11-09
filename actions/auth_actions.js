@@ -9,7 +9,9 @@ import {
     LOGIN_USER,
     FACEBOOK_LOGIN_FAIL,
     FACEBOOK_LOGIN_SUCCESS,
-    FACEBOOK_LOGOUT_SUCCESS
+    FACEBOOK_LOGOUT_SUCCESS,
+    AUTH_LOADING_ON,
+    AUTH_LOADING_OFF
 } from './types';
 
 
@@ -29,27 +31,19 @@ export const passwordChanged = (text) => {
 
 export const loginUser = ({ email, password }) => {
     return (dispatch) => {
-        dispatch({ type: LOGIN_USER })
+        authLoadingOn(dispatch)
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(user => {
                 const { currentUser } = firebase.auth()
                 firebase.database().ref(`/users/${currentUser.uid}`)
                     .on('value', async snapshot => {
-
                         const user = await snapshot.val()
-
-                        console.log('USUARIO', user)
+                        loginUserSuccess(dispatch, user).then(() => authLoadingOff(dispatch))
                     })
-
-
-                loginUserSuccess(dispatch, user)
             })
             .catch((error) => {
                 console.log(error)
                 loginUserFail(dispatch)
-                // firebase.auth().createUserWithEmailAndPassword( email, password )
-                //     .then(user => loginUserSuccess(dispatch, user))
-                //     .catch(() => loginUserFail(dispatch))
             })
     }
 }
@@ -58,14 +52,14 @@ export const facebookLogin = () => async (dispatch) => {
     const token = await AsyncStorage.getItem('fb_token_reserve');
 
     if (token) {
+        authLoadingOn(dispatch)
         const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
         firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
             const token = result.credential.accessToken;
             const user = result.user;
             const name = user.displayName
             const routeName = 'welcome'
-            // ...
-            facebookLoginSuccess(dispatch, token, name, routeName, user)
+            facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
         }).catch((err) => {
             console.log(err)
         })
@@ -75,7 +69,7 @@ export const facebookLogin = () => async (dispatch) => {
 export const facebookLogout = () => async (dispatch) => {
     const token = await AsyncStorage.getItem('fb_token_reserve');
     if (token) {
-
+        await firebase.auth().signOut()
         const routeName = 'auth'
         await AsyncStorage.setItem('fb_token_reserve', '');
         facebookLogoutSuccess(dispatch, routeName)
@@ -86,7 +80,7 @@ export const doFacebookLogin = () => async (dispatch) => {
     let { type, token } = await Facebook.logInWithReadPermissionsAsync('361785537896831', {
         permissions: ['public_profile']
     });
-
+    authLoadingOn(dispatch)
     if (type === 'cancel') {
         return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: token })
     }
@@ -100,8 +94,7 @@ export const doFacebookLogin = () => async (dispatch) => {
         const user = result.user;
         const name = user.displayName
         const routeName = 'welcome'
-        // ...
-        facebookLoginSuccess(dispatch, token, name, routeName, user)
+        facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
     }).catch((err) => {
         console.log(err)
     })
@@ -135,4 +128,18 @@ const loginUserSuccess = (dispatch, user) => {
     })
 
     // Actions.main();
+}
+
+const authLoadingOn = (dispatch) => {
+    dispatch({
+        type: AUTH_LOADING_ON,
+        payload: true
+    })
+}
+
+const authLoadingOff = (dispatch) => {
+    dispatch({
+        type: AUTH_LOADING_OFF,
+        payload: false
+    })
 }

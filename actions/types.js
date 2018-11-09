@@ -5,6 +5,8 @@ export const LOGIN_USER_FAIL = 'login_user_fail'
 export const LOGIN_USER = 'login_user'
 export const FACEBOOK_LOGIN_SUCCESS = 'facebook_login_success';
 export const FACEBOOK_LOGIN_FAIL = 'facebook_login_fail';
+export const AUTH_LOADING_ON = 'auth_loading_on'
+export const AUTH_LOADING_OFF = 'auth_loading_off'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 

@@ -6,7 +6,9 @@ import {
     LOGIN_USER_FAIL,
     FACEBOOK_LOGIN_FAIL,
     FACEBOOK_LOGIN_SUCCESS,
-    FACEBOOK_LOGOUT_SUCCESS
+    FACEBOOK_LOGOUT_SUCCESS,
+    AUTH_LOADING_ON,
+    AUTH_LOADING_OFF
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -45,6 +47,10 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, error: 'Não foi possível acessar o Facebook. Tente novamente', loading: false, token: action.payload};
         case FACEBOOK_LOGOUT_SUCCESS:
             return { ...state, ...INITIAL_STATE, routeName: action.payload };
+        case AUTH_LOADING_ON:
+            return { ...state, loading: action.payload };
+        case AUTH_LOADING_OFF:
+            return { ...state, loading: action.payload };
         default:
             return state;
     }

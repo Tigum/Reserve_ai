@@ -44,7 +44,7 @@ class LoginScreen extends Component {
         // this.props.navigation.navigate('welcome')
     }
 
-    renderButton() {
+    renderForm() {
         if (this.props.loading) {
             return (
                 <View style={styles.spinnerView}>
@@ -55,6 +55,24 @@ class LoginScreen extends Component {
 
         return (
             <View style={styles.formView}>
+                <FormLabel>EMAIL</FormLabel>
+
+                <FormInput onPress={() => this.setState({ emailInputFocus: true })}
+                    placeholder='Digite seu email'
+                    returnKeyType={"next"}
+                    onChangeText={this.onEmailChange.bind(this)}
+                    value={this.props.email}
+                    autoCapitalize='none'
+                />
+
+                <FormLabel>SENHA</FormLabel>
+                <FormInput
+                    secureTextEntry
+                    placeholder='Digite seu password'
+                    onChangeText={this.onPasswordChange.bind(this)}
+                    value={this.props.password}
+                    autoCapitalize='none'
+                />
                 <Button
                     borderRadius={50}
                     backgroundColor='#0089e3'
@@ -72,6 +90,26 @@ class LoginScreen extends Component {
                 />
             </View>
         )
+    }
+
+    renderLinks() {
+        if (!this.props.loading) {
+            return (
+                <View style={styles.registerLinkView}>
+
+                    <TouchableWithoutFeedback>
+                        <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
+                    </TouchableWithoutFeedback>
+
+                    <Text style={styles.registerLink}>ou</Text>
+
+                    <TouchableWithoutFeedback onPress={this.onAdminRegisterPress.bind(this)}>
+                        <Text style={styles.registerLink}>Cadastre-se como profissional!</Text>
+                    </TouchableWithoutFeedback>
+
+                </View>
+            )
+        }
     }
 
     renderError() {
@@ -101,40 +139,9 @@ class LoginScreen extends Component {
                 </View>
                 <View>
                     {this.renderError()}
-                    <FormLabel>EMAIL</FormLabel>
-
-                    <FormInput onPress={() => this.setState({ emailInputFocus: true })}
-                        placeholder='Digite seu email'
-                        returnKeyType={"next"}
-                        onChangeText={this.onEmailChange.bind(this)}
-                        value={this.props.email}
-                        autoCapitalize='none'
-                    />
-
-                    <FormLabel>SENHA</FormLabel>
-                    <FormInput
-                        secureTextEntry
-                        placeholder='Digite seu password'
-                        onChangeText={this.onPasswordChange.bind(this)}
-                        value={this.props.password}
-                        autoCapitalize='none'
-                    />
-                    {this.renderButton()}
-
+                    {this.renderForm()}
                 </View>
-                <View style={styles.registerLinkView}>
-
-                    <TouchableWithoutFeedback>
-                        <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
-                    </TouchableWithoutFeedback>
-
-                    <Text style={styles.registerLink}>ou</Text>
-
-                    <TouchableWithoutFeedback onPress={this.onAdminRegisterPress.bind(this)}>
-                        <Text style={styles.registerLink}>Cadastre-se como profissional!</Text>
-                    </TouchableWithoutFeedback>
-
-                </View>
+                {this.renderLinks()}
             </KeyboardAvoidingView>
         )
     }
@@ -178,7 +185,10 @@ const styles = {
         fontSize: 15
     },
     spinnerView: {
-        marginTop: 60
+        marginTop: 60,
+        flex: 1,
+        alignItems: 'center',
+        marginTop: -800
     },
     formView: {
         paddingBottom: 100
