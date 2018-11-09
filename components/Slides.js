@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { facebookLogout } from '../actions'
+import { withNavigation } from 'react-navigation';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -60,4 +61,4 @@ const mapStateToProps = ({ auth }) => {
     }
 }
 
-export default connect(mapStateToProps, { facebookLogout })(Slides);
+export default connect(mapStateToProps, { facebookLogout })(withNavigation(Slides));

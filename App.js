@@ -50,9 +50,6 @@ export default class App extends React.Component {
           tabBarVisible: false
         }
       },
-
-      slides: Slides,
-      
     });
 
     return (
