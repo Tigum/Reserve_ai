@@ -16,7 +16,7 @@ class LoginScreen extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.facebookLogin()
     }
 

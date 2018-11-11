@@ -55,12 +55,13 @@ export const facebookLogin = () => async (dispatch) => {
     if (token) {
         authLoadingOn(dispatch)
         const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
-        firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
+        firebase.auth().signInAndRetrieveDataWithCredential(provider).then(async function (result) {
             const token = result.credential.accessToken;
             const user = result.user;
             const name = user.displayName
             const routeName = 'welcome'
-            facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
+            await facebookLoginSuccess(dispatch, token, name, routeName, user)
+            authLoadingOff(dispatch)
         }).catch((err) => {
             console.log(err)
         })

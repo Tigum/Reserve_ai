@@ -13,6 +13,10 @@ class Slides extends Component {
             .then(() => this.props.navigation.navigate('auth'))
     }
 
+    onAppInit() {
+        this.props.navigation.navigate('mainAdminScreen')
+    }
+
     renderSlides() {
         return this.props.data.map((slide) => {
             return (
@@ -21,6 +25,10 @@ class Slides extends Component {
                     <Button 
                         onPress={this.onFacebookLogOut.bind(this)}
                         title='LOG OUT FACEBOOK'
+                    />
+                    <Button 
+                        onPress={this.onAppInit.bind(this)}
+                        title='IR PARA APP'
                     />
                 </View>
             )
