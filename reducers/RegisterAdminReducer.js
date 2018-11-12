@@ -9,7 +9,8 @@ import {
     PHONE_ADMIN_REGISTER_CHANGED,
     REGISTER_ADMIN_LOADING_ON,
     REGISTER_ADMIN_LOADING_OFF,
-    CLEAR_FORM
+    CLEAR_FORM,
+    CONTINUE_ADMIN_REGISTRATION
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -49,6 +50,15 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: action.payload };
         case CLEAR_FORM:
             return { ...state, ...INITIAL_STATE };
+        case CONTINUE_ADMIN_REGISTRATION:
+            return { ...state, 
+                    name: action.payload.name, 
+                    email: action.payload.email,
+                    companyName: action.payload.companyName,
+                    phone: action.payload.phone,
+                    password: action.payload.password,
+                    passwordConfirmation: action.payload.passwordConfirmation
+                }
         default:
             return state;
     }

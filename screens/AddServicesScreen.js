@@ -1,48 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
-import { Button } from 'react-native-elements'
-import { Header } from '../components/Header'
-
-const SCREEN_WIDTH = Dimensions.get('window').width
+import { Text, View } from 'react-native';
+import DefaultModal from '../components/DefaultModal'
 
 class AddServicesScreen extends Component {
     render() {
+        console.log('entrou')
         return (
-            <View style={styles.mainView}>
-                <Header style={styles.headerStyle} headerText='Adicionar serviço' />
-                <Text style={{ fontSize: 30 }}>This is a modal!</Text>
-                <View style={styles.buttonView}>
-                    <Button
-                        onPress={() => this.props.navigation.goBack()}
-                        title="Dismiss"
-                    />
-                    <Button
-                        onPress={() => this.props.navigation.goBack()}
-                        title="Dismiss"
-                    />
-                </View>
-
-            </View>
+                <DefaultModal
+                    title='Adicionar serviço'
+                    buttonText='Adicionar'
+                    dismissIcon='close'
+                >
+                    <Text style={{ fontSize: 30 }}>This is a modal!</Text>
+                </DefaultModal>
         )
-    }
-}
-
-const styles = {
-    mainView: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: SCREEN_WIDTH,
-        backgroundColor: '#d8edff'
-    },
-    headerStyle: {
-        flex: 1
-    },
-    buttonView: {
-        width: SCREEN_WIDTH,
-        backgroundColor: 'red',
-        height: 60
-
     }
 }
 

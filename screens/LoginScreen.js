@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, Image, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage, Button, SocialIcon } from 'react-native-elements'
+import { FormLabel, FormInput, SocialIcon } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin } from '../actions'
 import { Spinner } from '../components/Spinner'
+import Button from '../components/Button'
+import ButtonFacebook from '../components/ButtonFacebook'
+import { sanFranciscoWeights } from 'react-native-typography';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -55,7 +58,11 @@ class LoginScreen extends Component {
 
         return (
             <View style={styles.formView}>
-                <FormLabel>EMAIL</FormLabel>
+                <FormLabel
+                    labelStyle={sanFranciscoWeights.light}
+                >
+                EMAIL
+                </FormLabel>
 
                 <FormInput onPress={() => this.setState({ emailInputFocus: true })}
                     placeholder='Digite seu email'
@@ -63,30 +70,29 @@ class LoginScreen extends Component {
                     onChangeText={this.onEmailChange.bind(this)}
                     value={this.props.email}
                     autoCapitalize='none'
+                    inputStyle={sanFranciscoWeights.thin}
                 />
 
-                <FormLabel>SENHA</FormLabel>
+                <FormLabel
+                    labelStyle={sanFranciscoWeights.light}
+                >SENHA
+                </FormLabel>
                 <FormInput
                     secureTextEntry
                     placeholder='Digite seu password'
                     onChangeText={this.onPasswordChange.bind(this)}
                     value={this.props.password}
                     autoCapitalize='none'
+                    containerStyle={styles.formStyle}
+                    inputStyle={sanFranciscoWeights.thin}
                 />
-                <Button
-                    borderRadius={50}
-                    backgroundColor='#0089e3'
-                    style={styles.loginButton}
-                    title='Entrar'
-                    onPress={this.onLoginButtonPress.bind(this)}
+                <Button 
+                    buttonText='Entrar'
+                    buttonAction={this.onLoginButtonPress.bind(this)}
                 />
-                <SocialIcon
-                    style={styles.socialIconStyle}
-                    title='Entrar com Facebook'
-                    button
-                    type='facebook'
-                    returnKeyType={"return"}
-                    onPress={this.onFacebookButtonPress.bind(this)}
+                <ButtonFacebook 
+                    buttonText='Entrar com Facebook'
+                    buttonAction={this.onFacebookButtonPress.bind(this)}
                 />
             </View>
         )
@@ -98,13 +104,13 @@ class LoginScreen extends Component {
                 <View style={styles.registerLinkView}>
 
                     <TouchableWithoutFeedback>
-                        <Text style={styles.registerLink}>Não tem uma conta? Cadastre-se</Text>
+                        <Text style={[styles.registerLink, sanFranciscoWeights.thin]}>Não tem uma conta? Cadastre-se</Text>
                     </TouchableWithoutFeedback>
 
-                    <Text style={styles.registerLink}>ou</Text>
+                    <Text style={[styles.registerLink, {textDecorationLine: 'none'},]}>ou</Text>
 
                     <TouchableWithoutFeedback onPress={this.onAdminRegisterPress.bind(this)}>
-                        <Text style={styles.registerLink}>Cadastre-se como profissional!</Text>
+                        <Text style={[styles.registerLink, sanFranciscoWeights.thin]}>Cadastre-se como profissional!</Text>
                     </TouchableWithoutFeedback>
 
                 </View>
@@ -152,7 +158,7 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: '#d8edff'
+        backgroundColor: 'white'
     },
     logoView: {
         width: SCREEN_WIDTH,
@@ -162,19 +168,11 @@ const styles = {
         justifyContent: 'center',
         alignSelf: 'center'
     },
-    loginButton: {
-        paddingTop: 20,
-        width: '100%'
-    },
-    socialIconStyle: {
-        width: '93%',
-        alignSelf: 'center',
-        // marginTop: 50
-    },
     registerLink: {
         alignSelf: 'center',
         textDecorationLine: 'underline',
-        fontSize: 17
+        fontSize: 13,
+        color: '#7fc3ff'
     },
     registerLinkView: {
         paddingBottom: 20

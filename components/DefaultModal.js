@@ -1,49 +1,35 @@
-import React from 'react';
-import { Text, View, Modal } from 'react-native';
-import { CardSection } from './CardSection';
-import { Button } from 'react-native-elements';
+import React, { Component } from 'react';
+import { View, Dimensions } from 'react-native';
+import Header from './Header';
+import BottomButton from './BottomButton';
 
-const DefaultModal = ({ children, visible, onAccept, onDecline }) => {
-    const { cardSectionStyle, textStyle, containerStyle } = styles
+const SCREEN_WIDTH = Dimensions.get('window').width
 
-    return (
-        <Modal
-            visible={visible}
-            transparent
-            animationType='slide'
-            onRequestClose={() => { }} //Sempre colocar essa funçao para android, mesmo que não passe nada
+class DefaultModal extends Component {
+    render() {
+        const { title, children, dismissIcon } = this.props
 
-        >
-            <View style={containerStyle}>
-                <CardSection style={cardSectionStyle}>
-                    <Text style={textStyle}>{children}</Text>
-                </CardSection>
-                <CardSection>
-                    <Button onPress={onAccept}>Yes</Button>
-                    <Button onPress={onDecline}>No</Button>
-                </CardSection>
+        return (
+            <View style={styles.mainView}>
+                <Header headerText={title} icon={dismissIcon}/>
+                 {children}
+                 <BottomButton 
+                    buttonText='Adicionar'
+                    buttonAction={() => alert('Hello!')}
+                 />
             </View>
-        </Modal>
-    )
+        )
+    }
 }
 
 const styles = {
-    cardSectionStyle: {
-        justifyContent: 'center'
-    },
-    textStyle: {
+    mainView: {
         flex: 1,
-        fontSize: 18,
-        textAlign: 'center',
-        lineHeight: 40
-    },
-    containerStyle: {
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        position: 'relative',
-        flex: 1,
-        justifyContent: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: SCREEN_WIDTH,
+        backgroundColor: '#f3f3f3'
     }
-
 }
 
-export { DefaultModal };
+export default DefaultModal;

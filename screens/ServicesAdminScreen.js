@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { DefaultModal } from '../components/DefaultModal'
 
 class ServicesAdminScreen extends Component {
     

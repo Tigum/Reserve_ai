@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
+import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
+import Header from '../components/Header';
+import BottomButton from '../components/BottomButton';
 import { connect } from 'react-redux';
 import {
     nameAdminChanged,
@@ -9,9 +11,11 @@ import {
     phoneAdminChanged,
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
-    registerAdminUser
-} from '../actions'
-import { Spinner } from '../components/Spinner'
+    registerAdminUser,
+    continueRegisterAdmin
+} from '../actions';
+import { Spinner } from '../components/Spinner';
+import { sanFranciscoWeights } from 'react-native-typography';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -42,8 +46,17 @@ class RegisterAdminFormScreen extends Component {
     }
 
     onRegisterButtonPress() {
-        const { name, email, companyName, phone, password, passwordConfirmation } = this.props
-        this.props.registerAdminUser({ name, email, companyName, phone, password, passwordConfirmation })
+        // const { name, email, companyName, phone, password, passwordConfirmation } = this.props
+        // const userInfo = {
+        //     name,
+        //     email,
+        //     companyName,
+        //     phone,
+        //     password,
+        //     passwordConfirmation
+        // }
+        // this.props.continueRegisterAdmin(userInfo)
+        this.props.navigation.navigate('hoursAndDaysForm')
     }
 
     renderError() {
@@ -69,10 +82,18 @@ class RegisterAdminFormScreen extends Component {
 
         return (
             
-            <KeyboardAvoidingView style={styles.mainView} behavior="padding">
-                {this.renderError()}
+            <KeyboardAvoidingView 
+                style={styles.mainView} 
+                behavior="padding"
+            >
+            <Header headerText='Cadastre sua loja' icon='leftcircleo'/>
+            {this.renderError()}
                 <View>
-                    <FormLabel>NOME</FormLabel>
+                    <FormLabel
+                        labelStyle={sanFranciscoWeights.light}
+                    >
+                    NOME
+                    </FormLabel>
 
                     <FormInput
                         placeholder='Digite seu nome'
@@ -80,33 +101,48 @@ class RegisterAdminFormScreen extends Component {
                         onChangeText={this.onNameChange.bind(this)}
                         value={this.props.name}
                         onBlur={() => Keyboard.dismiss()}
+                        inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
                 <View>
-                    <FormLabel>EMAIL</FormLabel>
+                    <FormLabel
+                        labelStyle={sanFranciscoWeights.light}
+                    >
+                    EMAIL
+                    </FormLabel>
 
                     <FormInput
-                        placeholder='Digite seu nome'
+                        placeholder='Digite seu e-mail'
                         returnKeyType={"next"}
                         onChangeText={this.onEmailChange.bind(this)}
                         value={this.props.email}
                         onBlur={() => Keyboard.dismiss()}
                         autoCapitalize='none'
+                        inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
                 <View>
-                    <FormLabel>NOME DE SEU EMPREENDIMENTO</FormLabel>
+                    <FormLabel
+                        labelStyle={sanFranciscoWeights.light}
+                    >
+                    NOME DE SEU EMPREENDIMENTO
+                    </FormLabel>
 
                     <FormInput
-                        placeholder='Digite seu nome'
+                        placeholder='Digite o nome do seu negócio'
                         returnKeyType={"next"}
                         onChangeText={this.onCompanyNameChange.bind(this)}
                         value={this.props.companyName}
                         onBlur={() => Keyboard.dismiss()}
+                        inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
                 <View>
-                    <FormLabel>TELEFONE</FormLabel>
+                    <FormLabel
+                        labelStyle={sanFranciscoWeights.light}
+                    >
+                    TELEFONE
+                    </FormLabel>
 
                     <FormInput
                         placeholder='Digite seu telefone'
@@ -115,40 +151,47 @@ class RegisterAdminFormScreen extends Component {
                         value={this.props.phone}
                         onBlur={() => Keyboard.dismiss()}
                         keyboardType='numeric'
+                        inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
                 <View>
-                    <FormLabel>SENHA</FormLabel>
+                    <FormLabel
+                        labelStyle={sanFranciscoWeights.light}
+                    >
+                    SENHA
+                    </FormLabel>
 
                     <FormInput
-                        placeholder='Digite seu nome'
+                        placeholder='Digite sua senha'
                         returnKeyType={"next"}
                         onChangeText={this.onPasswordChange.bind(this)}
                         value={this.props.password}
                         secureTextEntry
                         onBlur={() => Keyboard.dismiss()}
+                        inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
                 <View>
-                    <FormLabel>CONFIRMAR SENHA</FormLabel>
+                    <FormLabel
+                        labelStyle={sanFranciscoWeights.light}
+                    >
+                    CONFIRMAR SENHA
+                    </FormLabel>
 
                     <FormInput
-                        placeholder='Digite seu nome'
+                        placeholder='Confirme sua senha'
                         returnKeyType={"next"}
                         onChangeText={this.onPasswordConfirmationChange.bind(this)}
                         value={this.props.passwordConfirmation}
                         secureTextEntry
                         onBlur={() => Keyboard.dismiss()}
+                        inputStyle={sanFranciscoWeights.thin}
                     />
-                    <Button
-                        borderRadius={50}
-                        backgroundColor='#0089e3'
-                        style={styles.registerButton}
-                        title='Cadastrar'
-                    onPress={this.onRegisterButtonPress.bind(this)}
-                    />
-                </View>
-
+                </View>              
+                <BottomButton 
+                    buttonText='Continuar'
+                    buttonAction={this.onRegisterButtonPress.bind(this)}
+                />
             </KeyboardAvoidingView>
         )
     }
@@ -163,7 +206,7 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: '#d8edff'
+        backgroundColor: 'white'
     },
     registerButton: {
         paddingTop: 35,
@@ -178,7 +221,7 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        backgroundColor: '#d8edff',
+        backgroundColor: 'white',
         alignSelf: 'center',
         width: SCREEN_WIDTH
     }
@@ -206,5 +249,6 @@ export default connect(mapStateToProps, {
     phoneAdminChanged,
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
-    registerAdminUser
+    registerAdminUser,
+    continueRegisterAdmin
 })(RegisterAdminFormScreen);

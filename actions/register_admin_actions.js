@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-import { AsyncStorage } from 'react-native'
 import {
     NAME_ADMIN_REGISTER_CHANGED,
     EMAIL_ADMIN_REGISTER_CHANGED,
@@ -11,7 +10,8 @@ import {
     PHONE_ADMIN_REGISTER_CHANGED,
     REGISTER_ADMIN_LOADING_ON,
     REGISTER_ADMIN_LOADING_OFF,
-    CLEAR_FORM
+    CLEAR_FORM,
+    CONTINUE_ADMIN_REGISTRATION
 } from './types';
 
 
@@ -85,6 +85,13 @@ export const registerAdminUser = ({ name, email, companyName, phone, password, p
     }
 
 };
+
+export const continueRegisterAdmin = (userInfo) => {
+    return {
+        type: CONTINUE_ADMIN_REGISTRATION,
+        payload: userInfo
+    }
+}
 
 const adminUserRegisteredSuccess = (dispatch, user) => {
     dispatch({
