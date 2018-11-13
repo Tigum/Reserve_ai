@@ -12,7 +12,21 @@ import {
     CLEAR_FORM,
     CONTINUE_ADMIN_REGISTRATION,
     COMPANY_HOURS_START,
-    COMPANY_HOURS_END
+    COMPANY_HOURS_END,
+    SELECT_MONDAY,
+    SELECT_TUESDAY,
+    SELECT_WEDNESDAY,
+    SELECT_THURSDAY,
+    SELECT_FRIDAY,
+    SELECT_SATURDAY,
+    SELECT_SUNDAY,
+    UNSELECT_MONDAY,
+    UNSELECT_TUESDAY,
+    UNSELECT_WEDNESDAY,
+    UNSELECT_THURSDAY,
+    UNSELECT_FRIDAY,
+    UNSELECT_SATURDAY,
+    UNSELECT_SUNDAY
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -26,7 +40,14 @@ const INITIAL_STATE = {
     error: '',
     loading: false,
     startHour: '',
-    endHour: ''
+    endHour: '',
+    monday: false,
+    tueday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -68,6 +89,34 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, startHour: action.payload }
         case COMPANY_HOURS_END:
             return { ...state, endHour: action.payload }
+        case SELECT_MONDAY:
+            return { ...state, monday: true }
+        case SELECT_TUESDAY:
+            return { ...state, tuesday: true }
+        case SELECT_WEDNESDAY:
+            return { ...state, wednesday: true }
+        case SELECT_THURSDAY:
+            return { ...state, thursday: true }
+        case SELECT_FRIDAY:
+            return { ...state, friday: true }
+        case SELECT_SATURDAY:
+            return { ...state, saturday: true }
+        case SELECT_SUNDAY:
+            return { ...state, sunday: true }
+        case UNSELECT_MONDAY:
+            return { ...state, monday: false }
+        case UNSELECT_TUESDAY:
+            return { ...state, tuesday: false }
+        case UNSELECT_WEDNESDAY:
+            return { ...state, wednesday: false }
+        case UNSELECT_THURSDAY:
+            return { ...state, thursday: false }
+        case UNSELECT_FRIDAY:
+            return { ...state, friday: false }
+        case UNSELECT_SATURDAY:
+            return { ...state, saturday: false }
+        case UNSELECT_SUNDAY:
+            return { ...state, sunday: false }
         default:
             return state;
     }

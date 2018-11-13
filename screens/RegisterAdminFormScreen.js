@@ -46,17 +46,17 @@ class RegisterAdminFormScreen extends Component {
     }
 
     onRegisterButtonPress() {
-        const { name, email, companyName, phone, password, passwordConfirmation } = this.props
-        const userInfo = {
-            name,
-            email,
-            companyName,
-            phone,
-            password,
-            passwordConfirmation
-        }
-        this.props.continueRegisterAdmin(userInfo)
-        this.props.navigation.navigate('hoursAndDaysForm')
+        // const { name, email, companyName, phone, password, passwordConfirmation } = this.props
+        // const userInfo = {
+        //     name,
+        //     email,
+        //     companyName,
+        //     phone,
+        //     password,
+        //     passwordConfirmation
+        // }
+        // this.props.continueRegisterAdmin(userInfo)
+        this.props.navigation.navigate('hoursForm')
     }
 
     renderError() {

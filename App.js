@@ -9,6 +9,7 @@ import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterAdminFormScreen from './screens/RegisterAdminFormScreen'
 import RegisterAdminHoursScreen from './screens/RegisterAdminHoursScreen'
+import RegisterAdminDaysScreen from './screens/RegisterAdminDaysScreen'
 import MainAdminScreen from './screens/MainAdminScreen'
 import ServicesAdminScreen from './screens/ServicesAdminScreen'
 import AddServicesScreen from './screens/AddServicesScreen'
@@ -49,8 +50,17 @@ export default class App extends React.Component {
               }
             })
           },
-          hoursAndDaysForm: {
+          hoursForm: {
             screen: RegisterAdminHoursScreen,
+            navigationOptions: () => ({
+              // title: 'Cadastre-se',
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
+          daysForm: {
+            screen: RegisterAdminDaysScreen,
             navigationOptions: () => ({
               // title: 'Cadastre-se',
               headerStyle: {

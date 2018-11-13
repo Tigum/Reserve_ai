@@ -1,35 +1,36 @@
 import React, { Component } from 'react';
-import { View, Text, KeyboardAvoidingView, Dimensions, Picker } from 'react-native';
+import { View, KeyboardAvoidingView, Picker } from 'react-native';
 import { FormLabel } from 'react-native-elements'
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
 import {
     continueRegisterAdmin,
-    registerAdminUser,
     hoursCompanyStart,
     hoursCompanyEnd
 } from '../actions'
-import { Spinner } from '../components/Spinner'
 import { sanFranciscoWeights } from 'react-native-typography';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 class RegisterAdminHoursScreen extends Component {
 
     onRegisterButtonPress() {
-        const { name, email, companyName, phone, password, passwordConfirmation } = this.props
-        this.props.registerAdminUser({ name, email, companyName, phone, password, passwordConfirmation })
+        // const { name, email, companyName, phone, password, passwordConfirmation, startHour, endHour } = this.props
+        // const userInfo = {
+        //     name,
+        //     email,
+        //     companyName,
+        //     phone,
+        //     password,
+        //     passwordConfirmation,
+        //     startHour,
+        //     endHour
+        // }
+        // this.props.continueRegisterAdmin(userInfo)
+        this.props.navigation.navigate('daysForm')
     }
 
     renderContent() {
-        if (this.props.loading) {
-            return (
-                <View style={styles.spinnerView}>
-                    <Spinner />
-                </View>
-            )
-        }
         return (
 
             <KeyboardAvoidingView
@@ -135,14 +136,6 @@ const styles = {
     registerButton: {
         paddingTop: 35,
         paddingBottom: 35
-    },
-    spinnerView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        alignSelf: 'center',
-        width: SCREEN_WIDTH
     }
 }
 
@@ -164,7 +157,6 @@ const mapStateToProps = ({ registerAdmin }) => {
 
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
-    registerAdminUser,
     hoursCompanyStart,
     hoursCompanyEnd
 })(RegisterAdminHoursScreen);

@@ -13,9 +13,106 @@ import {
     CLEAR_FORM,
     CONTINUE_ADMIN_REGISTRATION,
     COMPANY_HOURS_START,
-    COMPANY_HOURS_END
+    COMPANY_HOURS_END,
+    SELECT_MONDAY,
+    SELECT_TUESDAY,
+    SELECT_WEDNESDAY,
+    SELECT_THURSDAY,
+    SELECT_FRIDAY,
+    SELECT_SATURDAY,
+    SELECT_SUNDAY,
+    UNSELECT_MONDAY,
+    UNSELECT_TUESDAY,
+    UNSELECT_WEDNESDAY,
+    UNSELECT_THURSDAY,
+    UNSELECT_FRIDAY,
+    UNSELECT_SATURDAY,
+    UNSELECT_SUNDAY
 } from './types';
 
+export const mondaySelected = () => {
+    return {
+        type: SELECT_MONDAY,
+    }
+}
+
+export const tuesdaySelected = () => {
+    return {
+        type: SELECT_TUESDAY,
+    }
+}
+
+export const wednesdaySelected = () => {
+    return {
+        type: SELECT_WEDNESDAY,
+    }
+}
+
+export const thursdaySelected = () => {
+    return {
+        type: SELECT_THURSDAY,
+    }
+}
+
+export const fridaySelected = () => {
+    return {
+        type: SELECT_FRIDAY,
+    }
+}
+
+export const saturdaySelected = () => {
+    return {
+        type: SELECT_SATURDAY,
+    }
+}
+
+export const sundaySelected = () => {
+    return {
+        type: SELECT_SUNDAY,
+    }
+}
+
+export const mondayUnselected = () => {
+    return {
+        type: UNSELECT_MONDAY,
+    }
+}
+
+export const tuesdayUnselected = () => {
+    return {
+        type: UNSELECT_TUESDAY,
+    }
+}
+
+export const wednesdayUnselected = () => {
+    return {
+        type: UNSELECT_WEDNESDAY,
+    }
+}
+
+export const thursdayUnselected = () => {
+    return {
+        type: UNSELECT_THURSDAY,
+    }
+}
+
+export const fridayUnselected = () => {
+    return {
+        type: UNSELECT_FRIDAY,
+    }
+}
+
+export const saturdayUnselected = () => {
+    return {
+        type: UNSELECT_SATURDAY,
+    }
+}
+
+export const sundayUnselected = () => {
+    return {
+        type: UNSELECT_SUNDAY,
+    }
+}
 
 export const nameAdminChanged = (text) => {
     return {
