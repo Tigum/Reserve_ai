@@ -4,12 +4,37 @@ import { sanFranciscoWeights } from 'react-native-typography';
 
 class BottomButton extends Component {
     render() {
-        const { buttonText, buttonAction } = this.props
-        console.log('buttonAction', buttonAction)
+        const {
+            buttonText,
+            buttonAction,
+            buttonBackgroundColor,
+            buttonBorderColor,
+            buttonHeight,
+            buttonBorderStyle,
+            buttonTextColor,
+            buttonFontSize,
+            buttonMarginTop
+        } = this.props
+        const height = buttonHeight || 60
+        const borderColor = buttonBorderColor || ''
+        const backgroundColor = buttonBackgroundColor || '#7f7f7f'
+        const borderStyle = buttonBorderStyle || 'none'
+        const borderWidth = buttonBorderStyle ? 1 : 0
+        const color = buttonTextColor || 'white'
+        const fontSize = buttonFontSize || 20
+        const marginTop = buttonMarginTop || 10
         return (
             <TouchableWithoutFeedback onPress={buttonAction}>
-                <View style={styles.buttonView}>
-                    <Text style={[sanFranciscoWeights.thin, styles.addButtonStyle]}>{buttonText}</Text>
+                <View style={[styles.buttonView, { backgroundColor }, { borderColor }, { height }, { borderStyle }, { borderWidth }, {marginTop}]}>
+                    <Text
+                        style={
+                            [sanFranciscoWeights.thin,
+                            styles.addButtonStyle,
+                            { color },
+                            { fontSize }]
+                        }>
+                        {buttonText}
+                    </Text>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -18,17 +43,13 @@ class BottomButton extends Component {
 
 const styles = {
     buttonView: {
-        backgroundColor: '#5f5f5f',
-        height: 60,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 20,
         marginLeft: 20,
-        marginTop: 10
     },
     addButtonStyle: {
         fontSize: 20,
-        color: 'white'
     }
 }
 

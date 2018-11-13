@@ -10,7 +10,9 @@ import {
     REGISTER_ADMIN_LOADING_ON,
     REGISTER_ADMIN_LOADING_OFF,
     CLEAR_FORM,
-    CONTINUE_ADMIN_REGISTRATION
+    CONTINUE_ADMIN_REGISTRATION,
+    COMPANY_HOURS_START,
+    COMPANY_HOURS_END
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -22,7 +24,9 @@ const INITIAL_STATE = {
     passwordConfirmation: '',
     user: null,
     error: '',
-    loading: false
+    loading: false,
+    startHour: '',
+    endHour: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -51,14 +55,19 @@ export default (state = INITIAL_STATE, action) => {
         case CLEAR_FORM:
             return { ...state, ...INITIAL_STATE };
         case CONTINUE_ADMIN_REGISTRATION:
-            return { ...state, 
-                    name: action.payload.name, 
-                    email: action.payload.email,
-                    companyName: action.payload.companyName,
-                    phone: action.payload.phone,
-                    password: action.payload.password,
-                    passwordConfirmation: action.payload.passwordConfirmation
-                }
+            return {
+                ...state,
+                name: action.payload.name,
+                email: action.payload.email,
+                companyName: action.payload.companyName,
+                phone: action.payload.phone,
+                password: action.payload.password,
+                passwordConfirmation: action.payload.passwordConfirmation
+            }
+        case COMPANY_HOURS_START:
+            return { ...state, startHour: action.payload }
+        case COMPANY_HOURS_END:
+            return { ...state, endHour: action.payload }
         default:
             return state;
     }

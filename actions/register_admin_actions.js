@@ -11,7 +11,9 @@ import {
     REGISTER_ADMIN_LOADING_ON,
     REGISTER_ADMIN_LOADING_OFF,
     CLEAR_FORM,
-    CONTINUE_ADMIN_REGISTRATION
+    CONTINUE_ADMIN_REGISTRATION,
+    COMPANY_HOURS_START,
+    COMPANY_HOURS_END
 } from './types';
 
 
@@ -90,6 +92,20 @@ export const continueRegisterAdmin = (userInfo) => {
     return {
         type: CONTINUE_ADMIN_REGISTRATION,
         payload: userInfo
+    }
+}
+
+export const hoursCompanyStart = (hour) => {
+    return {
+        type: COMPANY_HOURS_START,
+        payload: hour
+    }
+}
+
+export const hoursCompanyEnd = (hour) => {
+    return {
+        type: COMPANY_HOURS_END,
+        payload: hour
     }
 }
 

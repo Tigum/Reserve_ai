@@ -21,7 +21,7 @@ class BottomButton extends Component {
 const styles = {
     buttonView: {
         backgroundColor: '#3577e6',
-        height: 60,
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',

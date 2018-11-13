@@ -89,10 +89,13 @@ class LoginScreen extends Component {
                 <Button 
                     buttonText='Entrar'
                     buttonAction={this.onLoginButtonPress.bind(this)}
+                    buttonBackgroundColor='#7f7f7f'
+                    buttonHeight={50}
                 />
                 <ButtonFacebook 
                     buttonText='Entrar com Facebook'
                     buttonAction={this.onFacebookButtonPress.bind(this)}
+                    buttonHeight={50}
                 />
             </View>
         )
@@ -103,16 +106,28 @@ class LoginScreen extends Component {
             return (
                 <View style={styles.registerLinkView}>
 
-                    <TouchableWithoutFeedback>
-                        <Text style={[styles.registerLink, sanFranciscoWeights.thin]}>Não tem uma conta? Cadastre-se</Text>
-                    </TouchableWithoutFeedback>
-
-                    <Text style={[styles.registerLink, {textDecorationLine: 'none'},]}>ou</Text>
-
-                    <TouchableWithoutFeedback onPress={this.onAdminRegisterPress.bind(this)}>
-                        <Text style={[styles.registerLink, sanFranciscoWeights.thin]}>Cadastre-se como profissional!</Text>
-                    </TouchableWithoutFeedback>
-
+                    <Button 
+                        buttonText='Não tem uma conta? Cadastre-se'
+                        buttonBackgroundColor='white'
+                        buttonBorderColor='#3577e6'
+                        buttonBorderStyle='solid'
+                        buttonHeight={30}
+                        buttonTextColor='#3577e6'
+                        buttonFontSize={15}
+                        buttonMarginTop={0}
+                    />
+                    <Button 
+                        buttonText='Cadastre-se como profissional!'
+                        buttonBackgroundColor='white'
+                        buttonBorderColor='#3577e6'
+                        buttonBorderStyle='solid'
+                        buttonHeight={30}
+                        buttonTextColor='#3577e6'
+                        buttonFontSize={15}
+                        buttonMarginTop={5}
+                        buttonAction={this.onAdminRegisterPress.bind(this)}
+                    />
+                
                 </View>
             )
         }
