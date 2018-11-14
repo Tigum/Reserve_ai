@@ -44,6 +44,7 @@ class RegisterAdminDaysScreen extends Component {
     onRegisterButtonPress() {
         // const { name, email, companyName, phone, password, passwordConfirmation, startHour, endHour } = this.props
         // this.props.continueRegisterAdmin({ name, email, companyName, phone, password, passwordConfirmation })
+        this.props.navigation.navigate('picForm')
     }
 
     mondayColor() {
@@ -231,7 +232,7 @@ class RegisterAdminDaysScreen extends Component {
                     />
                 </View>
                 <BottomButton
-                    buttonText='Finalizar cadastro'
+                    buttonText='Continuar'
                     buttonAction={this.onRegisterButtonPress.bind(this)}
                 />
             </View>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux'
 import firebase from 'firebase';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen'
@@ -10,6 +11,7 @@ import LoginScreen from './screens/LoginScreen'
 import RegisterAdminFormScreen from './screens/RegisterAdminFormScreen'
 import RegisterAdminHoursScreen from './screens/RegisterAdminHoursScreen'
 import RegisterAdminDaysScreen from './screens/RegisterAdminDaysScreen'
+import RegisterAdminPicScreen from './screens/RegisterAdminPicScreen'
 import MainAdminScreen from './screens/MainAdminScreen'
 import ServicesAdminScreen from './screens/ServicesAdminScreen'
 import AddServicesScreen from './screens/AddServicesScreen'
@@ -68,6 +70,15 @@ export default class App extends React.Component {
               }
             })
           },
+          picForm: {
+            screen: RegisterAdminPicScreen,
+            navigationOptions: () => ({
+              // title: 'Cadastre-se',
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
           welcome: WelcomeScreen,
 
         }),
@@ -110,10 +121,12 @@ export default class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          {/* <MainNavigator /> */}
-          <RootStack />
-        </View>
+        <ActionSheetProvider>
+          <View style={styles.container}>
+            {/* <MainNavigator /> */}
+            <RootStack />
+          </View>
+        </ActionSheetProvider>
       </Provider>
     );
   }

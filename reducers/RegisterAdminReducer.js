@@ -47,7 +47,8 @@ const INITIAL_STATE = {
     thursday: false,
     friday: false,
     saturday: false,
-    sunday: false
+    sunday: false,
+    image: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
