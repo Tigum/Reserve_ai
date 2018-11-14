@@ -1,4 +1,6 @@
 import firebase from 'firebase';
+import { RNS3 } from 'react-native-aws3';
+import $ from "jquery";
 import {
     NAME_ADMIN_REGISTER_CHANGED,
     EMAIL_ADMIN_REGISTER_CHANGED,
@@ -204,6 +206,35 @@ export const hoursCompanyEnd = (hour) => {
         type: COMPANY_HOURS_END,
         payload: hour
     }
+}
+
+export const uploadPhoto = ({ uri, S3Options }) => async (dispatch) => {
+    let post = {}
+    post["id"] = firebase.database.ServerValue.TIMESTAMP
+    post["text"] = 'teste4294'
+    console.log('post', post)
+    const options = S3Options
+    console.log('uri', uri)
+    console.log('options', options)
+    const ext = uri.substr(uri.lastIndexOf('.') + 1);
+    console.log('ext',ext)
+    const name = Math.round(+new Date() / 1000);
+    const file = {
+        name: name + "." + ext,
+        type: "image/" + ext,
+        uri
+    }
+
+    RNS3.put(file, options).then(response => {
+        console.log('response', response)
+        if (response.status === 201) {
+            post["photo"] = response.body.postResponse.location
+            firebase.database().ref('newsfeed').push(post)
+        }
+    }).catch((err) => console.log('imageError', err));
+
+
+
 }
 
 const adminUserRegisteredSuccess = (dispatch, user) => {

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, Image } from 'react-native';
 import firebase from 'firebase';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
 import {
-    continueRegisterAdmin
+    continueRegisterAdmin,
+    uploadPhoto
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import { sanFranciscoWeights } from 'react-native-typography';
@@ -14,6 +15,15 @@ import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { ImagePicker, Permissions } from 'expo'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+
+const S3Options = {
+    keyPrefix: "reserve_ai/",
+    bucket: "tigum",
+    region: "us-east-1",
+    accessKey: "AKIAIUHHF3SCXDZ2UR4A",
+    secretKey: "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",
+    successActionStatus: 201
+}
 
 class RegisterAdminPicScreen extends Component {
 
@@ -37,18 +47,25 @@ class RegisterAdminPicScreen extends Component {
                 if (buttonIndex === 0) {
                     const { status } = await Permissions.getAsync(Permissions.CAMERA);
                     if (status === 'granted') {
-                        let result = await ImagePicker.launchCameraAsync();
+                        let result = await ImagePicker.launchCameraAsync({
+                            allowsEditing: true,
+                            aspect: [4, 4],
+                          });
                         if (!result.cancelled) {
-                            console.log('resultado0',result)
-                            this.uploadImage(result.uri)
+                            const uri = result.uri
+                            this.props.uploadPhoto({ uri, S3Options })
                         }
                     } else {
                         await Permissions.askAsync(Permissions.CAMERA)
                         const { status } = await Permissions.getAsync(Permissions.CAMERA);
                         if (status === 'granted') {
-                            let result = await ImagePicker.launchCameraAsync();
+                            let result = await ImagePicker.launchCameraAsync({
+                                allowsEditing: true,
+                                aspect: [4, 4],
+                              });
                             if (!result.cancelled) {
-                                this.uploadImage(result.uri)
+                                const uri = result.uri
+                                this.props.uploadPhoto({ uri, S3Options })
                             }
                         } else {
                             throw new Error('Permissão para acessar camera negada');
@@ -60,44 +77,32 @@ class RegisterAdminPicScreen extends Component {
                     const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
 
                     if (status === 'granted') {
-                        let result = await ImagePicker.launchImageLibraryAsync();
+                        let result = await ImagePicker.launchImageLibraryAsync({
+                            allowsEditing: true,
+                            aspect: [4, 4],
+                          });
                         if (!result.cancelled) {
-                            console.log('resultado',result)
-                            this.uploadImage(result.uri)
+                            const uri = result.uri
+                            this.props.uploadPhoto({ uri, S3Options })
                         }
                     } else {
                         await Permissions.askAsync(Permissions.CAMERA_ROLL)
                         const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
                         if (status === 'granted') {
-                            let result = await ImagePicker.launchImageLibraryAsync();
+                            let result = await ImagePicker.launchImageLibraryAsync({
+                                allowsEditing: true,
+                                aspect: [4, 4],
+                              });
                             if (!result.cancelled) {
-                                this.uploadImage(result.uri)
+                                const uri = result.uri
+                                this.props.uploadPhoto({ uri, S3Options })
                             }
                         } else {
                             throw new Error('Permissão para acessar a biblioteca negada');
                         }
                     }
                 }
-
             });
-
-    }
-
-    uploadImage = async (uri) => {
-        console.log('entrou')
-        try {
-            const response = await fetch(uri)
-            console.log('response', response)
-            let blob = await response.blob();
-            
-            console.log('blob', blob._data)
-            // const ref = firebase.storage().ref().child(`images/${this.props.email}`)
-            let ref = firebase.storage().ref().child('images/teste')
-            return ref.put(blob, { contentType : 'image/jpg' }).then(() => { console.log('foi') }).catch((err) => console.log('erro', err))
-        } catch (err) {
-            console.log('erro2', err)
-        }
-
     }
 
 
@@ -116,6 +121,9 @@ class RegisterAdminPicScreen extends Component {
             >
                 <Header headerText='Foto ou Logo' icon='leftcircleo' />
                 <View>
+                    {/* <Image 
+                        source={{uri:''}}
+                    /> */}
                     <Button
                         buttonText='Subir foto'
                         // buttonBackgroundColor={this.sundayColor()}
@@ -203,4 +211,5 @@ const mapStateToProps = ({ registerAdmin }) => {
 
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
+    uploadPhoto
 })(connectActionSheet(RegisterAdminPicScreen));
