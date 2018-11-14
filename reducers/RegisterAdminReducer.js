@@ -26,7 +26,11 @@ import {
     UNSELECT_THURSDAY,
     UNSELECT_FRIDAY,
     UNSELECT_SATURDAY,
-    UNSELECT_SUNDAY
+    UNSELECT_SUNDAY,
+    SET_SATURDAY_HOUR_START,
+    SET_SATURDAY_HOUR_END,
+    SET_SUNDAY_HOUR_START,
+    SET_SUNDAY_HOUR_END
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -48,7 +52,11 @@ const INITIAL_STATE = {
     friday: false,
     saturday: false,
     sunday: false,
-    image: ''
+    image: '',
+    saturdayHourStartSelected: '',
+    saturdayHourEndSelected: '',
+    sundayHourStartSelected: '',
+    sundayHourEndSelected: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -118,6 +126,14 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, saturday: false }
         case UNSELECT_SUNDAY:
             return { ...state, sunday: false }
+        case SET_SATURDAY_HOUR_START:
+            return { ...state, saturdayHourStartSelected: action.payload }
+        case SET_SATURDAY_HOUR_END:
+            return { ...state, saturdayHourEndSelected: action.payload }
+        case SET_SUNDAY_HOUR_START:
+            return { ...state, sundayHourStartSelected: action.payload }
+        case SET_SUNDAY_HOUR_END:
+            return { ...state, sundayHourEndSelected: action.payload }
         default:
             return state;
     }

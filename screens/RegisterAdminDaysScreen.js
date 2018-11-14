@@ -42,8 +42,50 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onRegisterButtonPress() {
-        // const { name, email, companyName, phone, password, passwordConfirmation, startHour, endHour } = this.props
-        // this.props.continueRegisterAdmin({ name, email, companyName, phone, password, passwordConfirmation })
+        const { 
+            name, 
+            email, 
+            companyName, 
+            phone, 
+            password, 
+            passwordConfirmation, 
+            startHour, 
+            endHour,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday
+         } = this.props
+        const userInfo = {
+            name,
+            email,
+            companyName,
+            phone,
+            password,
+            passwordConfirmation,
+            startHour,
+            endHour,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday
+        }
+
+        if(saturday){
+            return this.props.navigation.navigate('saturdayForm')
+        }
+
+        if(sunday) {
+            return this.props.navigation.navigate('sundayForm')
+        }
+
+        // this.props.continueRegisterAdmin(userInfo)
         this.props.navigation.navigate('picForm')
     }
 

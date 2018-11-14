@@ -29,7 +29,11 @@ import {
     UNSELECT_THURSDAY,
     UNSELECT_FRIDAY,
     UNSELECT_SATURDAY,
-    UNSELECT_SUNDAY
+    UNSELECT_SUNDAY,
+    SET_SATURDAY_HOUR_START,
+    SET_SATURDAY_HOUR_END,
+    SET_SUNDAY_HOUR_START,
+    SET_SUNDAY_HOUR_END
 } from './types';
 
 export const mondaySelected = () => {
@@ -158,13 +162,34 @@ export const phoneAdminChanged = (text) => {
     }
 }
 
-export const registerAdminUser = ({ name, email, companyName, phone, password, passwordConfirmation }) => async (dispatch) => {
+export const registerAdminUser = (
+    { 
+        name, 
+        email, 
+        companyName, 
+        phone, 
+        password, 
+        passwordConfirmation,
+        startHour,
+        endHour,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday 
+    }
+    ) => async (dispatch) => {
     if (!name) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome não informado' })
     if (!email) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'E-mail não informado' })
     if (!companyName) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome do empreendimento não informado' })
     if (!phone) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Telefone não informado' })
     if (!password || !passwordConfirmation) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Senha ou confirmação de senha não informado' })
     if (password !== passwordConfirmation) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Confirmação de senha incorreta' })
+    if (startHour === endHour || parseFloat(startHour.substr(0,2) >= parseFloat(endHour.substr(0,2)))) return alert('Horário de funcionamento não válido, favor voltar e rever horário')
+    if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) return alert('É obrigatório escolher um dia de funcionamento no mínimo.')
+
 
     try {
         registerAdminLoadingOn(dispatch)
@@ -204,6 +229,34 @@ export const hoursCompanyStart = (hour) => {
 export const hoursCompanyEnd = (hour) => {
     return {
         type: COMPANY_HOURS_END,
+        payload: hour
+    }
+}
+
+export const saturdayHourStart = (hour) => {
+    return {
+        type: SET_SATURDAY_HOUR_START,
+        payload: hour
+    }
+}
+
+export const saturdayHourEnd = (hour) => {
+    return {
+        type: SET_SATURDAY_HOUR_END,
+        payload: hour
+    }
+}
+
+export const sundayHourStart = (hour) => {
+    return {
+        type: SET_SUNDAY_HOUR_START,
+        payload: hour
+    }
+}
+
+export const sundayHourEnd = (hour) => {
+    return {
+        type: SET_SUNDAY_HOUR_END,
         payload: hour
     }
 }

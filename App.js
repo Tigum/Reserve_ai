@@ -12,6 +12,8 @@ import RegisterAdminFormScreen from './screens/RegisterAdminFormScreen'
 import RegisterAdminHoursScreen from './screens/RegisterAdminHoursScreen'
 import RegisterAdminDaysScreen from './screens/RegisterAdminDaysScreen'
 import RegisterAdminPicScreen from './screens/RegisterAdminPicScreen'
+import RegisterSaturdayHoursScreen from './screens/RegisterSaturdayHoursScreen'
+import RegisterSundayHoursScreen from './screens/RegisterSundayHoursScreen'
 import MainAdminScreen from './screens/MainAdminScreen'
 import ServicesAdminScreen from './screens/ServicesAdminScreen'
 import AddServicesScreen from './screens/AddServicesScreen'
@@ -72,6 +74,24 @@ export default class App extends React.Component {
           },
           picForm: {
             screen: RegisterAdminPicScreen,
+            navigationOptions: () => ({
+              // title: 'Cadastre-se',
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
+          saturdayForm: {
+            screen: RegisterSaturdayHoursScreen,
+            navigationOptions: () => ({
+              // title: 'Cadastre-se',
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
+          sundayForm: {
+            screen: RegisterSundayHoursScreen,
             navigationOptions: () => ({
               // title: 'Cadastre-se',
               headerStyle: {
