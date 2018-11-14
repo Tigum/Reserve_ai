@@ -30,7 +30,7 @@ import {
     SET_SATURDAY_HOUR_START,
     SET_SATURDAY_HOUR_END,
     SET_SUNDAY_HOUR_START,
-    SET_SUNDAY_HOUR_END
+    SET_SUNDAY_HOUR_END,
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -56,7 +56,7 @@ const INITIAL_STATE = {
     saturdayHourStartSelected: '',
     saturdayHourEndSelected: '',
     sundayHourStartSelected: '',
-    sundayHourEndSelected: ''
+    sundayHourEndSelected: '',
 };
 
 export default (state = INITIAL_STATE, action) => {

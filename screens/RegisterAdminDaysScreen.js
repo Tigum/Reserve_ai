@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
@@ -18,10 +18,10 @@ import {
     thursdayUnselected,
     fridayUnselected,
     saturdayUnselected,
-    sundayUnselected
+    sundayUnselected,
+    registerAdminUser
 } from '../actions'
 import { Spinner } from '../components/Spinner'
-import { sanFranciscoWeights } from 'react-native-typography';
 import Button from '../components/Button'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -41,25 +41,9 @@ class RegisterAdminDaysScreen extends Component {
         sunday: false
     }
 
+    
     onRegisterButtonPress() {
-        const { 
-            name, 
-            email, 
-            companyName, 
-            phone, 
-            password, 
-            passwordConfirmation, 
-            startHour, 
-            endHour,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
-            sunday
-         } = this.props
-        const userInfo = {
+        const {
             name,
             email,
             companyName,
@@ -75,17 +59,40 @@ class RegisterAdminDaysScreen extends Component {
             friday,
             saturday,
             sunday
-        }
+        } = this.props
+        
+        if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) return alert('É obrigatório escolher um dia de funcionamento no mínimo.')
 
-        if(saturday){
+        if (saturday) {
             return this.props.navigation.navigate('saturdayForm')
         }
 
-        if(sunday) {
+        if (sunday) {
             return this.props.navigation.navigate('sundayForm')
         }
 
-        // this.props.continueRegisterAdmin(userInfo)
+        const userInfo = {
+            name,
+            email,
+            companyName,
+            phone,
+            password,
+            passwordConfirmation,
+            startHour,
+            endHour,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday,
+            saturdayHourStartSelected: null,
+            saturdayHourEndSelected: null,
+            sundayHourStartSelected: null,
+            sundayHourEndSelected: null
+        }
+        this.props.registerAdminUser(userInfo)
         this.props.navigation.navigate('picForm')
     }
 
@@ -94,14 +101,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressMonday() {
-        if(this.state.monday) {
+        if (this.state.monday) {
             this.props.mondayUnselected()
-            this.setState({ monday: false})
+            this.setState({ monday: false })
         }
 
-        if(!this.state.monday){
+        if (!this.state.monday) {
             this.props.mondaySelected()
-            this.setState({ monday : true})
+            this.setState({ monday: true })
         }
     }
 
@@ -110,14 +117,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressTuesday() {
-        if(this.state.tuesday) {
+        if (this.state.tuesday) {
             this.props.tuesdayUnselected()
-            this.setState({ tuesday: false})
+            this.setState({ tuesday: false })
         }
 
-        if(!this.state.tuesday){
+        if (!this.state.tuesday) {
             this.props.tuesdaySelected()
-            this.setState({ tuesday : true})
+            this.setState({ tuesday: true })
         }
     }
 
@@ -126,14 +133,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressWednesday() {
-        if(this.state.wednesday) {
+        if (this.state.wednesday) {
             this.props.wednesdayUnselected()
-            this.setState({ wednesday: false})
+            this.setState({ wednesday: false })
         }
 
-        if(!this.state.wednesday){
+        if (!this.state.wednesday) {
             this.props.wednesdaySelected()
-            this.setState({ wednesday : true})
+            this.setState({ wednesday: true })
         }
     }
 
@@ -142,14 +149,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressThursday() {
-        if(this.state.thursday) {
+        if (this.state.thursday) {
             this.props.thursdayUnselected()
-            this.setState({ thursday: false})
+            this.setState({ thursday: false })
         }
 
-        if(!this.state.thursday){
+        if (!this.state.thursday) {
             this.props.thursdaySelected()
-            this.setState({ thursday : true})
+            this.setState({ thursday: true })
         }
     }
 
@@ -158,14 +165,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressFriday() {
-        if(this.state.friday) {
+        if (this.state.friday) {
             this.props.fridayUnselected()
-            this.setState({ friday: false})
+            this.setState({ friday: false })
         }
 
-        if(!this.state.friday){
+        if (!this.state.friday) {
             this.props.fridaySelected()
-            this.setState({ friday : true})
+            this.setState({ friday: true })
         }
     }
 
@@ -174,14 +181,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressSaturday() {
-        if(this.state.saturday) {
+        if (this.state.saturday) {
             this.props.saturdayUnselected()
-            this.setState({ saturday: false})
+            this.setState({ saturday: false })
         }
 
-        if(!this.state.saturday){
+        if (!this.state.saturday) {
             this.props.saturdaySelected()
-            this.setState({ saturday : true})
+            this.setState({ saturday: true })
         }
     }
 
@@ -190,14 +197,14 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     onPressSunday() {
-        if(this.state.sunday) {
+        if (this.state.sunday) {
             this.props.sundayUnselected()
-            this.setState({ sunday: false})
+            this.setState({ sunday: false })
         }
 
-        if(!this.state.sunday){
+        if (!this.state.sunday) {
             this.props.sundaySelected()
-            this.setState({ sunday : true})
+            this.setState({ sunday: true })
         }
     }
 
@@ -282,7 +289,6 @@ class RegisterAdminDaysScreen extends Component {
     }
 
     render() {
-        console.log('props3', this.props)
         return this.renderContent()
     }
 }
@@ -364,5 +370,6 @@ export default connect(mapStateToProps, {
     thursdayUnselected,
     fridayUnselected,
     saturdayUnselected,
-    sundayUnselected
+    sundayUnselected,
+    registerAdminUser
 })(RegisterAdminDaysScreen);

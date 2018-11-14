@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
     continueRegisterAdmin,
     saturdayHourStart,
-    saturdayHourEnd
+    saturdayHourEnd,
+    registerAdminUser
 } from '../actions'
 import { sanFranciscoWeights } from 'react-native-typography';
 
@@ -15,14 +16,14 @@ import { sanFranciscoWeights } from 'react-native-typography';
 class RegisterSaturdayHoursScreen extends Component {
 
     onRegisterButtonPress() {
-        const { 
-            name, 
-            email, 
-            companyName, 
-            phone, 
-            password, 
-            passwordConfirmation, 
-            startHour, 
+        const {
+            name,
+            email,
+            companyName,
+            phone,
+            password,
+            passwordConfirmation,
+            startHour,
             endHour,
             monday,
             tuesday,
@@ -32,8 +33,20 @@ class RegisterSaturdayHoursScreen extends Component {
             saturday,
             sunday,
             saturdayHourStartSelected,
-            saturdayHourEndSelected
-         } = this.props
+            saturdayHourEndSelected,
+        } = this.props
+
+        if (saturdayHourStartSelected && saturdayHourEndSelected) {
+            const start = parseFloat(saturdayHourStartSelected.substr(0, 2))
+            const end = parseFloat(saturdayHourEndSelected.substr(0, 2))
+            if (saturdayHourStartSelected === saturdayHourEndSelected || start > end) {
+                return alert('Horário de funcionamento não válido, horário de fechamento deve ser maior que o horário de abertura do empreendimento')
+            }
+        }
+
+        if (sunday) {
+            return this.props.navigation.navigate('sundayForm')
+        }
         const userInfo = {
             name,
             email,
@@ -51,14 +64,11 @@ class RegisterSaturdayHoursScreen extends Component {
             saturday,
             sunday,
             saturdayHourStartSelected,
-            saturdayHourEndSelected
+            saturdayHourEndSelected,
+            sundayHourStartSelected: null,
+            sundayHourEndSelected: null
         }
-
-        if(sunday) {
-            return this.props.navigation.navigate('sundayForm')
-        }
-
-        // this.props.continueRegisterAdmin(userInfo)
+        this.props.registerAdminUser(userInfo)
         this.props.navigation.navigate('picForm')
     }
 
@@ -78,8 +88,8 @@ class RegisterSaturdayHoursScreen extends Component {
                     </FormLabel>
 
                     <Picker
-                    selectedValue={this.props.saturdayHourStartSelected}
-                    onValueChange={hour => this.props.saturdayHourStart(hour)}
+                        selectedValue={this.props.saturdayHourStartSelected}
+                        onValueChange={hour => this.props.saturdayHourStart(hour)}
                     >
                         <Picker.Item label='00:00' value='00:00' />
                         <Picker.Item type={String} label='01:00' value='01:00' />
@@ -114,8 +124,8 @@ class RegisterSaturdayHoursScreen extends Component {
                     </FormLabel>
 
                     <Picker
-                    selectedValue={this.props.saturdayHourEndSelected}
-                    onValueChange={hour => this.props.saturdayHourEnd(hour)}
+                        selectedValue={this.props.saturdayHourEndSelected}
+                        onValueChange={hour => this.props.saturdayHourEnd(hour)}
                     >
                         <Picker.Item label='00:00' value='00:00' />
                         <Picker.Item label='01:00' value='01:00' />
@@ -153,7 +163,6 @@ class RegisterSaturdayHoursScreen extends Component {
     }
 
     render() {
-        console.log('propsSaturday', this.props)
         return this.renderContent()
     }
 }
@@ -172,14 +181,14 @@ const styles = {
 }
 
 const mapStateToProps = ({ registerAdmin }) => {
-    const { 
-        name, 
-        email, 
-        companyName, 
-        phone, 
-        password, 
-        passwordConfirmation, 
-        user, 
+    const {
+        name,
+        email,
+        companyName,
+        phone,
+        password,
+        passwordConfirmation,
+        user,
         loading,
         monday,
         tuesday,
@@ -187,10 +196,10 @@ const mapStateToProps = ({ registerAdmin }) => {
         thursday,
         friday,
         saturday,
-        sunday, 
-        startHour, 
-        endHour, 
-        saturdayHourStartSelected, 
+        sunday,
+        startHour,
+        endHour,
+        saturdayHourStartSelected,
         saturdayHourEndSelected } = registerAdmin;
     return {
         name,
@@ -218,5 +227,6 @@ const mapStateToProps = ({ registerAdmin }) => {
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
     saturdayHourStart,
-    saturdayHourEnd
+    saturdayHourEnd,
+    registerAdminUser
 })(RegisterSaturdayHoursScreen);

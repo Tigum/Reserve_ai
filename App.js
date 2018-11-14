@@ -4,6 +4,7 @@ import { createBottomTabNavigator, createStackNavigator } from 'react-navigation
 import { Provider } from 'react-redux'
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import NavigationService from './actions/NavigationServices';
 
 import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen'
@@ -144,7 +145,11 @@ export default class App extends React.Component {
         <ActionSheetProvider>
           <View style={styles.container}>
             {/* <MainNavigator /> */}
-            <RootStack />
+            <RootStack 
+              ref={navigatorRef => {
+                NavigationService.setTopLevelNavigator(navigatorRef);
+              }}
+            />
           </View>
         </ActionSheetProvider>
       </Provider>

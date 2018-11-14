@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
     continueRegisterAdmin,
     sundayHourStart,
-    sundayHourEnd
+    sundayHourEnd,
+    registerAdminUser
 } from '../actions'
 import { sanFranciscoWeights } from 'react-native-typography';
 
@@ -36,6 +37,15 @@ class RegisterSaturdayHoursScreen extends Component {
             sundayHourStartSelected,
             sundayHourEndSelected
         } = this.props
+
+        if (sundayHourStartSelected && sundayHourEndSelected) {
+            const start = parseFloat(sundayHourStartSelected.substr(0, 2))
+            const end = parseFloat(sundayHourEndSelected.substr(0, 2))
+            if (sundayHourStartSelected === sundayHourEndSelected || start > end) {
+                return alert('Horário de funcionamento não válido, horário de fechamento deve ser maior que o horário de abertura do empreendimento')
+            }
+        }
+
         const userInfo = {
             name,
             email,
@@ -57,8 +67,7 @@ class RegisterSaturdayHoursScreen extends Component {
             sundayHourStartSelected,
             sundayHourEndSelected
         }
-
-        // this.props.continueRegisterAdmin(userInfo)
+        this.props.registerAdminUser(userInfo)
         this.props.navigation.navigate('picForm')
     }
 
@@ -153,7 +162,6 @@ class RegisterSaturdayHoursScreen extends Component {
     }
 
     render() {
-        console.log('propsSunday', this.props)
         return this.renderContent()
     }
 }
@@ -223,5 +231,6 @@ const mapStateToProps = ({ registerAdmin }) => {
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
     sundayHourStart,
-    sundayHourEnd
+    sundayHourEnd,
+    registerAdminUser
 })(RegisterSaturdayHoursScreen);

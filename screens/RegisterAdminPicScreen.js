@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Image } from 'react-native';
-import firebase from 'firebase';
+import { View, Text, Dimensions, ActivityIndicator } from 'react-native';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
@@ -8,7 +7,6 @@ import {
     continueRegisterAdmin,
     uploadPhoto
 } from '../actions'
-import { Spinner } from '../components/Spinner'
 import { sanFranciscoWeights } from 'react-native-typography';
 import Button from '../components/Button'
 import { connectActionSheet } from '@expo/react-native-action-sheet';
@@ -28,8 +26,7 @@ const S3Options = {
 class RegisterAdminPicScreen extends Component {
 
     onRegisterButtonPress() {
-        // const { name, email, companyName, phone, password, passwordConfirmation, startHour, endHour } = this.props
-        // this.props.continueRegisterAdmin({ name, email, companyName, phone, password, passwordConfirmation })
+        this.props.navigation.navigate('mainAdminScreen')
     }
 
     onOpenActionSheet = async () => {
@@ -52,8 +49,9 @@ class RegisterAdminPicScreen extends Component {
                             aspect: [4, 4],
                           });
                         if (!result.cancelled) {
+                            const uid = await this.props.user.uid
                             const uri = result.uri
-                            this.props.uploadPhoto({ uri, S3Options })
+                            await this.props.uploadPhoto({ uri, S3Options, uid })
                         }
                     } else {
                         await Permissions.askAsync(Permissions.CAMERA)
@@ -63,11 +61,13 @@ class RegisterAdminPicScreen extends Component {
                                 allowsEditing: true,
                                 aspect: [4, 4],
                               });
+                            const uid = await this.props.user.uid
                             if (!result.cancelled) {
                                 const uri = result.uri
-                                this.props.uploadPhoto({ uri, S3Options })
+                                await this.props.uploadPhoto({ uri, S3Options, uid })
                             }
                         } else {
+                            alert('Permissão para acessar camera negada')
                             throw new Error('Permissão para acessar camera negada');
                         }
                     }
@@ -82,8 +82,9 @@ class RegisterAdminPicScreen extends Component {
                             aspect: [4, 4],
                           });
                         if (!result.cancelled) {
+                            const uid = await this.props.user.uid
                             const uri = result.uri
-                            this.props.uploadPhoto({ uri, S3Options })
+                            await this.props.uploadPhoto({ uri, S3Options, uid })
                         }
                     } else {
                         await Permissions.askAsync(Permissions.CAMERA_ROLL)
@@ -94,10 +95,12 @@ class RegisterAdminPicScreen extends Component {
                                 aspect: [4, 4],
                               });
                             if (!result.cancelled) {
+                                const uid = await this.props.user.uid
                                 const uri = result.uri
-                                this.props.uploadPhoto({ uri, S3Options })
+                                await this.props.uploadPhoto({ uri, S3Options, uid })
                             }
                         } else {
+                            alert('Permissão para acessar a biblioteca negada')
                             throw new Error('Permissão para acessar a biblioteca negada');
                         }
                     }
@@ -110,7 +113,8 @@ class RegisterAdminPicScreen extends Component {
         if (this.props.loading) {
             return (
                 <View style={styles.spinnerView}>
-                    <Spinner />
+                    <ActivityIndicator size='large' />
+                    <Text style={[sanFranciscoWeights.thin, styles.loadingTextStyle]}>Processando...</Text>
                 </View>
             )
         }
@@ -140,7 +144,7 @@ class RegisterAdminPicScreen extends Component {
     }
 
     render() {
-        console.log('props4', this.props)
+        console.log('propsPic', this.props)
         return this.renderContent()
     }
 }
@@ -161,8 +165,13 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: 'white',
-        alignSelf: 'center',
+        alignItems: 'center',
         width: SCREEN_WIDTH
+    },
+    loadingTextStyle: {
+        color: '#8c8c8c',
+        fontSize: 13,
+        paddingTop: 10
     }
 }
 
@@ -211,5 +220,5 @@ const mapStateToProps = ({ registerAdmin }) => {
 
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
-    uploadPhoto
+    uploadPhoto,
 })(connectActionSheet(RegisterAdminPicScreen));

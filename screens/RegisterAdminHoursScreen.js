@@ -15,18 +15,14 @@ import { sanFranciscoWeights } from 'react-native-typography';
 class RegisterAdminHoursScreen extends Component {
 
     onRegisterButtonPress() {
-        // const { name, email, companyName, phone, password, passwordConfirmation, startHour, endHour } = this.props
-        // const userInfo = {
-        //     name,
-        //     email,
-        //     companyName,
-        //     phone,
-        //     password,
-        //     passwordConfirmation,
-        //     startHour,
-        //     endHour
-        // }
-        // this.props.continueRegisterAdmin(userInfo)
+        const { startHour, endHour } = this.props
+        const start = parseFloat(startHour.substr(0, 2))
+        const end = parseFloat(endHour.substr(0, 2))
+
+        if (startHour === endHour || start > end) {
+            return alert('Horário de funcionamento não válido, horário de fechamento deve ser maior que o horário de abertura do empreendimento')
+        }
+
         this.props.navigation.navigate('daysForm')
     }
 
@@ -121,7 +117,6 @@ class RegisterAdminHoursScreen extends Component {
     }
 
     render() {
-        console.log('props2', this.props)
         return this.renderContent()
     }
 }

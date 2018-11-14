@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import { RNS3 } from 'react-native-aws3';
+import NavigationService from './NavigationServices';
 import $ from "jquery";
 import {
     NAME_ADMIN_REGISTER_CHANGED,
@@ -33,7 +34,7 @@ import {
     SET_SATURDAY_HOUR_START,
     SET_SATURDAY_HOUR_END,
     SET_SUNDAY_HOUR_START,
-    SET_SUNDAY_HOUR_END
+    SET_SUNDAY_HOUR_END,
 } from './types';
 
 export const mondaySelected = () => {
@@ -163,12 +164,12 @@ export const phoneAdminChanged = (text) => {
 }
 
 export const registerAdminUser = (
-    { 
-        name, 
-        email, 
-        companyName, 
-        phone, 
-        password, 
+    {
+        name,
+        email,
+        companyName,
+        phone,
+        password,
         passwordConfirmation,
         startHour,
         endHour,
@@ -178,29 +179,110 @@ export const registerAdminUser = (
         thursday,
         friday,
         saturday,
-        sunday 
+        sunday,
+        saturdayHourStartSelected,
+        saturdayHourEndSelected,
+        sundayHourStartSelected,
+        sundayHourEndSelected
     }
-    ) => async (dispatch) => {
-    if (!name) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome não informado' })
-    if (!email) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'E-mail não informado' })
-    if (!companyName) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Nome do empreendimento não informado' })
-    if (!phone) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Telefone não informado' })
-    if (!password || !passwordConfirmation) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Senha ou confirmação de senha não informado' })
-    if (password !== passwordConfirmation) return dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: 'Confirmação de senha incorreta' })
-    if (startHour === endHour || parseFloat(startHour.substr(0,2) >= parseFloat(endHour.substr(0,2)))) return alert('Horário de funcionamento não válido, favor voltar e rever horário')
-    if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) return alert('É obrigatório escolher um dia de funcionamento no mínimo.')
+) => async (dispatch) => {
+    console.log('entrou')
+    let userInfo = {
+        name,
+        email,
+        companyName,
+        phone,
+        password,
+        passwordConfirmation,
+        startHour,
+        endHour,
+        seenWelcomePage: false,
+        role: 'admin',
+        imageUrl: '',
+    }
 
+    const days = [
+        {
+            day: {
+                selected: monday,
+                day: 'monday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: tuesday,
+                day: 'tuesday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: wednesday,
+                day: 'wednesday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: thursday,
+                day: 'thursday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: friday,
+                day: 'friday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: saturday,
+                day: 'saturday',
+                startHour: saturdayHourStartSelected,
+                endHour: saturdayHourEndSelected
+            }
+        },
+        {
+            day: {
+                selected: sunday,
+                day: 'sunday',
+                startHour: sundayHourStartSelected,
+                endHour: sundayHourEndSelected
+            }
+        }
+    ]
 
+    await days.map((element) => {
+        if (element.day.selected) {
+            const dayName = element.day.day
+            const dayInfo = {
+                day: dayName,
+                start: element.day.startHour,
+                end: element.day.endHour
+            }
+            userInfo[dayName] = dayInfo
+        }
+    })
+
+    console.log('userInfo', userInfo)
     try {
         registerAdminLoadingOn(dispatch)
         await firebase.auth().createUserWithEmailAndPassword(email, password)
         const { currentUser } = await firebase.auth()
-        await currentUser.updateProfile({ displayName: name })
-        await firebase.database().ref(`/users/${currentUser.uid}`).set({ name, email, companyName, phone, seenWelcomePage: false, role: 'admin' })
         const user = currentUser
-        console.log('user', user)
+        await currentUser.updateProfile({ displayName: name })
+        await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
+        await firebase.auth().signInWithEmailAndPassword(email, password)
         await adminUserRegisteredSuccess(dispatch, user)
-        clearForm(dispatch)
+        // clearForm(dispatch)
         registerAdminLoadingOff(dispatch)
 
     } catch (err) {
@@ -261,16 +343,13 @@ export const sundayHourEnd = (hour) => {
     }
 }
 
-export const uploadPhoto = ({ uri, S3Options }) => async (dispatch) => {
+export const uploadPhoto = ({ uri, S3Options, uid }) => async (dispatch) => {
+    registerAdminLoadingOn(dispatch)
     let post = {}
     post["id"] = firebase.database.ServerValue.TIMESTAMP
     post["text"] = 'teste4294'
-    console.log('post', post)
     const options = S3Options
-    console.log('uri', uri)
-    console.log('options', options)
     const ext = uri.substr(uri.lastIndexOf('.') + 1);
-    console.log('ext',ext)
     const name = Math.round(+new Date() / 1000);
     const file = {
         name: name + "." + ext,
@@ -279,15 +358,24 @@ export const uploadPhoto = ({ uri, S3Options }) => async (dispatch) => {
     }
 
     RNS3.put(file, options).then(response => {
-        console.log('response', response)
         if (response.status === 201) {
             post["photo"] = response.body.postResponse.location
-            firebase.database().ref('newsfeed').push(post)
+            firebase.database().ref(`users/${uid}`).update({ imageUrl: post.photo })
+                .then(() => {
+                    NavigationService.navigate('mainAdminScreen', {});
+                    registerAdminLoadingOff(dispatch)
+                })
+                .catch((err) => {
+                    console.log('imageError', err)
+                    alert('Erro ao carregar a foto. Tente novamente.')
+                    registerAdminLoadingOff(dispatch)
+                })
         }
-    }).catch((err) => console.log('imageError', err));
-
-
-
+    }).catch((err) => {
+        console.log('imageError', err)
+        alert('Erro ao carregar a foto. Tente novamente.')
+        registerAdminLoadingOff(dispatch)
+    });
 }
 
 const adminUserRegisteredSuccess = (dispatch, user) => {
@@ -316,3 +404,4 @@ const clearForm = (dispatch) => {
         type: CLEAR_FORM,
     })
 }
+

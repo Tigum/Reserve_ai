@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions, TouchableWithoutFeedback } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
+import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
+import { FormLabel, FormInput } from 'react-native-elements';
 import Header from '../components/Header';
 import BottomButton from '../components/BottomButton';
 import { connect } from 'react-redux';
@@ -47,15 +47,13 @@ class RegisterAdminFormScreen extends Component {
 
     onRegisterButtonPress() {
         const { name, email, companyName, phone, password, passwordConfirmation } = this.props
-        const userInfo = {
-            name,
-            email,
-            companyName,
-            phone,
-            password,
-            passwordConfirmation
-        }
-        // this.props.continueRegisterAdmin(userInfo)
+        if (!name) return alert('Nome não informado')
+        if (!email) return alert('E-mail não informado')
+        if (!companyName) return alert('Nome do empreendimento não informado')
+        if (!phone) return alert('Telefone não informado')
+        if (password.length < 6) return alert('A senha precisa ter no mínimo 6 caracteres')
+        if (!password || !passwordConfirmation) return alert('Senha ou confirmação de senha não informado')
+        if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
         this.props.navigation.navigate('hoursForm')
     }
 
@@ -81,18 +79,18 @@ class RegisterAdminFormScreen extends Component {
         }
 
         return (
-            
-            <KeyboardAvoidingView 
-                style={styles.mainView} 
+
+            <KeyboardAvoidingView
+                style={styles.mainView}
                 behavior="padding"
             >
-            <Header headerText='Cadastre sua loja' icon='leftcircleo'/>
-            {this.renderError()}
+                <Header headerText='Cadastre sua loja' icon='leftcircleo' />
+                {this.renderError()}
                 <View>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
-                    NOME
+                        NOME
                     </FormLabel>
 
                     <FormInput
@@ -108,7 +106,7 @@ class RegisterAdminFormScreen extends Component {
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
-                    EMAIL
+                        EMAIL
                     </FormLabel>
 
                     <FormInput
@@ -125,7 +123,7 @@ class RegisterAdminFormScreen extends Component {
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
-                    NOME DE SEU EMPREENDIMENTO
+                        NOME DE SEU EMPREENDIMENTO
                     </FormLabel>
 
                     <FormInput
@@ -141,7 +139,7 @@ class RegisterAdminFormScreen extends Component {
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
-                    TELEFONE
+                        TELEFONE
                     </FormLabel>
 
                     <FormInput
@@ -158,7 +156,7 @@ class RegisterAdminFormScreen extends Component {
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
-                    SENHA
+                        SENHA
                     </FormLabel>
 
                     <FormInput
@@ -175,7 +173,7 @@ class RegisterAdminFormScreen extends Component {
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
-                    CONFIRMAR SENHA
+                        CONFIRMAR SENHA
                     </FormLabel>
 
                     <FormInput
@@ -187,8 +185,8 @@ class RegisterAdminFormScreen extends Component {
                         onBlur={() => Keyboard.dismiss()}
                         inputStyle={sanFranciscoWeights.thin}
                     />
-                </View>              
-                <BottomButton 
+                </View>
+                <BottomButton
                     buttonText='Continuar'
                     buttonAction={this.onRegisterButtonPress.bind(this)}
                 />
