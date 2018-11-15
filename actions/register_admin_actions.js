@@ -381,6 +381,7 @@ export const checkIfEmailExists = ({ email, errorMessage, errorRouteName, succes
     registerAdminLoadingOn(dispatch)
     const result = await firebase.auth().fetchSignInMethodsForEmail(email)
     if (result.length > 0) {
+        clearForm(dispatch)
         registerAdminLoadingOff(dispatch)
         alert(errorMessage)
         return NavigationService.navigate(errorRouteName, {})
