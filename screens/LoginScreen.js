@@ -111,6 +111,7 @@ class LoginScreen extends Component {
                         buttonTextColor='#3577e6'
                         buttonFontSize={15}
                         buttonMarginTop={0}
+                        buttonAction={this.onClientRegisterPress.bind(this)}
                     />
                     <Button 
                         buttonText='Cadastre-se como profissional!'
@@ -143,6 +144,10 @@ class LoginScreen extends Component {
 
     onAdminRegisterPress() {
         this.props.navigation.navigate('adminForm')
+    }
+
+    onClientRegisterPress() {
+        this.props.navigation.navigate('clientForm')
     }
 
     render() {

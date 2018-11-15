@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import firebase from 'firebase';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
 import {
     continueRegisterAdmin,
-    uploadPhoto
+    uploadPhoto,
+    checkIfClientEmailExistsAndRegister
 } from '../actions'
 import Button from '../components/Button'
 import { Spinner } from '../components/Spinner'
@@ -45,7 +47,7 @@ class RegisterAdminPicScreen extends Component {
                         let result = await ImagePicker.launchCameraAsync({
                             allowsEditing: true,
                             aspect: [4, 4],
-                          });
+                        });
                         if (!result.cancelled) {
                             const uid = await this.props.user.uid
                             const uri = result.uri
@@ -58,7 +60,7 @@ class RegisterAdminPicScreen extends Component {
                             let result = await ImagePicker.launchCameraAsync({
                                 allowsEditing: true,
                                 aspect: [4, 4],
-                              });
+                            });
                             const uid = await this.props.user.uid
                             if (!result.cancelled) {
                                 const uri = result.uri
@@ -78,7 +80,7 @@ class RegisterAdminPicScreen extends Component {
                         let result = await ImagePicker.launchImageLibraryAsync({
                             allowsEditing: true,
                             aspect: [4, 4],
-                          });
+                        });
                         if (!result.cancelled) {
                             const uid = await this.props.user.uid
                             const uri = result.uri
@@ -91,7 +93,7 @@ class RegisterAdminPicScreen extends Component {
                             let result = await ImagePicker.launchImageLibraryAsync({
                                 allowsEditing: true,
                                 aspect: [4, 4],
-                              });
+                            });
                             if (!result.cancelled) {
                                 const uid = await this.props.user.uid
                                 const uri = result.uri
@@ -116,7 +118,7 @@ class RegisterAdminPicScreen extends Component {
             <View
                 style={styles.mainView}
             >
-                <Header headerText='Foto ou Logo' icon='leftcircleo' />
+                <Header headerText='Foto do perfil' icon='leftcircleo' />
                 <View>
                     {/* <Image 
                         source={{uri:''}}
@@ -155,7 +157,7 @@ const styles = {
     },
 }
 
-const mapStateToProps = ({ registerAdmin }) => {
+const mapStateToProps = ({ registerAdmin, registerClient }) => {
     const {
         name,
         email,
@@ -175,7 +177,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         saturday,
         sunday,
         image
-    } = registerAdmin;
+    } = registerAdmin ? registerAdmin : registerClient;
     return {
         name,
         email,
@@ -201,4 +203,5 @@ const mapStateToProps = ({ registerAdmin }) => {
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
     uploadPhoto,
+    checkIfClientEmailExistsAndRegister
 })(connectActionSheet(RegisterAdminPicScreen));

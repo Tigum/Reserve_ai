@@ -1,7 +1,6 @@
 import firebase from 'firebase';
 import { RNS3 } from 'react-native-aws3';
 import NavigationService from './NavigationServices';
-import $ from "jquery";
 import {
     NAME_ADMIN_REGISTER_CHANGED,
     EMAIL_ADMIN_REGISTER_CHANGED,
@@ -386,7 +385,6 @@ export const checkIfEmailExists = ({ email, errorMessage, errorRouteName, succes
         alert(errorMessage)
         return NavigationService.navigate(errorRouteName, {})
     }
-    console.log('result', result)
     NavigationService.navigate(successRouteName, {})
     registerAdminLoadingOff(dispatch)
 }

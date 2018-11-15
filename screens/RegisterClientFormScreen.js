@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
+import { View, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
 import { FormLabel, FormInput } from 'react-native-elements';
 import Header from '../components/Header';
 import BottomButton from '../components/BottomButton';
 import { connect } from 'react-redux';
 import {
-    
+    nameClientChanged,
+    emailClientChanged,
+    phoneClientChanged,
+    passwordClientChanged,
+    passwordConfirmationClientChanged,
+    checkIfClientEmailExistsAndRegister
 } from '../actions';
 import { Spinner } from '../components/Spinner';
 import { sanFranciscoWeights } from 'react-native-typography';
@@ -15,27 +20,27 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 class RegisterClientFormScreen extends Component {
 
     onNameChange(text) {
-        this.props.nameAdminChanged(text)
+        this.props.nameClientChanged(text)
     }
 
     onEmailChange(text) {
-        this.props.emailAdminChanged(text)
+        this.props.emailClientChanged(text)
     }
 
     onPhoneChange(text) {
-        this.props.phoneAdminChanged(text)
+        this.props.phoneClientChanged(text)
     }
 
     onPasswordChange(text) {
-        this.props.passwordAdminChanged(text)
+        this.props.passwordClientChanged(text)
     }
 
     onPasswordConfirmationChange(text) {
-        this.props.passwordConfirmationAdminChanged(text)
+        this.props.passwordConfirmationClientChanged(text)
     }
 
     onRegisterButtonPress() {
-        const { name, email, phone, password, passwordConfirmation } = this.props
+        const { name, email, phone, password, passwordConfirmation, imageUrl } = this.props
         if (!name) return alert('Nome não informado')
         if (!email) return alert('E-mail não informado')
         if (!phone) return alert('Telefone não informado')
@@ -44,26 +49,16 @@ class RegisterClientFormScreen extends Component {
         if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
         const errorMessage = 'O e-mail informado já possui uma conta.'
         const errorRouteName = 'auth'
-        const successRouteName = 'mainAdminScreen'
+        const successRouteName = 'picForm'
+        const userInfo = { name, email, phone, password, passwordConfirmation, imageUrl, role: 'client' }
 
-        this.props.checkIfEmailExists({email, errorMessage, errorRouteName, successRouteName})
-    }
-
-    renderError() {
-        if (this.props.error) {
-            return (
-                <View style={{ backgroundColor: 'transparent' }}>
-                    <Text style={styles.errorTextStyle}>
-                        {this.props.error}
-                    </Text>
-                </View>
-            )
-        }
+        this.props.checkIfClientEmailExistsAndRegister({ email, errorMessage, errorRouteName, successRouteName, userInfo })
     }
 
     renderContent() {
+        console.log('props', this.props)
         if (this.props.loading) {
-            return <Spinner text='Validando usuário...' />
+            return <Spinner text='Criando conta...' />
         }
 
         return (
@@ -72,8 +67,7 @@ class RegisterClientFormScreen extends Component {
                 style={styles.mainView}
                 behavior="padding"
             >
-                <Header headerText='Cadastre sua loja' icon='leftcircleo' />
-                {this.renderError()}
+                <Header headerText='Cadastre-se' icon='leftcircleo' />
                 <View>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
@@ -104,22 +98,6 @@ class RegisterClientFormScreen extends Component {
                         value={this.props.email}
                         onBlur={() => Keyboard.dismiss()}
                         autoCapitalize='none'
-                        inputStyle={sanFranciscoWeights.thin}
-                    />
-                </View>
-                <View>
-                    <FormLabel
-                        labelStyle={sanFranciscoWeights.light}
-                    >
-                        NOME DE SEU EMPREENDIMENTO
-                    </FormLabel>
-
-                    <FormInput
-                        placeholder='Digite o nome do seu negócio'
-                        returnKeyType={"next"}
-                        onChangeText={this.onCompanyNameChange.bind(this)}
-                        value={this.props.companyName}
-                        onBlur={() => Keyboard.dismiss()}
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
@@ -198,11 +176,6 @@ const styles = {
         paddingTop: 35,
         paddingBottom: 35
     },
-    errorTextStyle: {
-        fontSize: 20,
-        alignSelf: 'center',
-        color: 'red'
-    },
     spinnerView: {
         flex: 1,
         flexDirection: 'column',
@@ -213,8 +186,8 @@ const styles = {
     }
 }
 
-const mapStateToProps = ({ registerAdmin }) => {
-    const { name, email, phone, password, passwordConfirmation, user, loading } = registerAdmin;
+const mapStateToProps = ({ registerClient }) => {
+    const { name, email, phone, password, passwordConfirmation, user, loading, imageUrl } = registerClient;
     return {
         name,
         email,
@@ -222,9 +195,16 @@ const mapStateToProps = ({ registerAdmin }) => {
         password,
         passwordConfirmation,
         user,
-        loading
+        loading,
+        imageUrl
     }
 }
 
 export default connect(mapStateToProps, {
+    nameClientChanged,
+    emailClientChanged,
+    phoneClientChanged,
+    passwordClientChanged,
+    passwordConfirmationClientChanged,
+    checkIfClientEmailExistsAndRegister
 })(RegisterClientFormScreen);
