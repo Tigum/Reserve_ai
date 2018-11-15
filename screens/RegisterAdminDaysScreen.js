@@ -211,11 +211,7 @@ class RegisterAdminDaysScreen extends Component {
 
     renderContent() {
         if (this.props.loading) {
-            return (
-                <View style={styles.spinnerView}>
-                    <Spinner />
-                </View>
-            )
+            return <Spinner />
         }
         return (
 

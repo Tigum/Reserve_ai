@@ -347,7 +347,6 @@ export const uploadPhoto = ({ uri, S3Options, uid }) => async (dispatch) => {
     registerAdminLoadingOn(dispatch)
     let post = {}
     post["id"] = firebase.database.ServerValue.TIMESTAMP
-    post["text"] = 'teste4294'
     const options = S3Options
     const ext = uri.substr(uri.lastIndexOf('.') + 1);
     const name = Math.round(+new Date() / 1000);
@@ -376,6 +375,19 @@ export const uploadPhoto = ({ uri, S3Options, uid }) => async (dispatch) => {
         alert('Erro ao carregar a foto. Tente novamente.')
         registerAdminLoadingOff(dispatch)
     });
+}
+
+export const checkIfEmailExists = ({ email, errorMessage, errorRouteName, successRouteName }) => async (dispatch) => {
+    registerAdminLoadingOn(dispatch)
+    const result = await firebase.auth().fetchSignInMethodsForEmail(email)
+    if (result.length > 0) {
+        registerAdminLoadingOff(dispatch)
+        alert(errorMessage)
+        return NavigationService.navigate(errorRouteName, {})
+    }
+    console.log('result', result)
+    NavigationService.navigate(successRouteName, {})
+    registerAdminLoadingOff(dispatch)
 }
 
 const adminUserRegisteredSuccess = (dispatch, user) => {

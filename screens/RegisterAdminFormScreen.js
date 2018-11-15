@@ -12,7 +12,8 @@ import {
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
     registerAdminUser,
-    continueRegisterAdmin
+    continueRegisterAdmin,
+    checkIfEmailExists
 } from '../actions';
 import { Spinner } from '../components/Spinner';
 import { sanFranciscoWeights } from 'react-native-typography';
@@ -55,6 +56,11 @@ class RegisterAdminFormScreen extends Component {
         if (!password || !passwordConfirmation) return alert('Senha ou confirmação de senha não informado')
         if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
         this.props.navigation.navigate('hoursForm')
+        const errorMessage = 'O e-mail informado já possui uma conta.'
+        const errorRouteName = 'auth'
+        const successRouteName = 'hoursForm'
+
+        this.props.checkIfEmailExists({email, errorMessage, errorRouteName, successRouteName})
     }
 
     renderError() {
@@ -71,11 +77,7 @@ class RegisterAdminFormScreen extends Component {
 
     renderContent() {
         if (this.props.loading) {
-            return (
-                <View style={styles.spinnerView}>
-                    <Spinner />
-                </View>
-            )
+            return <Spinner text='Validando usuário...' />
         }
 
         return (
@@ -143,12 +145,12 @@ class RegisterAdminFormScreen extends Component {
                     </FormLabel>
 
                     <FormInput
-                        placeholder='Digite seu telefone'
+                        placeholder='Ex.: (00) 00000-0000'
                         returnKeyType={"next"}
                         onChangeText={this.onPhoneChange.bind(this)}
                         value={this.props.phone}
                         onBlur={() => Keyboard.dismiss()}
-                        keyboardType='numeric'
+                        // keyboardType='numeric'
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
@@ -248,5 +250,6 @@ export default connect(mapStateToProps, {
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
     registerAdminUser,
-    continueRegisterAdmin
+    continueRegisterAdmin,
+    checkIfEmailExists
 })(RegisterAdminFormScreen);

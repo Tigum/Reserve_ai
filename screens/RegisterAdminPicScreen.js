@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
@@ -7,12 +7,10 @@ import {
     continueRegisterAdmin,
     uploadPhoto
 } from '../actions'
-import { sanFranciscoWeights } from 'react-native-typography';
 import Button from '../components/Button'
+import { Spinner } from '../components/Spinner'
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { ImagePicker, Permissions } from 'expo'
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const S3Options = {
     keyPrefix: "reserve_ai/",
@@ -111,12 +109,7 @@ class RegisterAdminPicScreen extends Component {
 
     renderContent() {
         if (this.props.loading) {
-            return (
-                <View style={styles.spinnerView}>
-                    <ActivityIndicator size='large' />
-                    <Text style={[sanFranciscoWeights.thin, styles.loadingTextStyle]}>Processando...</Text>
-                </View>
-            )
+            return <Spinner text='Criando conta...' />
         }
         return (
 
@@ -160,19 +153,6 @@ const styles = {
         paddingTop: 35,
         paddingBottom: 35
     },
-    spinnerView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        alignItems: 'center',
-        width: SCREEN_WIDTH
-    },
-    loadingTextStyle: {
-        color: '#8c8c8c',
-        fontSize: 13,
-        paddingTop: 10
-    }
 }
 
 const mapStateToProps = ({ registerAdmin }) => {

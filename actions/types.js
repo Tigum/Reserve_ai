@@ -40,6 +40,7 @@ export const SET_SATURDAY_HOUR_START = 'set_saturday_hour_start'
 export const SET_SATURDAY_HOUR_END = 'set_saturday_hour_end'
 export const SET_SUNDAY_HOUR_START = 'set_sunday_hour_start'
 export const SET_SUNDAY_HOUR_END = 'set_sunday_hour_end'
+export const CHECK_IF_USER_EXISTS_BY_EMAIL = 'check_if_user_exists_by_email'
 
 export const ADD_NEW_SERVICE = 'add_new_service'
 export const NEW_SERVICE_NAME_CHANGED = 'new_service_name_changed'
