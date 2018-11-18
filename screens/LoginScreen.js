@@ -48,9 +48,9 @@ class LoginScreen extends Component {
     }
 
     renderForm() {
-        if (this.props.loading) {
-            return  <Spinner />
-        }
+        // if (this.props.loading) {
+        //     return  <Spinner text='Autenticando usuário...'/>
+        // }
 
         return (
             <View style={styles.formView}>
@@ -150,15 +150,27 @@ class LoginScreen extends Component {
         this.props.navigation.navigate('clientForm')
     }
 
-    render() {
-        return (
-            <KeyboardAvoidingView style={styles.mainView} behavior="padding">
+    onRenderLogo() {
+        if(!this.props.loading) {
+            return (
                 <View style={styles.logoView}>
                     <Image
                         style={styles.logo}
                         source={require('../img/logo_main.png')}
                     />
                 </View>
+            )
+        }
+    }
+
+    render() {
+        if (this.props.loading) {
+            return  <Spinner text='Autenticando usuário...'/>
+        }
+        
+        return (
+            <KeyboardAvoidingView style={styles.mainView} behavior="padding">
+                {this.onRenderLogo()}
                 <View>
                     {this.renderError()}
                     {this.renderForm()}

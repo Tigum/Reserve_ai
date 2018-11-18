@@ -10,7 +10,8 @@ import {
     REGISTER_CLIENT_LOADING_ON,
     REGISTER_CLIENT_LOADING_OFF,
     CLEAR_FORM,
-    CLIENT_USER_REGISTERED_SUCCESS
+    CLIENT_USER_REGISTERED_SUCCESS,
+    CONTINUE_CLIENT_REGISTRATION
 } from './types';
 
 export const nameClientChanged = (text) => {
@@ -76,6 +77,47 @@ export const checkIfClientEmailExistsAndRegister = ({ email, errorMessage, error
         console.log(err)
         await dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
         registerClientLoadingOff(dispatch)
+    }
+}
+
+export const uploadPhotoClient = ({ uri, S3Options, uid, successRouteName }) => async (dispatch) => {
+    registerClientLoadingOn(dispatch)
+    let post = {}
+    post["id"] = firebase.database.ServerValue.TIMESTAMP
+    const options = S3Options
+    const ext = uri.substr(uri.lastIndexOf('.') + 1);
+    const name = Math.round(+new Date() / 1000);
+    const file = {
+        name: name + "." + ext,
+        type: "image/" + ext,
+        uri
+    }
+
+    RNS3.put(file, options).then(response => {
+        if (response.status === 201) {
+            post["photo"] = response.body.postResponse.location
+            firebase.database().ref(`users/${uid}`).update({ imageUrl: post.photo })
+                .then(() => {
+                    NavigationService.navigate(successRouteName, {});
+                    registerClientLoadingOff(dispatch)
+                })
+                .catch((err) => {
+                    console.log('imageError', err)
+                    alert('Erro ao carregar a foto. Tente novamente.')
+                    registerClientLoadingOff(dispatch)
+                })
+        }
+    }).catch((err) => {
+        console.log('imageError', err)
+        alert('Erro ao carregar a foto. Tente novamente.')
+        registerClientLoadingOff(dispatch)
+    });
+}
+
+export const continueRegisterClient = (userInfo) => {
+    return {
+        type: CONTINUE_CLIENT_REGISTRATION,
+        payload: userInfo
     }
 }
 

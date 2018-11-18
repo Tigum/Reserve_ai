@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import firebase from 'firebase';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
 import {
-    continueRegisterAdmin,
-    uploadPhoto,
-    checkIfClientEmailExistsAndRegister
+    continueRegisterClient,
+    uploadPhotoClient,
 } from '../actions'
 import Button from '../components/Button'
 import { Spinner } from '../components/Spinner'
@@ -23,7 +21,7 @@ const S3Options = {
     successActionStatus: 201
 }
 
-class RegisterAdminPicScreen extends Component {
+class RegisterClientPicScreen extends Component {
 
     onRegisterButtonPress() {
         this.props.navigation.navigate('mainAdminScreen')
@@ -52,7 +50,7 @@ class RegisterAdminPicScreen extends Component {
                             const uid = await this.props.user.uid
                             const uri = result.uri
                             const successRouteName = 'mainAdminScreen'
-                            await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                            await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                         }
                     } else {
                         await Permissions.askAsync(Permissions.CAMERA)
@@ -66,7 +64,7 @@ class RegisterAdminPicScreen extends Component {
                             if (!result.cancelled) {
                                 const uri = result.uri
                                 const successRouteName = 'mainAdminScreen'
-                                await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                             }
                         } else {
                             alert('Permissão para acessar camera negada')
@@ -87,7 +85,7 @@ class RegisterAdminPicScreen extends Component {
                             const uid = await this.props.user.uid
                             const uri = result.uri
                             const successRouteName = 'mainAdminScreen'
-                            await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                            await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                         }
                     } else {
                         await Permissions.askAsync(Permissions.CAMERA_ROLL)
@@ -101,7 +99,7 @@ class RegisterAdminPicScreen extends Component {
                                 const uid = await this.props.user.uid
                                 const uri = result.uri
                                 const successRouteName = 'mainAdminScreen'
-                                await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                             }
                         } else {
                             alert('Permissão para acessar a biblioteca negada')
@@ -115,14 +113,14 @@ class RegisterAdminPicScreen extends Component {
 
     renderContent() {
         if (this.props.loading) {
-            return <Spinner text='Criando conta...' />
+            return <Spinner text='Subindo foto...' />
         }
         return (
 
             <View
                 style={styles.mainView}
             >
-                <Header headerText='Foto da loja ou Logo' icon='leftcircleo' />
+                <Header headerText='Foto do perfil' icon='leftcircleo' />
                 <View>
                     {/* <Image 
                         source={{uri:''}}
@@ -135,7 +133,7 @@ class RegisterAdminPicScreen extends Component {
                     />
                 </View>
                 <BottomButton
-                    buttonText='Finalizar cadastro'
+                    buttonText='Pular'
                     buttonAction={this.onRegisterButtonPress.bind(this)}
                 />
             </View>
@@ -160,51 +158,32 @@ const styles = {
     },
 }
 
-const mapStateToProps = ({ registerAdmin }) => {
+const mapStateToProps = ({ registerClient }) => {
     const {
         name,
         email,
-        companyName,
         phone,
         password,
         passwordConfirmation,
         user,
         loading,
-        startHour,
-        endHour,
-        monday,
-        tuesday,
-        wednesday,
-        thursday,
-        friday,
-        saturday,
-        sunday,
-        image
-    } = registerAdmin;
+        image,
+        role
+    } = registerClient;
     return {
         name,
         email,
-        companyName,
         phone,
         password,
         passwordConfirmation,
         user,
         loading,
-        startHour,
-        endHour,
-        monday,
-        tuesday,
-        wednesday,
-        thursday,
-        friday,
-        saturday,
-        sunday,
-        image
+        image,
+        role
     }
 }
 
 export default connect(mapStateToProps, {
-    continueRegisterAdmin,
-    uploadPhoto,
-    checkIfClientEmailExistsAndRegister
-})(connectActionSheet(RegisterAdminPicScreen));
+    continueRegisterClient,
+    uploadPhotoClient,
+})(connectActionSheet(RegisterClientPicScreen));

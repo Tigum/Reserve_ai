@@ -7,7 +7,7 @@ import {
     CLIENT_USER_REGISTERED_SUCCESS,
     CLEAR_FORM,
     REGISTER_CLIENT_LOADING_ON,
-    REGISTER_ADMIN_LOADING_OFF
+    REGISTER_CLIENT_LOADING_OFF
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -18,7 +18,8 @@ const INITIAL_STATE = {
     passwordConfirmation: '',
     user: null,
     loading: false,
-    imageUrl: ''
+    imageUrl: '',
+    role: 'client'
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -38,7 +39,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, user: action.payload };
         case REGISTER_CLIENT_LOADING_ON:
             return { ...state, loading: action.payload };
-        case REGISTER_ADMIN_LOADING_OFF:
+        case REGISTER_CLIENT_LOADING_OFF:
             return { ...state, loading: action.payload };
         case CLEAR_FORM:
             return { ...state, ...INITIAL_STATE };

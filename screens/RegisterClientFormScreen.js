@@ -49,14 +49,13 @@ class RegisterClientFormScreen extends Component {
         if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
         const errorMessage = 'O e-mail informado já possui uma conta.'
         const errorRouteName = 'auth'
-        const successRouteName = 'picForm'
+        const successRouteName = 'picFormClient'
         const userInfo = { name, email, phone, password, passwordConfirmation, imageUrl, role: 'client' }
 
         this.props.checkIfClientEmailExistsAndRegister({ email, errorMessage, errorRouteName, successRouteName, userInfo })
     }
 
     renderContent() {
-        console.log('props', this.props)
         if (this.props.loading) {
             return <Spinner text='Criando conta...' />
         }

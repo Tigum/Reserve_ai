@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import { AsyncStorage } from 'react-native'
+import NavigationService from './NavigationServices';
 import { Facebook } from 'expo'
 import {
     EMAIL_CHANGED,
@@ -39,7 +40,14 @@ export const loginUser = ({ email, password }) => {
                 firebase.database().ref(`/users/${currentUser.uid}`)
                     .on('value', async snapshot => {
                         const user = await snapshot.val()
-                        loginUserSuccess(dispatch, user).then(() => authLoadingOff(dispatch))
+                        try {
+                            await loginUserSuccess(dispatch, user)
+                            NavigationService.navigate('mainAdminScreen', {});
+                            authLoadingOff(dispatch)
+                        } catch (err) {
+                            alert(err)
+                        }
+
                     })
             })
             .catch((error) => {
@@ -91,7 +99,7 @@ export const doFacebookLogin = () => async (dispatch) => {
 
     const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
 
-    firebase.auth().signInAndRetrieveDataWithCredential(provider).then( async function (result) {
+    firebase.auth().signInAndRetrieveDataWithCredential(provider).then(async function (result) {
         const token = result.credential.accessToken;
         const user = result.user;
         const name = user.displayName

@@ -18,14 +18,14 @@ class BottomButton extends Component {
         const height = buttonHeight || 60
         const borderColor = buttonBorderColor || ''
         const backgroundColor = buttonBackgroundColor || '#7f7f7f'
-        const borderStyle = buttonBorderStyle || 'none'
+        // const borderStyle = buttonBorderStyle || 'none'
         const borderWidth = buttonBorderStyle ? 1 : 0
         const color = buttonTextColor || 'white'
         const fontSize = buttonFontSize || 20
         const marginTop = buttonMarginTop || 10
         return (
             <TouchableWithoutFeedback onPress={buttonAction}>
-                <View style={[styles.buttonView, { backgroundColor }, { borderColor }, { height }, { borderStyle }, { borderWidth }, {marginTop}]}>
+                <View style={[styles.buttonView, { backgroundColor }, { borderColor }, { height }, { borderWidth }, {marginTop}]}>
                     <Text
                         style={
                             [sanFranciscoWeights.thin,

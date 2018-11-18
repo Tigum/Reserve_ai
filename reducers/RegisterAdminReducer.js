@@ -57,6 +57,7 @@ const INITIAL_STATE = {
     saturdayHourEndSelected: '',
     sundayHourStartSelected: '',
     sundayHourEndSelected: '',
+    role: 'admin'
 };
 
 export default (state = INITIAL_STATE, action) => {

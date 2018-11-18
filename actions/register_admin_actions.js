@@ -342,7 +342,7 @@ export const sundayHourEnd = (hour) => {
     }
 }
 
-export const uploadPhoto = ({ uri, S3Options, uid }) => async (dispatch) => {
+export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => async (dispatch) => {
     registerAdminLoadingOn(dispatch)
     let post = {}
     post["id"] = firebase.database.ServerValue.TIMESTAMP
@@ -360,7 +360,7 @@ export const uploadPhoto = ({ uri, S3Options, uid }) => async (dispatch) => {
             post["photo"] = response.body.postResponse.location
             firebase.database().ref(`users/${uid}`).update({ imageUrl: post.photo })
                 .then(() => {
-                    NavigationService.navigate('mainAdminScreen', {});
+                    NavigationService.navigate(successRouteName, {});
                     registerAdminLoadingOff(dispatch)
                 })
                 .catch((err) => {
