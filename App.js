@@ -23,6 +23,7 @@ import RegisterClientFormScreen from './screens/RegisterClientFormScreen'
 import MainAdminScreen from './screens/MainAdminScreen'
 import ServicesAdminScreen from './screens/ServicesAdminScreen'
 import AddServicesScreen from './screens/AddServicesScreen'
+import AddEmployeesScreen from './screens/AddEmployeesScreen'
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -155,6 +156,9 @@ export default class App extends React.Component {
         },
         addService: {
           screen: AddServicesScreen,
+        },
+        addEmployee: {
+          screen: AddEmployeesScreen,
         },
       },
       {

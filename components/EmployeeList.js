@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { ListItem } from 'react-native-elements';
 
 class EmployeeList extends Component {
@@ -16,6 +16,7 @@ class EmployeeList extends Component {
                         subtitle={item.role}
                     />
                 ))
+                
             )
         } else {
             return (

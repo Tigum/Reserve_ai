@@ -7,13 +7,13 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 
 class DefaultModal extends Component {
     render() {
-        const { title, children, dismissIcon, buttonAction } = this.props
+        const { title, children, dismissIcon, buttonAction, buttonText } = this.props
         return (
             <View style={styles.mainView}>
                 <Header headerText={title} icon={dismissIcon}/>
                  {children}
                  <BottomButton 
-                    buttonText='Adicionar'
+                    buttonText={buttonText}
                     buttonAction={buttonAction}
                  />
             </View>

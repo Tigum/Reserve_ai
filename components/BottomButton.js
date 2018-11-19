@@ -7,8 +7,10 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 class BottomButton extends Component {
     render() {
         const { buttonText, buttonAction } = this.props
+        const nofunction = () => {}
+        console.log('buton', this.props)
         return (
-            <TouchableWithoutFeedback onPress={buttonAction || {}}>
+            <TouchableWithoutFeedback onPress={buttonAction || nofunction}>
                 <View style={styles.buttonView}>
                     <Text style={[sanFranciscoWeights.thin, styles.addButtonStyle]}>{buttonText}</Text>
                 </View>

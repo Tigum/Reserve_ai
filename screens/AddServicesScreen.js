@@ -37,7 +37,7 @@ class AddServicesScreen extends Component {
         return (
             <DefaultModal
                 title='Adicionar serviço'
-                buttonText='Adicionar'
+                buttonText='Continuar'
                 dismissIcon='close'
                 buttonAction={this.onContinuePress.bind(this)}
             >

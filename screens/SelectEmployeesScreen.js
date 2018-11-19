@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { showCurrentEmployees } from '../actions'
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import EmployeeList from '../components/EmployeeList'
+import BottomButton from '../components/BottomButton';
 
 class SelectEmployeesScreen extends Component {
 
@@ -25,7 +26,7 @@ class SelectEmployeesScreen extends Component {
                 </TouchableWithoutFeedback>
             ),
             headerRight: (
-                <TouchableWithoutFeedback onPress={() => navigate('addService')}>
+                <TouchableWithoutFeedback>
                     <View style={{ paddingRight: 10 }}>
                         <MaterialIcons name="done" size={25} color="#3577e6" />
                     </View>
@@ -35,11 +36,22 @@ class SelectEmployeesScreen extends Component {
 
     };
 
+    addEmployee() {
+        this.props.navigation.navigate('addEmployee')
+    }
+
     render() {
         return (
-            <EmployeeList 
-                data={this.props.employees}
-            />
+            <ScrollView>
+                <EmployeeList
+                    data={this.props.employees}
+                />
+                <BottomButton 
+                    buttonText='Novo funcionário'
+                    buttonAction={() => this.props.navigation.navigate('addEmployee')}
+                />
+            </ScrollView>
+
         )
     }
 }
@@ -49,4 +61,4 @@ const mapStateToProps = ({ servicesAdmin }) => {
     return { employees }
 }
 
-export default connect(mapStateToProps, {showCurrentEmployees})(SelectEmployeesScreen);
+export default connect(mapStateToProps, { showCurrentEmployees })(SelectEmployeesScreen);
