@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
+import { View, Text, Keyboard, Dimensions } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { FormLabel, FormInput } from 'react-native-elements';
 import Header from '../components/Header';
 import BottomButton from '../components/BottomButton';
@@ -80,14 +81,14 @@ class RegisterAdminFormScreen extends Component {
         }
 
         return (
-
-            <KeyboardAvoidingView
-                style={styles.mainView}
-                behavior="padding"
+            <View style={styles.mainView}>
+            <KeyboardAwareScrollView
+                // style={styles.mainView}
+                // behavior="padding"
             >
                 <Header headerText='Cadastre sua loja' icon='leftcircleo' />
                 {this.renderError()}
-                <View>
+                <View style={styles.inputViews}>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
@@ -103,7 +104,7 @@ class RegisterAdminFormScreen extends Component {
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
-                <View>
+                <View style={styles.inputViews}>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
@@ -120,7 +121,7 @@ class RegisterAdminFormScreen extends Component {
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
-                <View>
+                <View style={styles.inputViews}>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
@@ -136,7 +137,7 @@ class RegisterAdminFormScreen extends Component {
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
-                <View>
+                <View style={styles.inputViews}>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
@@ -153,7 +154,7 @@ class RegisterAdminFormScreen extends Component {
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
-                <View>
+                <View style={styles.inputViews}>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
@@ -170,7 +171,7 @@ class RegisterAdminFormScreen extends Component {
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
-                <View>
+                <View style={styles.inputViews}>
                     <FormLabel
                         labelStyle={sanFranciscoWeights.light}
                     >
@@ -187,11 +188,13 @@ class RegisterAdminFormScreen extends Component {
                         inputStyle={sanFranciscoWeights.thin}
                     />
                 </View>
-                <BottomButton
+                
+            </KeyboardAwareScrollView>
+            <BottomButton
                     buttonText='Continuar'
                     buttonAction={this.onRegisterButtonPress.bind(this)}
                 />
-            </KeyboardAvoidingView>
+            </View>
         )
     }
 
@@ -223,6 +226,9 @@ const styles = {
         backgroundColor: 'white',
         alignSelf: 'center',
         width: SCREEN_WIDTH
+    },
+    inputViews: {
+        paddingTop: 10
     }
 }
 

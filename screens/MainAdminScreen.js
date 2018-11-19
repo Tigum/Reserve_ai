@@ -3,7 +3,6 @@ import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Card, ListItem, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import firebase from 'firebase'
 import { getAdminUserInfo } from '../actions'
 
 class MainAdminScreen extends Component {
@@ -31,7 +30,6 @@ class MainAdminScreen extends Component {
 
 
     render() {
-        console.log('mainProps', this.props)
         return (
             <ScrollView>
                 <Card
@@ -110,4 +108,4 @@ const mapStateToProps = ({ mainAdmin }) => {
     return { user }
 }
 
-export default connect(mapStateToProps, {getAdminUserInfo})(MainAdminScreen);
+export default connect(mapStateToProps, { getAdminUserInfo })(MainAdminScreen);

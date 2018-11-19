@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { getAdminUserInfo } from '../actions'
 
 class ServicesAdminScreen extends Component {
-    
+
     static navigationOptions = ({ navigation }) => {
-        
+
         const { navigate } = navigation
 
         return {
@@ -23,7 +25,6 @@ class ServicesAdminScreen extends Component {
 
 
     render() {
-        console.log('services', this.props)
         return (
             <View>
                 <Text>Services Screen</Text>
@@ -32,4 +33,9 @@ class ServicesAdminScreen extends Component {
     }
 }
 
-export default ServicesAdminScreen;
+const mapStateToProps = ({ mainAdmin }) => {
+    const { user } = mainAdmin
+    return { user }
+}
+
+export default connect(mapStateToProps, { getAdminUserInfo })(ServicesAdminScreen);

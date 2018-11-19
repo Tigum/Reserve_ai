@@ -16,6 +16,7 @@ import RegisterAdminPicScreen from './screens/RegisterAdminPicScreen'
 import RegisterClientPicScreen from './screens/RegisterClientPicScreen'
 import RegisterSaturdayHoursScreen from './screens/RegisterSaturdayHoursScreen'
 import RegisterSundayHoursScreen from './screens/RegisterSundayHoursScreen'
+import SelectEmployeesScreen from './screens/SelectEmployeesScreen'
 
 import RegisterClientFormScreen from './screens/RegisterClientFormScreen'
 
@@ -137,9 +138,9 @@ export default class App extends React.Component {
           servicesAdmin: {
             screen: ServicesAdminScreen
           },
-          // addService: {
-          //   screen: AddServicesScreen,
-          // },
+          selectEmployee: {
+            screen: SelectEmployeesScreen
+          },
         }),
         navigationOptions: () => ({
           title: 'Hoje'

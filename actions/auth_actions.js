@@ -57,6 +57,27 @@ export const loginUser = ({ email, password }) => {
     }
 }
 
+export const checkIfUserAlreadyLoggedIn = () => async(dispatch) => {
+    try{
+        authLoadingOn(dispatch)
+        await firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                NavigationService.navigate('mainAdminScreen', {})
+                authLoadingOff(dispatch)
+                loginUserSuccess(dispatch, null)
+            } else {
+                authLoadingOff(dispatch)
+                NavigationService.navigate('auth', {})
+            }
+        })
+
+    } catch(err) {
+        authLoadingOff(dispatch)
+        loginUserFail(dispatch, null)
+        alert(err)
+    } 
+}
+
 export const facebookLogin = () => async (dispatch) => {
     const token = await AsyncStorage.getItem('fb_token_reserve');
 

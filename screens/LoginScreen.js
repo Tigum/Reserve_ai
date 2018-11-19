@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin } from '../actions'
+import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin, checkIfUserAlreadyLoggedIn } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
 import ButtonFacebook from '../components/ButtonFacebook'
@@ -21,6 +21,7 @@ class LoginScreen extends Component {
 
     componentWillMount() {
         this.props.facebookLogin()
+        this.props.checkIfUserAlreadyLoggedIn()
     }
 
     componentWillReceiveProps(nextProps) {
@@ -239,4 +240,5 @@ export default connect(mapStateToProps, {
     loginUser,
     facebookLogin,
     doFacebookLogin,
+    checkIfUserAlreadyLoggedIn
 })(LoginScreen);

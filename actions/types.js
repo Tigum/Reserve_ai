@@ -48,6 +48,7 @@ export const ADD_NEW_SERVICE = 'add_new_service'
 export const NEW_SERVICE_NAME_CHANGED = 'new_service_name_changed'
 export const NEW_SERVICE_DURATION_TIME_CHANGED = 'new_service_duration_time_changed'
 export const NEW_SERVICE_DESCRIPTION_CHANGED = 'new_service_description_changed'
+export const NEW_SERVICE_PRICE_CHANGED = 'new_service_price_changed'
 export const NEW_SERVICE_EMPLOYEE_SELECT = 'new_service_employee_select'
 export const COMPANY_HOURS_START = 'company_hours_start'
 export const COMPANY_HOURS_END = 'company_hours_end'
@@ -63,3 +64,7 @@ export const CONTINUE_CLIENT_REGISTRATION = 'continue_client_registration'
 
 //MAIN ADMIN SCREEN
 export const LOAD_ADMIN_USER_INFO = 'load_admin_user_info'
+
+
+//EMPLOYEES
+export const SHOW_CURRENT_EMPLOYEES = 'show_current_employees'

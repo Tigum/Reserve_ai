@@ -7,15 +7,14 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 
 class DefaultModal extends Component {
     render() {
-        const { title, children, dismissIcon } = this.props
-
+        const { title, children, dismissIcon, buttonAction } = this.props
         return (
             <View style={styles.mainView}>
                 <Header headerText={title} icon={dismissIcon}/>
                  {children}
                  <BottomButton 
                     buttonText='Adicionar'
-                    buttonAction={() => alert('Hello!')}
+                    buttonAction={buttonAction}
                  />
             </View>
         )
@@ -25,7 +24,7 @@ class DefaultModal extends Component {
 const styles = {
     mainView: {
         flex: 1,
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'space-between',
         width: SCREEN_WIDTH,
         backgroundColor: '#f3f3f3'
