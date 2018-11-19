@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
-import { FormLabel, FormInput, SocialIcon } from 'react-native-elements'
+import { View, Text, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin } from '../actions'
 import { Spinner } from '../components/Spinner'

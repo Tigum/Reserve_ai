@@ -59,3 +59,7 @@ export const PASSWORD_CLIENT_REGISTER_CHANGED = 'password_client_register_change
 export const PASSWORD_CONFIRMATION_CLIENT_REGISTER_CHANGED = 'password_confirmation_client_register_changed'
 export const CLIENT_USER_REGISTERED_SUCCESS = 'client_user_registered_success'
 export const CONTINUE_CLIENT_REGISTRATION = 'continue_client_registration'
+
+
+//MAIN ADMIN SCREEN
+export const LOAD_ADMIN_USER_INFO = 'load_admin_user_info'

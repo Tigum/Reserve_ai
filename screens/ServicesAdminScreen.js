@@ -23,6 +23,7 @@ class ServicesAdminScreen extends Component {
 
 
     render() {
+        console.log('services', this.props)
         return (
             <View>
                 <Text>Services Screen</Text>

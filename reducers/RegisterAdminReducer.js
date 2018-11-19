@@ -61,7 +61,7 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action)
+    // console.log(action)
     switch (action.type) {
         case NAME_ADMIN_REGISTER_CHANGED:
             return { ...state, name: action.payload };
