@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { showCurrentEmployees } from '../actions'
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
@@ -46,7 +46,7 @@ class SelectEmployeesScreen extends Component {
                 <EmployeeList
                     data={this.props.employees}
                 />
-                <BottomButton 
+                <BottomButton
                     buttonText='Novo funcionário'
                     buttonAction={() => this.props.navigation.navigate('addEmployee')}
                 />
@@ -57,8 +57,22 @@ class SelectEmployeesScreen extends Component {
 }
 
 const mapStateToProps = ({ servicesAdmin }) => {
-    const { employees } = servicesAdmin
-    return { employees }
+    const {
+        employees,
+        loading,
+        serviceName,
+        serviceDescription,
+        servicePrice,
+        serviceDuration
+    } = servicesAdmin
+    return {
+        employees,
+        loading,
+        serviceName,
+        serviceDescription,
+        servicePrice,
+        serviceDuration
+    }
 }
 
 export default connect(mapStateToProps, { showCurrentEmployees })(SelectEmployeesScreen);

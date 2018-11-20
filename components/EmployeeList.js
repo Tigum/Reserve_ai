@@ -6,12 +6,13 @@ class EmployeeList extends Component {
 
     renderList() {
         const { data } = this.props
+        
         if (data) {
             return (
                 data.map((item) => (
                     <ListItem
                         key={item.key}
-                        leftAvatar={{ source: { uri: item.imageUrl ? item.imageUrl : '' } }}
+                        avatar={item.imageUrl ? {uri: item.imageUrl} : require('../img/default-avatar.png')}
                         title={item.name}
                         subtitle={item.role}
                     />

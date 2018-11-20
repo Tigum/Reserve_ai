@@ -68,3 +68,8 @@ export const LOAD_ADMIN_USER_INFO = 'load_admin_user_info'
 
 //EMPLOYEES
 export const SHOW_CURRENT_EMPLOYEES = 'show_current_employees'
+export const NEW_EMPLOYEE_NAME_CHANGED = 'new_employee_name_changed'
+export const NEW_EMPLOYEE_PHOTO_CHANGED = 'new_employee_photo_changed'
+export const NEW_EMPLOYEE_LOADING_ON = 'new_employee_loading_on'
+export const NEW_EMPLOYEE_LOADING_OFF = 'new_employee_loading_off'
+export const NEW_EMPLOYEE_ADDED = 'new_employee_added'

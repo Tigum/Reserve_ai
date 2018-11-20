@@ -3,7 +3,12 @@ import {
     NEW_SERVICE_DESCRIPTION_CHANGED,
     NEW_SERVICE_PRICE_CHANGED,
     NEW_SERVICE_DURATION_TIME_CHANGED,
-    SHOW_CURRENT_EMPLOYEES
+    SHOW_CURRENT_EMPLOYEES,
+    NEW_EMPLOYEE_NAME_CHANGED,
+    NEW_EMPLOYEE_PHOTO_CHANGED,
+    NEW_EMPLOYEE_LOADING_ON,
+    NEW_EMPLOYEE_LOADING_OFF,
+    NEW_EMPLOYEE_ADDED
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -11,7 +16,10 @@ const INITIAL_STATE = {
     serviceDescription: '',
     servicePrice: '',
     serviceDuration: '',
-    employees : []
+    employees: [],
+    employeeName: '',
+    employeePhoto: '',
+    loading: false
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -26,7 +34,17 @@ export default (state = INITIAL_STATE, action) => {
         case NEW_SERVICE_DURATION_TIME_CHANGED:
             return { ...state, serviceDuration: action.payload };
         case SHOW_CURRENT_EMPLOYEES:
-            return { ...state, employees: action.payload}
+            return { ...state, employees: action.payload }
+        case NEW_EMPLOYEE_NAME_CHANGED:
+            return { ...state, employeeName: action.payload }
+        case NEW_EMPLOYEE_PHOTO_CHANGED:
+            return { ...state, employeePhoto: action.payload }
+        case NEW_EMPLOYEE_LOADING_ON:
+            return { ...state, loading: action.payload }
+        case NEW_EMPLOYEE_LOADING_OFF:
+            return { ...state, loading: action.payload }
+        case NEW_EMPLOYEE_ADDED:
+            return { ...state, employees: [ ...this, action.payload] }
         default:
             return state;
     }
