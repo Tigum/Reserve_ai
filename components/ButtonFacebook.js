@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback, Dimensions } from 'react-native'
+import { View, Text, TouchableWithoutFeedback } from 'react-native'
 import { withNavigation } from 'react-navigation';
 import { sanFranciscoWeights } from 'react-native-typography';
 import { AntDesign } from '@expo/vector-icons';

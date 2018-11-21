@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback, Dimensions } from 'react-native'
+import { View, Text, TouchableWithoutFeedback } from 'react-native'
 import { sanFranciscoWeights } from 'react-native-typography';
 
 class BottomButton extends Component {
@@ -18,7 +18,6 @@ class BottomButton extends Component {
         const height = buttonHeight || 60
         const borderColor = buttonBorderColor || ''
         const backgroundColor = buttonBackgroundColor || '#7f7f7f'
-        // const borderStyle = buttonBorderStyle || 'none'
         const borderWidth = buttonBorderStyle ? 1 : 0
         const color = buttonTextColor || 'white'
         const fontSize = buttonFontSize || 20

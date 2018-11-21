@@ -37,7 +37,6 @@ const styles = {
         width: SCREEN_WIDTH,
         paddingLeft: 15,
         flexDirection: 'row',
-        // flex: 1
     },
     textStyle: {
         fontSize: 25

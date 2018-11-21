@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
+import { TouchableHighlight } from 'react-native'
 import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import Swipeable from 'react-native-swipeable';

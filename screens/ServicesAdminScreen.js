@@ -20,9 +20,7 @@ class ServicesAdminScreen extends Component {
                 </TouchableWithoutFeedback>
             ),
         }
-
     };
-
 
     render() {
         return (

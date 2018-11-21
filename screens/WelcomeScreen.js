@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
 import { withNavigation } from 'react-navigation';
 
 import Slides from '../components/Slides'
@@ -19,12 +18,6 @@ class WelcomeScreen extends Component {
         }
 
     }
-
-    // componentWillReceiveProps(nextProps) {
-    //     if (this.props.routeName !== nextProps.routeName){
-    //         this.props.navigation.navigate(nextProps.routeName)
-    //     }
-    // }
 
     render() {
         return (

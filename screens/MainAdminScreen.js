@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { Card, ListItem, Button } from 'react-native-elements'
+import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { getAdminUserInfo } from '../actions'
 
@@ -94,12 +94,6 @@ class MainAdminScreen extends Component {
                 </Card>
             </ScrollView>
         )
-    }
-}
-
-const styles = {
-    addIcon: {
-        paddingRight: 10
     }
 }
 
