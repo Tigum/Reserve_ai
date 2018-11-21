@@ -56,6 +56,8 @@ class SelectEmployeesScreen extends Component {
                 <EmployeeList
                     data={this.props.employees}
                     routeName='addEmployee'
+                    iconsTypeUnselected={<AntDesign name="checkcircleo" size={25} color="grey" />}
+                    iconsTypeSelected={<AntDesign name="checkcircle" size={25} color="blue" />}
                 />
                 <BottomButton
                     buttonText='Novo funcionário'

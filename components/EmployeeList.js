@@ -5,10 +5,19 @@ import ListItemSwipe from './ListItemSwipe';
 class EmployeeList extends Component {
 
     renderList() {
-        const { data, routeName } = this.props
+        const { data, routeName, iconsTypeUnselected, iconsTypeSelected, iconsType } = this.props
         if (data) {
             return (
-                data.map((item) => (<ListItemSwipe key={item.key} item={item} routeName={routeName} />))
+                data.map((item) => (
+                    <ListItemSwipe
+                        key={item.key}
+                        item={item}
+                        routeName={routeName}
+                        iconsTypeUnselected={iconsTypeUnselected || ''}
+                        iconsTypeSelected={iconsTypeSelected || ''}
+                        iconsType={iconsType || ''}
+                    />)
+                )
             )
         } else {
             return (

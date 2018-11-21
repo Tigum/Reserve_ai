@@ -11,7 +11,8 @@ import {
     NEW_EMPLOYEE_ADDED,
     CLEAR_EMPLOYEE_FORM,
     EDIT_EMPLOYEE_SUCCESS,
-    NEW_EMPLOYEE_ID_CHANGED
+    NEW_EMPLOYEE_ID_CHANGED,
+    EMPLOYEE_ADDED_TO_SELECTION
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -23,7 +24,8 @@ const INITIAL_STATE = {
     employeeName: '',
     employeePhoto: '',
     employeeId: '',
-    loading: false
+    loading: false,
+    employeesSelected: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -48,11 +50,13 @@ export default (state = INITIAL_STATE, action) => {
         case NEW_EMPLOYEE_LOADING_OFF:
             return { ...state, loading: action.payload }
         case NEW_EMPLOYEE_ADDED:
-            return { ...state, employees: [ ...this, action.payload] }
+            return { ...state, employees: [...this, action.payload] }
         case CLEAR_EMPLOYEE_FORM:
-            return { ...state, employeeName: '', employeePhoto: '', employeeId: ''}
+            return { ...state, employeeName: '', employeePhoto: '', employeeId: '' }
         case NEW_EMPLOYEE_ID_CHANGED:
-            return { ...state, employeeId: action.payload}
+            return { ...state, employeeId: action.payload }
+        case EMPLOYEE_ADDED_TO_SELECTION:
+            return { ...state, employeesSelected: [...this, action.payload] }
         default:
             return state;
     }
