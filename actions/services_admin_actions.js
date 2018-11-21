@@ -19,7 +19,6 @@ import {
     EMPLOYEE_ADDED_TO_SELECTION,
     EMPLOYEE_REMOVED_FROM_SELECTION,
     SELECTED_EMPLOYEE_ID,
-    SET_EMPLOYEEID_TO_NULL
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';

@@ -8,18 +8,14 @@ import { withNavigation } from 'react-navigation';
 import { manageEmployeeToSelection } from '../actions'
 
 class ListItemSwipe extends Component {
+
     swipeable = null
 
-    handleIcons(key) {
-        const { iconsTypeUnselected, iconsTypeSelected, iconsType, itemSelected } = this.props
-
-        if (iconsType) return iconsType
-
-        if (itemSelected === key) {
-            return iconsTypeSelected
+    handleIcon(employees, key) {
+        if(employees.includes(key)) {
+            return this.props.iconsTypeSelected
         }
-
-        return iconsTypeUnselected
+        return this.props.iconsTypeUnselected
     }
 
     render() {
@@ -45,7 +41,7 @@ class ListItemSwipe extends Component {
                     avatar={item.imageUrl ? { uri: item.imageUrl } : require('../img/default-avatar.png')}
                     title={item.name}
                     subtitle={item.role}
-                    rightIcon={this.handleIcons(item.key)}
+                    rightIcon={this.handleIcon(this.props.employeesSelected, item.key)}
                     onPress={() => this.props.manageEmployeeToSelection(this.props.employeesSelected, item.key)}
                 />
             </Swipeable>
