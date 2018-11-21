@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { Alert } from 'react-native'
 import _ from 'lodash';
 import { RNS3 } from 'react-native-aws3';
 import {
@@ -94,14 +95,14 @@ export const manageEmployeeToSelection = (employees, employeeId) => {
         }
     }
 
-    if(employees.includes(employeeId)){
+    if (employees.includes(employeeId)) {
         console.log('eitaa')
         return {
             type: EMPLOYEE_REMOVED_FROM_SELECTION,
             payload: employeeId
         }
     }
-    
+
 }
 
 
@@ -188,8 +189,6 @@ export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => async (dispa
 }
 
 export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
-    console.log('uid', uid)
-    console.log('employee', employee)
     try {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).set(employee)
         // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
@@ -197,6 +196,31 @@ export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
     } catch (err) {
         console.log(err)
     }
+}
+
+export const deleteEmployee = ({ uid, employeeId }) => async () => {
+    Alert.alert(
+        'Deletar funcionário',
+        'Tem certeza que deseja deletar este funcionário?',
+        [
+            {
+                text: 'Sim', onPress: async () => {
+                    try {
+                        console.log('uid', uid)
+                        console.log('employeeId', employeeId)
+                        await firebase.database().ref(`/users/${uid}/employees/${employeeId}`).remove()
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            },
+            {
+                text: 'Não', onPress: () => {
+                }
+            },
+        ],
+        { cancelable: false }
+    )
 }
 
 export const editEmployee = ({ uid, employee }) => async (dispatch) => {

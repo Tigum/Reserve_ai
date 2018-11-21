@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Swipeable from 'react-native-swipeable';
 import { AntDesign } from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';
-import { manageEmployeeToSelection } from '../actions'
+import { manageEmployeeToSelection, deleteEmployee } from '../actions'
 
 class ListItemSwipe extends Component {
 
@@ -16,6 +16,12 @@ class ListItemSwipe extends Component {
             return this.props.iconsTypeSelected
         }
         return this.props.iconsTypeUnselected
+    }
+
+    deleteButton(key) {
+        const { uid } = this.props.user
+        const employeeId = key
+        this.props.deleteEmployee({uid, employeeId})
     }
 
     render() {
@@ -32,7 +38,7 @@ class ListItemSwipe extends Component {
                     }}>
                         <AntDesign name="edit" size={25} color="white" />
                     </TouchableHighlight>,
-                    <TouchableHighlight style={styles.deleteButton}>
+                    <TouchableHighlight style={styles.deleteButton} onPress={() => this.deleteButton(item.key)}>
                         <AntDesign name="delete" size={25} color="white" />
                     </TouchableHighlight>]
                 }>
@@ -79,4 +85,4 @@ const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     }
 }
 
-export default connect(mapStateToProps, { manageEmployeeToSelection })(withNavigation(ListItemSwipe));
+export default connect(mapStateToProps, { manageEmployeeToSelection, deleteEmployee })(withNavigation(ListItemSwipe));

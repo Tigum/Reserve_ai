@@ -42,7 +42,7 @@ class SelectEmployeesScreen extends Component {
     }
 
     render() {
-        console.log('employeesSelected', this.props.employeesSelected)
+        console.log('propsselected', this.props)
         if (this.props.loading) {
             return (
                 <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40, backgroundColor: 'white'}}>
