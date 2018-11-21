@@ -13,7 +13,9 @@ import {
     NEW_EMPLOYEE_LOADING_ON,
     NEW_EMPLOYEE_LOADING_OFF,
     NEW_EMPLOYEE_ADDED,
-    CLEAR_EMPLOYEE_FORM
+    CLEAR_EMPLOYEE_FORM,
+    EDIT_EMPLOYEE_SUCCESS,
+    NEW_EMPLOYEE_ID_CHANGED
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -55,6 +57,13 @@ export const serviceDurationChanged = (text) => {
 export const employeeNameChanged = (text) => {
     return {
         type: NEW_EMPLOYEE_NAME_CHANGED,
+        payload: text
+    }
+}
+
+export const employeeIdChanged = (text) => {
+    return {
+        type: NEW_EMPLOYEE_ID_CHANGED,
         payload: text
     }
 }
@@ -160,9 +169,28 @@ export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
     }
 }
 
+export const editEmployee = ({ uid, employee }) => async (dispatch) => {
+    console.log('uid2', uid)
+    console.log('employee2', employee)
+    try {
+        await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).update(employee)
+        // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
+        // employeeEditedSuccess(dispatch, employee)
+    } catch(err) {
+        console.log(err)
+    }
+}
+
 const employeeAdded = (dispatch, employee) => {
     dispatch({
         type: NEW_EMPLOYEE_ADDED,
+        payload: employee
+    })
+}
+
+const employeeEditedSuccess = (dispatch, employee) => {
+    dispatch({
+        type: EDIT_EMPLOYEE_SUCCESS,
         payload: employee
     })
 }

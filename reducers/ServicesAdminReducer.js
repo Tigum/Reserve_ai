@@ -9,7 +9,9 @@ import {
     NEW_EMPLOYEE_LOADING_ON,
     NEW_EMPLOYEE_LOADING_OFF,
     NEW_EMPLOYEE_ADDED,
-    CLEAR_EMPLOYEE_FORM
+    CLEAR_EMPLOYEE_FORM,
+    EDIT_EMPLOYEE_SUCCESS,
+    NEW_EMPLOYEE_ID_CHANGED
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -49,6 +51,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, employees: [ ...this, action.payload] }
         case CLEAR_EMPLOYEE_FORM:
             return { ...state, employeeName: '', employeePhoto: '', employeeId: ''}
+        case NEW_EMPLOYEE_ID_CHANGED:
+            return { ...state, employeeId: action.payload}
         default:
             return state;
     }

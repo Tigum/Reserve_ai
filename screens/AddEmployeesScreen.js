@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { sanFranciscoWeights } from 'react-native-typography';
 import { ListItem, FormLabel, FormInput } from 'react-native-elements';
-import { employeeNameChanged, employeePhotoChangedEdit, uploadEmployeePhotoToS3, addNewEmployee } from '../actions'
+import { employeeNameChanged, employeePhotoChangedEdit, uploadEmployeePhotoToS3, addNewEmployee, editEmployee, employeeIdChanged } from '../actions'
 import { EvilIcons } from '@expo/vector-icons';
 import DefaultModal from '../components/DefaultModal'
 import random from 'random-id';
@@ -24,7 +24,8 @@ class AddEmployeesScreen extends Component {
 
     state = {
         modalTitle: null,
-        modalButtonActionText: null
+        modalButtonActionText: null,
+        editEmployeeMode: false
     }
 
     componentWillMount() {
@@ -34,9 +35,10 @@ class AddEmployeesScreen extends Component {
         if (params) {
             this.props.employeeNameChanged(params.name)
             this.props.employeePhotoChangedEdit(params.imageUrl)
-            this.setState({ modalTitle: 'Editar funcionário', modalButtonActionText: 'Concluir'})
+            this.props.employeeIdChanged(params.key)
+            this.setState({ modalTitle: 'Editar funcionário', modalButtonActionText: 'Concluir', editEmployeeMode: true})
         } else {
-            this.setState({ modalTitle: null, modalButtonActionText: null})
+            this.setState({ modalTitle: null, modalButtonActionText: null, editEmployeeMode: false})
         }
 
     }
@@ -173,14 +175,28 @@ class AddEmployeesScreen extends Component {
         this.props.navigation.goBack()
     }
 
-    render() {
+    async editEmployeeSelected() {
+        const uid = this.props.user.uid
+        const employee = {
+            name: this.props.employeeName,
+            imageUrl: this.props.employeePhoto || '',
+            key: this.props.employeeId,
+            role: 'Funcionário',
+            ownerUid: uid,
+        }
 
+        await this.props.editEmployee({ uid, employee })
+        this.props.navigation.goBack()
+    }
+
+    render() {
+        console.log('PROPS', this.props)
         return (
             <DefaultModal
                 title={this.state.modalTitle || 'Adicionar funcionário'}
                 buttonText={this.state.modalButtonActionText || 'Adicionar'}
                 dismissIcon='close'
-                buttonAction={this.addNewEmployee.bind(this)}
+                buttonAction={this.state.editEmployeeMode ? this.editEmployeeSelected.bind(this) : this.addNewEmployee.bind(this)}
             >
                 <KeyboardAwareScrollView>
 
@@ -239,5 +255,7 @@ export default connect(mapStateToProps,
         employeePhotoChangedEdit,
         uploadEmployeePhotoToS3,
         addNewEmployee,
+        editEmployee,
+        employeeIdChanged
     }
 )(connectActionSheet(AddEmployeesScreen));
