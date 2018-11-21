@@ -12,7 +12,7 @@ class ListItemSwipe extends Component {
     swipeable = null
 
     handleIcon(employees, key) {
-        if(employees.includes(key)) {
+        if (employees.includes(key)) {
             return this.props.iconsTypeSelected
         }
         return this.props.iconsTypeUnselected
@@ -37,6 +37,7 @@ class ListItemSwipe extends Component {
                     </TouchableHighlight>]
                 }>
                 <ListItem
+                    containerStyle={{ backgroundColor: 'white' }}
                     key={item.key}
                     avatar={item.imageUrl ? { uri: item.imageUrl } : require('../img/default-avatar.png')}
                     title={item.name}
