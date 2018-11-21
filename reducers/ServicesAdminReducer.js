@@ -60,13 +60,15 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, employeeId: action.payload }
         case EMPLOYEE_ADDED_TO_SELECTION:
             return { ...state, employeesSelected: [...state.employeesSelected, action.payload] }
-        case EMPLOYEE_ADDED_TO_SELECTION:
-            return {
-                ...state, employeesSelected: [
-                    ...state.slice(0, action.payload),
-                    ...state.slice(action.payload + 1)
-                ]
-            }
+        case EMPLOYEE_REMOVED_FROM_SELECTION:
+            let employees = state.employeesSelected
+            let newArray = []
+            employees.map((item) => {
+                if (item !== action.payload) {
+                    newArray.push(item)
+                }
+            })
+            return { ...state, employeesSelected: newArray }
         case SELECTED_EMPLOYEE_ID:
             return { ...state, employeeId: action.payload }
         case SET_EMPLOYEEID_TO_NULL:

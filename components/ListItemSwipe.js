@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Swipeable from 'react-native-swipeable';
 import { AntDesign } from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';
-import { selectedEmployeeId } from '../actions'
+import { manageEmployeeToSelection } from '../actions'
 
 class ListItemSwipe extends Component {
     swipeable = null
@@ -25,31 +25,31 @@ class ListItemSwipe extends Component {
     render() {
         const { item, navigation, routeName } = this.props
         return (
-            
-                <Swipeable
+
+            <Swipeable
+                key={item.key}
+                onRef={ref => this.swipeable = ref}
+                rightButtons={
+                    [<TouchableHighlight style={styles.editButton} onPress={() => {
+                        navigation.navigate(routeName, item)
+                        this.swipeable.recenter()
+                    }}>
+                        <AntDesign name="edit" size={25} color="white" />
+                    </TouchableHighlight>,
+                    <TouchableHighlight style={styles.deleteButton}>
+                        <AntDesign name="delete" size={25} color="white" />
+                    </TouchableHighlight>]
+                }>
+                <ListItem
                     key={item.key}
-                    onRef={ref => this.swipeable = ref}
-                    rightButtons={
-                        [<TouchableHighlight style={styles.editButton} onPress={() => {
-                            navigation.navigate(routeName, item)
-                            this.swipeable.recenter()
-                        }}>
-                            <AntDesign name="edit" size={25} color="white" />
-                        </TouchableHighlight>,
-                        <TouchableHighlight style={styles.deleteButton}>
-                            <AntDesign name="delete" size={25} color="white" />
-                        </TouchableHighlight>]
-                    }>
-                    <ListItem
-                        key={item.key}
-                        avatar={item.imageUrl ? { uri: item.imageUrl } : require('../img/default-avatar.png')}
-                        title={item.name}
-                        subtitle={item.role}
-                        rightIcon={this.handleIcons(item.key)}
-                        onPress={() => this.props.selectedEmployeeId(item.key)}
-                    />
-                </Swipeable>
-            
+                    avatar={item.imageUrl ? { uri: item.imageUrl } : require('../img/default-avatar.png')}
+                    title={item.name}
+                    subtitle={item.role}
+                    rightIcon={this.handleIcons(item.key)}
+                    onPress={() => this.props.manageEmployeeToSelection(this.props.employeesSelected, item.key)}
+                />
+            </Swipeable>
+
 
         )
     }
@@ -82,4 +82,4 @@ const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     }
 }
 
-export default connect(mapStateToProps, {selectedEmployeeId})(withNavigation(ListItemSwipe));
+export default connect(mapStateToProps, { manageEmployeeToSelection })(withNavigation(ListItemSwipe));

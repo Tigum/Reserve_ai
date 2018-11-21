@@ -86,19 +86,25 @@ export const selectedEmployeeId = (key) => {
     }
 }
 
-export const addEmployeeToSelection = (employeeId) => {
-    return {
-        type: EMPLOYEE_ADDED_TO_SELECTION,
-        payload: employeeId
+export const manageEmployeeToSelection = (employees, employeeId) => {
+
+    if (!employees.includes(employeeId)) {
+        return {
+            type: EMPLOYEE_ADDED_TO_SELECTION,
+            payload: employeeId
+        }
     }
+
+    if(employees.includes(employeeId)){
+        console.log('eitaa')
+        return {
+            type: EMPLOYEE_REMOVED_FROM_SELECTION,
+            payload: employeeId
+        }
+    }
+    
 }
 
-export const setEmployeeIdToNull = () => {
-    return{
-        type: SET_EMPLOYEEID_TO_NULL,
-        payload: ''
-    }
-}
 
 const employeePhotoChanged = (dispatch, text) => {
     dispatch({
@@ -115,13 +121,13 @@ export const showCurrentEmployees = () => async (dispatch) => {
         .on('value', async snapshot => {
             const hasEmployees = await snapshot.hasChild('employees')
             const user = await snapshot.val()
-            if(hasEmployees){
-                
+            if (hasEmployees) {
+
                 const employees = user.employees
                 console.log('employees', employees)
 
                 let data = _.values(employees)
-                
+
 
                 const myself = {
                     key: currentUser.uid,
@@ -137,7 +143,7 @@ export const showCurrentEmployees = () => async (dispatch) => {
                 addEmployeeLoadingOff(dispatch)
             } else {
                 let data = []
-                
+
                 const myself = {
                     key: currentUser.uid,
                     imageUrl: user.imageUrl,
@@ -189,7 +195,7 @@ export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).set(employee)
         // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         employeeAdded(dispatch, employee)
-    } catch(err) {
+    } catch (err) {
         console.log(err)
     }
 }
@@ -201,7 +207,7 @@ export const editEmployee = ({ uid, employee }) => async (dispatch) => {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).update(employee)
         // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         // employeeEditedSuccess(dispatch, employee)
-    } catch(err) {
+    } catch (err) {
         console.log(err)
     }
 }
