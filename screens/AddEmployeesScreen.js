@@ -30,7 +30,6 @@ class AddEmployeesScreen extends Component {
 
     componentWillMount() {
         const { params } = this.props.navigation.state
-        console.log('params', params)
 
         if (params) {
             this.props.employeeNameChanged(params.name)
@@ -190,7 +189,6 @@ class AddEmployeesScreen extends Component {
     }
 
     render() {
-        console.log('PROPS', this.props)
         return (
             <DefaultModal
                 title={this.state.modalTitle || 'Adicionar funcionário'}

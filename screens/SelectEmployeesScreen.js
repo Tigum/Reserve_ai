@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableWithoutFeedback, ScrollView, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { showCurrentEmployees, clearEmployeeForm } from '../actions'
+import { showCurrentEmployees, clearEmployeeForm, addEmployeeToSelection, setEmployeeIdToNull } from '../actions'
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { sanFranciscoWeights } from 'react-native-typography';
 import EmployeeList from '../components/EmployeeList'
@@ -11,6 +11,22 @@ class SelectEmployeesScreen extends Component {
 
     componentWillMount() {
         this.props.showCurrentEmployees()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.employeeId !== nextProps.employeeId) {
+            
+            if(!this.props.employeesSelected.includes(nextProps.employeeId)){
+                this.props.addEmployeeToSelection(nextProps.employeeId)
+            }
+
+
+        } else {
+
+            if(this.props.employeesSelected.includes(nextProps.employeeId)) {
+                this.props
+            }
+        }
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -42,6 +58,7 @@ class SelectEmployeesScreen extends Component {
     }
 
     render() {
+        console.log('employeesSelected', this.props.employeesSelected)
         if (this.props.loading) {
             return (
                 <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40, backgroundColor: 'white'}}>
@@ -80,7 +97,8 @@ const mapStateToProps = ({ servicesAdmin }) => {
         serviceDescription,
         servicePrice,
         serviceDuration,
-        employeeId
+        employeeId,
+        employeesSelected
     } = servicesAdmin
     return {
         employees,
@@ -89,8 +107,10 @@ const mapStateToProps = ({ servicesAdmin }) => {
         serviceDescription,
         servicePrice,
         serviceDuration,
-        employeeId
+        employeeId,
+        employeesSelected,
+        setEmployeeIdToNull
     }
 }
 
-export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm })(SelectEmployeesScreen);
+export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm, addEmployeeToSelection })(SelectEmployeesScreen);

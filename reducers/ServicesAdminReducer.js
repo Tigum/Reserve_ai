@@ -12,7 +12,10 @@ import {
     CLEAR_EMPLOYEE_FORM,
     EDIT_EMPLOYEE_SUCCESS,
     NEW_EMPLOYEE_ID_CHANGED,
-    EMPLOYEE_ADDED_TO_SELECTION
+    EMPLOYEE_ADDED_TO_SELECTION,
+    EMPLOYEE_REMOVED_FROM_SELECTION,
+    SELECTED_EMPLOYEE_ID,
+    SET_EMPLOYEEID_TO_NULL
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -25,7 +28,7 @@ const INITIAL_STATE = {
     employeePhoto: '',
     employeeId: '',
     loading: false,
-    employeesSelected: []
+    employeesSelected: [],
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -56,7 +59,18 @@ export default (state = INITIAL_STATE, action) => {
         case NEW_EMPLOYEE_ID_CHANGED:
             return { ...state, employeeId: action.payload }
         case EMPLOYEE_ADDED_TO_SELECTION:
-            return { ...state, employeesSelected: [...this, action.payload] }
+            return { ...state, employeesSelected: [...state.employeesSelected, action.payload] }
+        case EMPLOYEE_ADDED_TO_SELECTION:
+            return {
+                ...state, employeesSelected: [
+                    ...state.slice(0, action.payload),
+                    ...state.slice(action.payload + 1)
+                ]
+            }
+        case SELECTED_EMPLOYEE_ID:
+            return { ...state, employeeId: action.payload }
+        case SET_EMPLOYEEID_TO_NULL:
+            return { ...state, employeeId: action.payload }
         default:
             return state;
     }

@@ -15,7 +15,11 @@ import {
     NEW_EMPLOYEE_ADDED,
     CLEAR_EMPLOYEE_FORM,
     EDIT_EMPLOYEE_SUCCESS,
-    NEW_EMPLOYEE_ID_CHANGED
+    NEW_EMPLOYEE_ID_CHANGED,
+    EMPLOYEE_ADDED_TO_SELECTION,
+    EMPLOYEE_REMOVED_FROM_SELECTION,
+    SELECTED_EMPLOYEE_ID,
+    SET_EMPLOYEEID_TO_NULL
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -72,6 +76,27 @@ export const employeePhotoChangedEdit = (text) => {
     return {
         type: NEW_EMPLOYEE_PHOTO_CHANGED,
         payload: text
+    }
+}
+
+export const selectedEmployeeId = (key) => {
+    return {
+        type: SELECTED_EMPLOYEE_ID,
+        payload: key
+    }
+}
+
+export const addEmployeeToSelection = (employeeId) => {
+    return {
+        type: EMPLOYEE_ADDED_TO_SELECTION,
+        payload: employeeId
+    }
+}
+
+export const setEmployeeIdToNull = () => {
+    return{
+        type: SET_EMPLOYEEID_TO_NULL,
+        payload: ''
     }
 }
 

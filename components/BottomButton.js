@@ -8,7 +8,6 @@ class BottomButton extends Component {
     render() {
         const { buttonText, buttonAction } = this.props
         const nofunction = () => {}
-        console.log('buton', this.props)
         return (
             <TouchableWithoutFeedback onPress={buttonAction || nofunction}>
                 <View style={styles.buttonView}>
