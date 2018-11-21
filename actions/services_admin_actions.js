@@ -206,8 +206,6 @@ export const deleteEmployee = ({ uid, employeeId }) => async () => {
             {
                 text: 'Sim', onPress: async () => {
                     try {
-                        console.log('uid', uid)
-                        console.log('employeeId', employeeId)
                         await firebase.database().ref(`/users/${uid}/employees/${employeeId}`).remove()
                     } catch (err) {
                         console.log(err)

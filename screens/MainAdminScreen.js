@@ -4,17 +4,13 @@ import { AntDesign } from '@expo/vector-icons';
 import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { getAdminUserInfo } from '../actions'
+import { NavigationActions } from 'react-navigation'
 
 class MainAdminScreen extends Component {
 
-    componentWillMount() {
-        this.props.getAdminUserInfo()
-    }
-
-
     static navigationOptions = ({ navigation }) => {
         const { navigate } = navigation
-
+        console.log('this.params', navigation)
         return {
             headerTitle: 'Hoje',
             headerRight: (
