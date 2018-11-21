@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { sanFranciscoWeights } from 'react-native-typography';
 import { ListItem, FormLabel, FormInput } from 'react-native-elements';
-import { employeeNameChanged, employeePhotoChanged, uploadEmployeePhotoToS3, addNewEmployee } from '../actions'
+import { employeeNameChanged, employeePhotoChangedEdit, uploadEmployeePhotoToS3, addNewEmployee } from '../actions'
 import { EvilIcons } from '@expo/vector-icons';
 import DefaultModal from '../components/DefaultModal'
+import random from 'random-id';
 
 const S3Options = {
     keyPrefix: "reserve_ai/",
@@ -20,6 +21,25 @@ const S3Options = {
 }
 
 class AddEmployeesScreen extends Component {
+
+    state = {
+        modalTitle: null,
+        modalButtonActionText: null
+    }
+
+    componentWillMount() {
+        const { params } = this.props.navigation.state
+        console.log('params', params)
+
+        if (params) {
+            this.props.employeeNameChanged(params.name)
+            this.props.employeePhotoChangedEdit(params.imageUrl)
+            this.setState({ modalTitle: 'Editar funcionário', modalButtonActionText: 'Concluir'})
+        } else {
+            this.setState({ modalTitle: null, modalButtonActionText: null})
+        }
+
+    }
 
     onNameChanged(text) {
         this.props.employeeNameChanged(text)
@@ -105,13 +125,13 @@ class AddEmployeesScreen extends Component {
     }
 
     renderPhoto() {
-        const EMPLOYEE_IMAGE = this.props.employeePhoto ? {uri: this.props.employeePhoto} : require('../img/default-avatar.png')
+        const EMPLOYEE_IMAGE = this.props.employeePhoto ? { uri: this.props.employeePhoto } : require('../img/default-avatar.png')
         const EMPLOYEE_NAME = this.props.employeeName || 'Nome do funcionário'
         if (this.props.loading) {
             return (
-                <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40}}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40 }}>
                     <ActivityIndicator size='small' />
-                    <Text style={[sanFranciscoWeights.thin, {fontSize: 10, paddingTop: 10}]}>Carregando foto...</Text>
+                    <Text style={[sanFranciscoWeights.thin, { fontSize: 10, paddingTop: 10 }]}>Carregando foto...</Text>
                 </View>
             )
         }
@@ -129,7 +149,7 @@ class AddEmployeesScreen extends Component {
                         avatar={EMPLOYEE_IMAGE}
                         title={EMPLOYEE_NAME}
                         subtitle='Clique aqui para escolher foto'
-                        rightIcon={<EvilIcons name="camera" size={35} color="grey"/>}
+                        rightIcon={<EvilIcons name="camera" size={35} color="grey" />}
                     />
 
                 </View>
@@ -137,27 +157,28 @@ class AddEmployeesScreen extends Component {
         )
     }
 
-    addNewEmployee() {
+    async addNewEmployee() {
         const uid = this.props.user.uid
-        const key = Math.round(+new Date() / 1000);
-        if(!this.props.employeeName) return alert('Informe o nome do funcionário')
-        const employee = { 
+        const key = await random(17, 'aA0');
+        if (!this.props.employeeName) return alert('Informe o nome do funcionário')
+        const employee = {
             name: this.props.employeeName,
             imageUrl: this.props.employeePhoto || '',
             key,
             role: 'Funcionário',
             ownerUid: uid,
         }
-        
-        this.props.addNewEmployee({uid, employee})
+
+        await this.props.addNewEmployee({ uid, employee })
+        this.props.navigation.goBack()
     }
 
     render() {
 
         return (
             <DefaultModal
-                title='Adicionar funcionário'
-                buttonText='Adicionar'
+                title={this.state.modalTitle || 'Adicionar funcionário'}
+                buttonText={this.state.modalButtonActionText || 'Adicionar'}
                 dismissIcon='close'
                 buttonAction={this.addNewEmployee.bind(this)}
             >
@@ -196,7 +217,7 @@ const styles = {
 
 const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     const { user } = mainAdmin
-    const { serviceName, serviceDescription, servicePrice, serviceDuration, employeeName, employeePhoto, loading, employees } = servicesAdmin
+    const { serviceName, serviceDescription, servicePrice, serviceDuration, employeeName, employeePhoto, loading, employees, employeeId } = servicesAdmin
 
     return {
         user,
@@ -207,8 +228,16 @@ const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
         employeeName,
         employeePhoto,
         loading,
-        employees
+        employees,
+        employeeId
     }
 }
 
-export default connect(mapStateToProps, { employeeNameChanged, employeePhotoChanged, uploadEmployeePhotoToS3, addNewEmployee })(connectActionSheet(AddEmployeesScreen));
+export default connect(mapStateToProps,
+    {
+        employeeNameChanged,
+        employeePhotoChangedEdit,
+        uploadEmployeePhotoToS3,
+        addNewEmployee,
+    }
+)(connectActionSheet(AddEmployeesScreen));

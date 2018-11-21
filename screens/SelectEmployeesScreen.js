@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, TouchableWithoutFeedback, ScrollView, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { showCurrentEmployees } from '../actions'
+import { showCurrentEmployees, clearEmployeeForm } from '../actions'
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { sanFranciscoWeights } from 'react-native-typography';
 import EmployeeList from '../components/EmployeeList'
 import BottomButton from '../components/BottomButton';
 
@@ -41,14 +42,27 @@ class SelectEmployeesScreen extends Component {
     }
 
     render() {
+        if (this.props.loading) {
+            return (
+                <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40, backgroundColor: 'white'}}>
+                    <ActivityIndicator />
+                    <Text style={[sanFranciscoWeights.thin, {fontSize: 10, paddingTop: 10}]}>CARREGANDO FUNCIONÁRIOS...</Text>
+                </View>
+            )
+        }
+
         return (
             <ScrollView>
                 <EmployeeList
                     data={this.props.employees}
+                    routeName='addEmployee'
                 />
                 <BottomButton
                     buttonText='Novo funcionário'
-                    buttonAction={() => this.props.navigation.navigate('addEmployee')}
+                    buttonAction={() => {
+                        this.props.clearEmployeeForm()
+                        this.props.navigation.navigate('addEmployee')
+                    }}
                 />
             </ScrollView>
 
@@ -63,7 +77,8 @@ const mapStateToProps = ({ servicesAdmin }) => {
         serviceName,
         serviceDescription,
         servicePrice,
-        serviceDuration
+        serviceDuration,
+        employeeId
     } = servicesAdmin
     return {
         employees,
@@ -71,8 +86,9 @@ const mapStateToProps = ({ servicesAdmin }) => {
         serviceName,
         serviceDescription,
         servicePrice,
-        serviceDuration
+        serviceDuration,
+        employeeId
     }
 }
 
-export default connect(mapStateToProps, { showCurrentEmployees })(SelectEmployeesScreen);
+export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm })(SelectEmployeesScreen);

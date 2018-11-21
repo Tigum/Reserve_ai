@@ -8,7 +8,8 @@ import {
     NEW_EMPLOYEE_PHOTO_CHANGED,
     NEW_EMPLOYEE_LOADING_ON,
     NEW_EMPLOYEE_LOADING_OFF,
-    NEW_EMPLOYEE_ADDED
+    NEW_EMPLOYEE_ADDED,
+    CLEAR_EMPLOYEE_FORM
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -19,6 +20,7 @@ const INITIAL_STATE = {
     employees: [],
     employeeName: '',
     employeePhoto: '',
+    employeeId: '',
     loading: false
 }
 
@@ -45,6 +47,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: action.payload }
         case NEW_EMPLOYEE_ADDED:
             return { ...state, employees: [ ...this, action.payload] }
+        case CLEAR_EMPLOYEE_FORM:
+            return { ...state, employeeName: '', employeePhoto: '', employeeId: ''}
         default:
             return state;
     }

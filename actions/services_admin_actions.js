@@ -1,7 +1,6 @@
 import firebase from 'firebase';
 import _ from 'lodash';
 import { RNS3 } from 'react-native-aws3';
-import NavigationService from './NavigationServices';
 import {
     ADD_NEW_SERVICE,
     NEW_SERVICE_NAME_CHANGED,
@@ -13,13 +12,22 @@ import {
     NEW_EMPLOYEE_PHOTO_CHANGED,
     NEW_EMPLOYEE_LOADING_ON,
     NEW_EMPLOYEE_LOADING_OFF,
-    NEW_EMPLOYEE_ADDED
+    NEW_EMPLOYEE_ADDED,
+    CLEAR_EMPLOYEE_FORM
 } from './types';
+import NavigationServices from './NavigationServices';
+import random from 'random-id';
 
 export const serviceNameChanged = (text) => {
     return {
         type: NEW_SERVICE_NAME_CHANGED,
         payload: text
+    }
+}
+
+export const clearEmployeeForm = () => {
+    return {
+        type: CLEAR_EMPLOYEE_FORM,
     }
 }
 
@@ -51,6 +59,13 @@ export const employeeNameChanged = (text) => {
     }
 }
 
+export const employeePhotoChangedEdit = (text) => {
+    return {
+        type: NEW_EMPLOYEE_PHOTO_CHANGED,
+        payload: text
+    }
+}
+
 const employeePhotoChanged = (dispatch, text) => {
     dispatch({
         type: NEW_EMPLOYEE_PHOTO_CHANGED,
@@ -59,6 +74,7 @@ const employeePhotoChanged = (dispatch, text) => {
 }
 
 export const showCurrentEmployees = () => async (dispatch) => {
+    addEmployeeLoadingOn(dispatch)
     const { currentUser } = await firebase.auth()
 
     firebase.database().ref(`/users/${currentUser.uid}`)
@@ -84,6 +100,7 @@ export const showCurrentEmployees = () => async (dispatch) => {
                 console.log('data', data)
 
                 sendCurrentEmployess(dispatch, data)
+                addEmployeeLoadingOff(dispatch)
             } else {
                 let data = []
                 
@@ -98,9 +115,8 @@ export const showCurrentEmployees = () => async (dispatch) => {
                 console.log('data', data)
 
                 sendCurrentEmployess(dispatch, data)
+                addEmployeeLoadingOff(dispatch)
             }
-
-
         })
 }
 
@@ -111,7 +127,7 @@ export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => async (dispa
     post["id"] = firebase.database.ServerValue.TIMESTAMP
     const options = S3Options
     const ext = uri.substr(uri.lastIndexOf('.') + 1);
-    const name = Math.round(+new Date() / 1000);
+    const name = random(17, 'aA0');
     const file = {
         name: name + "." + ext,
         type: "image/" + ext,
@@ -136,7 +152,8 @@ export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
     console.log('uid', uid)
     console.log('employee', employee)
     try {
-        await firebase.database().ref(`/users/${uid}/employees`).push(employee)
+        await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).set(employee)
+        // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         employeeAdded(dispatch, employee)
     } catch(err) {
         console.log(err)

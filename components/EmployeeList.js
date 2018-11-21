@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native'
-import { ListItem } from 'react-native-elements';
+import { View, Text } from 'react-native'
+import ListItemSwipe from './ListItemSwipe';
 
 class EmployeeList extends Component {
 
     renderList() {
-        const { data } = this.props
-        
+        const { data, routeName } = this.props
         if (data) {
             return (
-                data.map((item) => (
-                    <ListItem
-                        key={item.key}
-                        avatar={item.imageUrl ? {uri: item.imageUrl} : require('../img/default-avatar.png')}
-                        title={item.name}
-                        subtitle={item.role}
-                    />
-                ))
-                
+                data.map((item) => (<ListItemSwipe key={item.key} item={item} routeName={routeName} />))
             )
         } else {
             return (
@@ -29,7 +20,6 @@ class EmployeeList extends Component {
             )
         }
     }
-
 
     render() {
         return this.renderList()
