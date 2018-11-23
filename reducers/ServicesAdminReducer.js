@@ -14,7 +14,8 @@ import {
     EMPLOYEE_ADDED_TO_SELECTION,
     EMPLOYEE_REMOVED_FROM_SELECTION,
     SELECTED_EMPLOYEE_ID,
-    SET_EMPLOYEEID_TO_NULL
+    SET_EMPLOYEEID_TO_NULL,
+    NEW_SERVICE_ADDED_SUCCESS
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -72,6 +73,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, employeeId: action.payload }
         case SET_EMPLOYEEID_TO_NULL:
             return { ...state, employeeId: action.payload }
+        case NEW_SERVICE_ADDED_SUCCESS:
+            return { ...state }
         default:
             return state;
     }

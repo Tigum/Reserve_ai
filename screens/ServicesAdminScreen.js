@@ -7,9 +7,7 @@ import { getAdminUserInfo } from '../actions'
 class ServicesAdminScreen extends Component {
 
     static navigationOptions = ({ navigation }) => {
-
         const { navigate } = navigation
-
         return {
             headerTitle: 'Serviços Cadastrados',
             headerRight: (

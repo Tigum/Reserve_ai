@@ -8,7 +8,8 @@ import {
     FACEBOOK_LOGIN_SUCCESS,
     FACEBOOK_LOGOUT_SUCCESS,
     AUTH_LOADING_ON,
-    AUTH_LOADING_OFF
+    AUTH_LOADING_OFF,
+    LOAD_LOGGEDIN_USER
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -44,13 +45,15 @@ export default (state = INITIAL_STATE, action) => {
                 user: action.payload.user
             };
         case FACEBOOK_LOGIN_FAIL:
-            return { ...state, error: 'Não foi possível acessar o Facebook. Tente novamente', loading: false, token: action.payload};
+            return { ...state, error: 'Não foi possível acessar o Facebook. Tente novamente', loading: false, token: action.payload };
         case FACEBOOK_LOGOUT_SUCCESS:
             return { ...state, ...INITIAL_STATE, routeName: action.payload };
         case AUTH_LOADING_ON:
             return { ...state, loading: action.payload };
         case AUTH_LOADING_OFF:
             return { ...state, loading: action.payload };
+        case LOAD_LOGGEDIN_USER:
+            return { ...state, user: action.payload };
         default:
             return state;
     }

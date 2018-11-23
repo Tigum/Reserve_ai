@@ -20,6 +20,7 @@ import {
     EMPLOYEE_ADDED_TO_SELECTION,
     EMPLOYEE_REMOVED_FROM_SELECTION,
     SELECTED_EMPLOYEE_ID,
+    NEW_SERVICE_ADDED_SUCCESS
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -96,7 +97,6 @@ export const manageEmployeeToSelection = (employees, employeeId) => {
     }
 
     if (employees.includes(employeeId)) {
-        console.log('eitaa')
         return {
             type: EMPLOYEE_REMOVED_FROM_SELECTION,
             payload: employeeId
@@ -124,7 +124,6 @@ export const showCurrentEmployees = () => async (dispatch) => {
             if (hasEmployees) {
 
                 const employees = user.employees
-                console.log('employees', employees)
 
                 let data = _.values(employees)
 
@@ -136,8 +135,6 @@ export const showCurrentEmployees = () => async (dispatch) => {
                     role: 'Você (Proprietário)'
                 }
                 data.unshift(myself)
-
-                console.log('data', data)
 
                 sendCurrentEmployess(dispatch, data)
                 addEmployeeLoadingOff(dispatch)
@@ -151,8 +148,6 @@ export const showCurrentEmployees = () => async (dispatch) => {
                     role: 'Você (Proprietário)'
                 }
                 data.unshift(myself)
-
-                console.log('data', data)
 
                 sendCurrentEmployess(dispatch, data)
                 addEmployeeLoadingOff(dispatch)
@@ -222,12 +217,8 @@ export const deleteEmployee = ({ uid, employeeId }) => async () => {
 }
 
 export const editEmployee = ({ uid, employee }) => async (dispatch) => {
-    console.log('uid2', uid)
-    console.log('employee2', employee)
     try {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).update(employee)
-        // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
-        // employeeEditedSuccess(dispatch, employee)
     } catch (err) {
         console.log(err)
     }
@@ -265,5 +256,23 @@ const addEmployeeLoadingOff = (dispatch) => {
     dispatch({
         type: NEW_EMPLOYEE_LOADING_OFF,
         payload: false
+    })
+}
+
+
+
+export const addNewService = ( serviceInfo ) => async (dispatch) => {
+    const { currentUser } = firebase.auth()
+    const serviceId = await random(17, 'aA0');
+    try {
+        await firebase.database().ref(`/services/${currentUser.uid}/${serviceId}`).set(serviceInfo)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const serviceAddedSuccess = (dispatch) => {
+    dispatch({
+        type: NEW_SERVICE_ADDED_SUCCESS,
     })
 }

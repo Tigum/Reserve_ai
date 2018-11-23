@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import { View, TouchableWithoutFeedback, ScrollView, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { showCurrentEmployees, clearEmployeeForm } from '../actions'
+import { showCurrentEmployees, clearEmployeeForm, addNewService } from '../actions'
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { sanFranciscoWeights } from 'react-native-typography';
 import EmployeeList from '../components/EmployeeList'
@@ -13,10 +14,15 @@ class SelectEmployeesScreen extends Component {
         this.props.showCurrentEmployees()
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.employeesSelected !== nextProps.employeesSelected) {
+            this.props.navigation.setParams({ props: nextProps })
+        }
+    }
+
     static navigationOptions = ({ navigation }) => {
 
         const { navigate } = navigation
-
         return {
             headerTitle: 'Selecione funcionários',
             headerLeft: (
@@ -27,7 +33,20 @@ class SelectEmployeesScreen extends Component {
                 </TouchableWithoutFeedback>
             ),
             headerRight: (
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={async () => {
+                    const { currentUser } = await firebase.auth()
+                    const ownerUid = currentUser.uid
+                    const { serviceName, serviceDescription, serviceDuration, servicePrice, employeesSelected } = navigation.state.params.props
+                    const serviceInfo = {
+                        serviceName,
+                        serviceDescription,
+                        serviceDuration,
+                        servicePrice,
+                        employeesSelected,
+                        ownerUid
+                    }
+                    navigation.state.params.props.addNewService(serviceInfo)
+                }}>
                     <View style={{ paddingRight: 10 }}>
                         <MaterialIcons name="done" size={25} color="#3577e6" />
                     </View>
@@ -42,12 +61,11 @@ class SelectEmployeesScreen extends Component {
     }
 
     render() {
-        console.log('propsselected', this.props)
         if (this.props.loading) {
             return (
-                <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40, backgroundColor: 'white'}}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 40, backgroundColor: 'white' }}>
                     <ActivityIndicator />
-                    <Text style={[sanFranciscoWeights.thin, {fontSize: 10, paddingTop: 10}]}>CARREGANDO FUNCIONÁRIOS...</Text>
+                    <Text style={[sanFranciscoWeights.thin, { fontSize: 10, paddingTop: 10 }]}>CARREGANDO FUNCIONÁRIOS...</Text>
                 </View>
             )
         }
@@ -96,4 +114,4 @@ const mapStateToProps = ({ servicesAdmin }) => {
     }
 }
 
-export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm })(SelectEmployeesScreen);
+export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm, addNewService })(SelectEmployeesScreen);

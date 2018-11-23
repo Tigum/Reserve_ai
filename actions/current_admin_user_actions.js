@@ -12,7 +12,6 @@ export const getAdminUserInfo = () => {
             .on('value', async snapshot => {
                 const user = await snapshot.val()
                 user['uid'] = currentUser.uid
-
                 try {
                     await loginAdminUserInfoSuccess(dispatch, user)
                 } catch (err) {

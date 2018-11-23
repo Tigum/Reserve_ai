@@ -12,6 +12,7 @@ export const REGISTER_ADMIN_LOADING_OFF = 'register_admin_loading_off'
 export const REGISTER_CLIENT_LOADING_ON = 'register_client_loading_on'
 export const REGISTER_CLIENT_LOADING_OFF = 'register_client_loading_off'
 export const CLEAR_FORM = 'clear_form'
+export const LOAD_LOGGEDIN_USER = 'load_loggedin_user'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 
@@ -52,6 +53,7 @@ export const NEW_SERVICE_PRICE_CHANGED = 'new_service_price_changed'
 export const NEW_SERVICE_EMPLOYEE_SELECT = 'new_service_employee_select'
 export const COMPANY_HOURS_START = 'company_hours_start'
 export const COMPANY_HOURS_END = 'company_hours_end'
+export const NEW_SERVICE_ADDED_SUCCESS = 'new_service_added_success'
 
 export const NAME_CLIENT_REGISTER_CHANGED = 'name_client_register_changed'
 export const EMAIL_CLIENT_REGISTER_CHANGED = 'email_client_register_changed'

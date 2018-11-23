@@ -13,8 +13,10 @@ import {
     FACEBOOK_LOGOUT_SUCCESS,
     AUTH_LOADING_ON,
     AUTH_LOADING_OFF,
-    CLEAR_FORM
+    CLEAR_FORM,
+    LOAD_LOGGEDIN_USER
 } from './types';
+import NavigationServices from './NavigationServices';
 
 
 export const emailChanged = (text) => {
@@ -29,6 +31,24 @@ export const passwordChanged = (text) => {
         type: PASSWORD_CHANGED,
         payload: text
     }
+}
+
+export const loadLoggedInUser = () => async (dispatch) => {
+    const { currentUser } = await firebase.auth()
+    console.log('currentUser', currentUser)
+    firebase.database().ref(`/users/${currentUser.uid}`)
+        .on('value', async snapshot => {
+            const user = await snapshot.val()
+            try {
+                await dispatch({
+                    type: LOAD_LOGGEDIN_USER,
+                    payload: user
+                })
+            } catch (err) {
+                alert(err)
+            }
+
+        })
 }
 
 export const loginUser = ({ email, password }) => {
@@ -57,25 +77,36 @@ export const loginUser = ({ email, password }) => {
     }
 }
 
-export const checkIfUserAlreadyLoggedIn = () => async(dispatch) => {
-    try{
+export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
+    try {
         authLoadingOn(dispatch)
-        await firebase.auth().onAuthStateChanged(user => {
-            if(user){
+        await firebase.auth().onAuthStateChanged(async user => {
+            if (user) {
+                const { currentUser } = await firebase.auth()
+                await firebase.database().ref(`/users/${currentUser.uid}`)
+                    .on('value', async snapshot => {
+                        const user = await snapshot.val()
+                        try {
+                            loginUserSuccess(dispatch, user)
+                        } catch (err) {
+                            alert(err)
+                        }
+
+                    })
                 NavigationService.navigate('mainAdminScreen', {})
                 authLoadingOff(dispatch)
-                loginUserSuccess(dispatch, null)
+
             } else {
                 authLoadingOff(dispatch)
                 NavigationService.navigate('auth', {})
             }
         })
 
-    } catch(err) {
+    } catch (err) {
         authLoadingOff(dispatch)
         loginUserFail(dispatch, null)
         alert(err)
-    } 
+    }
 }
 
 export const facebookLogin = () => async (dispatch) => {

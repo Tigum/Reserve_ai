@@ -3,14 +3,17 @@ import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { getAdminUserInfo } from '../actions'
-import { NavigationActions } from 'react-navigation'
 
 class MainAdminScreen extends Component {
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.user !== nextProps.user) {
+            this.props.navigation.setParams({ props: nextProps })
+        }
+    }
+
     static navigationOptions = ({ navigation }) => {
         const { navigate } = navigation
-        console.log('this.params', navigation)
         return {
             headerTitle: 'Hoje',
             headerRight: (
@@ -21,7 +24,6 @@ class MainAdminScreen extends Component {
                 </TouchableWithoutFeedback>
             ),
         }
-
     };
 
 
@@ -93,9 +95,9 @@ class MainAdminScreen extends Component {
     }
 }
 
-const mapStateToProps = ({ mainAdmin }) => {
-    const { user } = mainAdmin
+const mapStateToProps = ({ auth }) => {
+    const { user } = auth
     return { user }
 }
 
-export default connect(mapStateToProps, { getAdminUserInfo })(MainAdminScreen);
+export default connect(mapStateToProps, {})(MainAdminScreen);
