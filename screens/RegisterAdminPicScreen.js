@@ -14,12 +14,7 @@ import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { ImagePicker, Permissions } from 'expo'
 
 const S3Options = {
-    keyPrefix: "reserve_ai/",
-    bucket: "tigum",
-    region: "us-east-1",
-    accessKey: "AKIAIUHHF3SCXDZ2UR4A",
-    secretKey: "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",
-    successActionStatus: 201
+  
 }
 
 class RegisterAdminPicScreen extends Component {
