@@ -9,12 +9,17 @@ import {
     checkIfClientEmailExistsAndRegister
 } from '../actions'
 import Button from '../components/Button'
+import { bucket, region, accessKey, secretKey, successActionStatus} from '../s3'
 import { Spinner } from '../components/Spinner'
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { ImagePicker, Permissions } from 'expo'
 
 const S3Options = {
-  
+    bucket,
+    region,
+    accessKey,
+    secretKey,
+    successActionStatus
 }
 
 class RegisterAdminPicScreen extends Component {

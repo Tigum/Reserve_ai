@@ -8,11 +8,16 @@ import { sanFranciscoWeights } from 'react-native-typography';
 import { ListItem, FormLabel, FormInput } from 'react-native-elements';
 import { employeeNameChanged, employeePhotoChangedEdit, uploadEmployeePhotoToS3, addNewEmployee, editEmployee, employeeIdChanged } from '../actions'
 import { EvilIcons } from '@expo/vector-icons';
+import { bucket, region, accessKey, secretKey, successActionStatus} from '../s3'
 import DefaultModal from '../components/DefaultModal'
 import random from 'random-id';
 
 const S3Options = {
-
+    bucket,
+    region,
+    accessKey,
+    secretKey,
+    successActionStatus
 }
 
 class AddEmployeesScreen extends Component {
