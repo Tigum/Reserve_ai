@@ -3,6 +3,7 @@ import { View, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
+import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 
 class MainAdminScreen extends Component {
 
@@ -19,10 +20,17 @@ class MainAdminScreen extends Component {
             headerRight: (
                 <TouchableWithoutFeedback onPress={() => navigate('servicesAdmin')}>
                     <View style={{ paddingRight: 10 }}>
-                        <AntDesign name="carryout" size={25} color="#3577e6" />
+                        <AntDesign name="carryout" size={25} color="white" />
                     </View>
                 </TouchableWithoutFeedback>
             ),
+            headerStyle: {
+                backgroundColor: HEADER_BACKGROUND_COLOR,
+            },
+            headerTintColor: HEADER_TEXT_COLOR,
+            headerTitleStyle: {
+                fontWeight: HEADER_TEXT_FONT_WEIGHT
+            },
         }
     };
 

@@ -81,3 +81,8 @@ export const NEW_EMPLOYEE_ID_CHANGED = 'new_employee_id_changed'
 export const EMPLOYEE_ADDED_TO_SELECTION = 'employee_added_to_selection'
 export const EMPLOYEE_REMOVED_FROM_SELECTION = 'employee_removed_from_selection'
 export const SELECTED_EMPLOYEE_ID = 'selected_employee_id'
+
+
+//REGISTERED SERVICES SCREEN
+export const LOAD_REGISTERED_SERVICES = 'load_registered_services'
+export const FIND_EMPLOYEES_NAMES_BY_ID = 'find_employees_names_by_id'

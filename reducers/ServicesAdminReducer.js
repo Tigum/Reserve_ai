@@ -15,7 +15,9 @@ import {
     EMPLOYEE_REMOVED_FROM_SELECTION,
     SELECTED_EMPLOYEE_ID,
     SET_EMPLOYEEID_TO_NULL,
-    NEW_SERVICE_ADDED_SUCCESS
+    NEW_SERVICE_ADDED_SUCCESS,
+    LOAD_REGISTERED_SERVICES,
+    FIND_EMPLOYEES_NAMES_BY_ID
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -29,6 +31,8 @@ const INITIAL_STATE = {
     employeeId: '',
     loading: false,
     employeesSelected: [],
+    registeredServices: [],
+    employeesByJob: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -75,6 +79,10 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, employeeId: action.payload }
         case NEW_SERVICE_ADDED_SUCCESS:
             return { ...state }
+        case LOAD_REGISTERED_SERVICES:
+            return { ...state,  registeredServices: action.payload}
+        case FIND_EMPLOYEES_NAMES_BY_ID:
+            return { ...state, employeesByJob: action.payload}
         default:
             return state;
     }

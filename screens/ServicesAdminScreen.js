@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { getAdminUserInfo } from '../actions'
+import { getAdminUserInfo, loadRegisteredServices } from '../actions'
+import ServicesListAdmin from '../components/ServicesListAdmin'
+import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 
 class ServicesAdminScreen extends Component {
+
+    componentWillMount() {
+        this.props.loadRegisteredServices()
+    }
 
     static navigationOptions = ({ navigation }) => {
         const { navigate } = navigation
@@ -13,25 +19,35 @@ class ServicesAdminScreen extends Component {
             headerRight: (
                 <TouchableWithoutFeedback onPress={() => navigate('addService')}>
                     <View style={{ paddingRight: 10 }}>
-                        <AntDesign name="plus" size={25} color="#3577e6" />
+                        <AntDesign name="plus" size={25} color="white" />
                     </View>
                 </TouchableWithoutFeedback>
             ),
+            headerStyle: {
+                backgroundColor: HEADER_BACKGROUND_COLOR,
+            },
+            headerTintColor: HEADER_TEXT_COLOR,
+            headerTitleStyle: {
+                fontWeight: HEADER_TEXT_FONT_WEIGHT
+            },
         }
     };
 
     render() {
         return (
             <View>
-                <Text>Services Screen</Text>
+                <ServicesListAdmin
+                    data={this.props.registeredServices}
+                />
             </View>
         )
     }
 }
 
-const mapStateToProps = ({ mainAdmin }) => {
+const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     const { user } = mainAdmin
-    return { user }
+    const { registeredServices } = servicesAdmin
+    return { user, registeredServices }
 }
 
-export default connect(mapStateToProps, { getAdminUserInfo })(ServicesAdminScreen);
+export default connect(mapStateToProps, { getAdminUserInfo, loadRegisteredServices })(ServicesAdminScreen);

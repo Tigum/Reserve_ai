@@ -20,7 +20,9 @@ import {
     EMPLOYEE_ADDED_TO_SELECTION,
     EMPLOYEE_REMOVED_FROM_SELECTION,
     SELECTED_EMPLOYEE_ID,
-    NEW_SERVICE_ADDED_SUCCESS
+    NEW_SERVICE_ADDED_SUCCESS,
+    LOAD_REGISTERED_SERVICES,
+    FIND_EMPLOYEES_NAMES_BY_ID
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -261,11 +263,13 @@ const addEmployeeLoadingOff = (dispatch) => {
 
 
 
-export const addNewService = ( serviceInfo ) => async (dispatch) => {
-    const { currentUser } = firebase.auth()
+export const addNewService = (serviceInfo) => async (dispatch) => {
+    const { currentUser } = await firebase.auth()
     const serviceId = await random(17, 'aA0');
+    serviceInfo['serviceId'] = serviceId
     try {
         await firebase.database().ref(`/services/${currentUser.uid}/${serviceId}`).set(serviceInfo)
+        NavigationServices.navigate('servicesAdmin')
     } catch (err) {
         console.log(err)
     }
@@ -274,5 +278,64 @@ export const addNewService = ( serviceInfo ) => async (dispatch) => {
 const serviceAddedSuccess = (dispatch) => {
     dispatch({
         type: NEW_SERVICE_ADDED_SUCCESS,
+    })
+}
+
+export const loadRegisteredServices = () => async (dispatch) => {
+    const { currentUser } = await firebase.auth()
+    try {
+        await firebase.database().ref(`/services/${currentUser.uid}`)
+            .on('value', async snapshot => {
+
+                let data = []
+                const services = snapshot.val()
+                let servicesList = _.values(services)
+
+                servicesList.map((item) => {
+                    const service = {
+                        employeesSelected: item.employeesSelected,
+                        ownerUid: item.ownerUid,
+                        serviceDescription: item.serviceDescription,
+                        serviceDuration: item.serviceDuration,
+                        serviceName: item.serviceName,
+                        servicePrice: item.servicePrice,
+                        serviceId: item.serviceId
+                    }
+                    data.push(service)
+                })
+
+                dispatch({
+                    type: LOAD_REGISTERED_SERVICES,
+                    payload: data
+                })
+            })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const findEmployeesNamesById = (keys) => async (dispatch) => {
+    let list = []
+    const { currentUser } = await firebase.auth()
+    
+    await keys.map(async (item) => {
+        try {
+            await firebase.database().ref(`/users/${currentUser.uid}/employees/${item}`)
+                .on('value', async snapshot => {
+                    const employee = await snapshot.val()
+                    if(!employee) {
+                        list.push('Você')
+                    }else{
+                        list.push(employee.name)
+                    }
+                })
+        } catch (err) {
+            console.log(err)
+        }
+    })
+    console.log('list', list)
+    dispatch({
+        type: FIND_EMPLOYEES_NAMES_BY_ID,
+        payload: list
     })
 }
