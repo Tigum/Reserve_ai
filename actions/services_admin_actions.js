@@ -261,6 +261,19 @@ const addEmployeeLoadingOff = (dispatch) => {
     })
 }
 
+export const serviceLoadingOn = () => {
+    return {
+        type: NEW_EMPLOYEE_LOADING_ON,
+        payload: true
+    }
+}
+
+export const serviceLoadingOff = () => {
+    return {
+        type: NEW_EMPLOYEE_LOADING_ON,
+        payload: false
+    }
+}
 
 
 export const addNewService = (serviceInfo) => async (dispatch) => {
@@ -282,6 +295,7 @@ const serviceAddedSuccess = (dispatch) => {
 }
 
 export const loadRegisteredServices = () => async (dispatch) => {
+    addEmployeeLoadingOn(dispatch)
     const { currentUser } = await firebase.auth()
     try {
         await firebase.database().ref(`/services/${currentUser.uid}`)
@@ -308,8 +322,10 @@ export const loadRegisteredServices = () => async (dispatch) => {
                     type: LOAD_REGISTERED_SERVICES,
                     payload: data
                 })
+                addEmployeeLoadingOff(dispatch)
             })
     } catch (err) {
+        addEmployeeLoadingOff(dispatch)
         console.log(err)
     }
 }

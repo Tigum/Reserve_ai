@@ -3,14 +3,14 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import firebase from 'firebase'
 import { Divider, Avatar } from 'react-native-elements'
-import { View, Text } from 'react-native';
+import { View, Text} from 'react-native';
 import { sanFranciscoWeights } from 'react-native-typography';
 import { findEmployeesNamesById } from '../actions'
 
 class ServiceItemAdmin extends Component {
     state = {
         employeesNames: [],
-        employeesPics: []
+        employeesPics: [],
     }
 
     async componentWillMount() {
@@ -29,15 +29,20 @@ class ServiceItemAdmin extends Component {
                                 name: 'Você',
                                 imageUrl
                             }
-                            this.setState({ employeesNames: [...this.state.employeesNames, employeeToAdd.name] })
-                            this.setState({ employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl] })
+                            this.setState({
+                                employeesNames: [...this.state.employeesNames, employeeToAdd.name],
+                                employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                            })
+                            
                         } else {
                             const employeeToAdd = {
                                 name: employee.name,
                                 imageUrl: employee.imageUrl
                             }
-                            this.setState({ employeesNames: [...this.state.employeesNames, employeeToAdd.name] })
-                            this.setState({ employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl] })
+                            this.setState({
+                                employeesNames: [...this.state.employeesNames, employeeToAdd.name],
+                                employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                            })
                         }
                     })
             } catch (err) {
@@ -50,21 +55,30 @@ class ServiceItemAdmin extends Component {
         const INITIAL_MARGIN = 45
         const ADDITIONAL_MARGIN = 10
         if (this.state.employeesNames) {
-            if (this.state.employeesPics) {
-                const pics = this.state.employeesPics
-                if (pics.length === 2) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + ADDITIONAL_MARGIN }]}>{this.state.employeesNames.join(', ')}</Text>
-                if (pics.length === 3) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + (ADDITIONAL_MARGIN * 2) }]}>{this.state.employeesNames.join(', ')}</Text>
-                if (pics.length === 4) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + (ADDITIONAL_MARGIN * 3) }]}>{this.state.employeesNames.join(', ')}</Text>
-                if (pics.length === 5) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + (ADDITIONAL_MARGIN * 4) }]}>{this.state.employeesNames.join(', ')}</Text>
-                return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN }]}>{this.state.employeesNames.join(', ')}</Text>
+            let data = this.state.employeesNames.join(', ')
+
+            if (this.state.employeesNames.length > 5) {
+                data = this.state.employeesNames.slice(0, 5).join(', ') + ' + ' + this.state.employeesNames.length + ' funcionário(s)'
             }
 
+            if (this.state.employeesPics) {
+                const names = this.state.employeesNames
+                if (names.length === 2) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + ADDITIONAL_MARGIN }]}>{data}</Text>
+                if (names.length === 3) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + (ADDITIONAL_MARGIN * 2) }]}>{data}</Text>
+                if (names.length === 4) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + (ADDITIONAL_MARGIN * 3) }]}>{data}</Text>
+                if (names.length >= 5) return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN + (ADDITIONAL_MARGIN * 4) }]}>{data}</Text>
+                return <Text style={[sanFranciscoWeights.thin, styles.namesStyles, { marginLeft: INITIAL_MARGIN }]}>{data}</Text>
+            }
         }
     }
 
     renderEmployeePicList() {
         if (this.state.employeesPics) {
-            const data = this.state.employeesPics
+            let data = this.state.employeesPics
+
+            if (data.length > 5) {
+                data = this.state.employeesPics.slice(0, 5)
+            }
             return (
                 data.map((item, i) => (
                     <Avatar
@@ -74,11 +88,12 @@ class ServiceItemAdmin extends Component {
                         source={{ uri: item }}
                         onPress={() => console.log("Works!", i)}
                         activeOpacity={0.7}
-                        containerStyle={[styles.avatars, { marginLeft: i * 10}]}
+                        containerStyle={[styles.avatars, { marginLeft: i * 10 }]}
                     />
                 ))
 
             )
+            
         }
     }
 
@@ -87,15 +102,19 @@ class ServiceItemAdmin extends Component {
         return (
             <View style={styles.itemOutterView}>
                 <View style={styles.itemInnerView}>
-                    <Text style={[sanFranciscoWeights.light, styles.itemTitle]}>{this.props.service.serviceName}</Text>
+
+                    <View style={styles.titleView}>
+                        <Text style={[sanFranciscoWeights.light, styles.itemTitle]}>{this.props.service.serviceName}</Text>
+                        <View style={styles.activationView}>
+                            <View style={styles.circle} /><Text style={[sanFranciscoWeights.thin, styles.activation]}> Ativado</Text>
+                        </View>
+                    </View>
+
                     <Text style={[sanFranciscoWeights.thin, styles.itemDescription]}>{this.props.service.serviceDescription}</Text>
                     <Text style={[sanFranciscoWeights.thin, styles.itemAdditionalInfo]}>Duração:{this.props.service.serviceDuration} min</Text>
                     <Text style={[sanFranciscoWeights.thin, styles.itemAdditionalInfo]}>Preço: R${this.props.service.servicePrice}</Text>
-                    <Divider style={styles.divider} />
-                    <View style={{ flexDirection: 'row' }}>
+                    {/* <Divider style={styles.divider} /> */}
 
-                        <View style={styles.circle} /><Text style={[sanFranciscoWeights.thin, styles.activation]}> Ativado</Text>
-                    </View>
                     <View style={{ flexDirection: 'row' }}>
                         {this.renderEmployeePicList()}
                         {this.renderEmployeeNameList()}
@@ -148,7 +167,7 @@ const styles = {
     namesStyles: {
         marginTop: 20,
         marginBottom: 15,
-        color: '#a0a0a0'
+        color: '#a0a0a0',
     },
     avatars: {
         position: 'absolute',
@@ -159,12 +178,20 @@ const styles = {
         borderTopWidth: 9,
         borderBottomWidth: 9,
         borderRadius: '90%'
+    },
+    titleView: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-between'
+    },
+    activationView: {
+        flexDirection: 'row',
     }
 }
 
 const mapStateToProps = ({ servicesAdmin }) => {
-    const { employeesByJob } = servicesAdmin;
-    return { employeesByJob }
+    const {} = servicesAdmin;
+    return {}
 }
 
 export default connect(mapStateToProps, { findEmployeesNamesById })(ServiceItemAdmin)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import ServiceItemAdmin from './ServiceItemAdmin'
+import ServiceItemAdmin from './ServiceItemAdmin';
 
 class ServicesListAdmin extends Component {
 

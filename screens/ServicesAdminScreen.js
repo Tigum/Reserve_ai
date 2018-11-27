@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getAdminUserInfo, loadRegisteredServices } from '../actions'
 import ServicesListAdmin from '../components/ServicesListAdmin'
 import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
+import { Spinner } from '../components/Spinner'
 
 class ServicesAdminScreen extends Component {
 
@@ -34,6 +35,10 @@ class ServicesAdminScreen extends Component {
     };
 
     render() {
+        if (this.props.loading) {
+            return  <Spinner text='CARREGANDO SERVIÇOS...'/>
+        }
+
         return (
             <View>
                 <ServicesListAdmin
@@ -46,8 +51,8 @@ class ServicesAdminScreen extends Component {
 
 const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     const { user } = mainAdmin
-    const { registeredServices } = servicesAdmin
-    return { user, registeredServices }
+    const { registeredServices, loading } = servicesAdmin
+    return { user, registeredServices, loading }
 }
 
 export default connect(mapStateToProps, { getAdminUserInfo, loadRegisteredServices })(ServicesAdminScreen);
