@@ -193,7 +193,7 @@ const styles = {
     },
     employeeText: {
         color: '#8c8c8c',
-        fontSize: 13, 
+        fontSize: 13,
         marginTop: 18
     }
 }
