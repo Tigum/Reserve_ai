@@ -231,7 +231,7 @@ const styles = {
 
 const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     const { user } = mainAdmin
-    const { serviceName, serviceDescription, servicePrice, serviceDuration, employeeName, employeePhoto, loading, employees, employeeId } = servicesAdmin
+    const { serviceName, serviceDescription, servicePrice, serviceDuration, employeeName, employeePhoto, loading, employees, employeeId, mode } = servicesAdmin
 
     return {
         user,
@@ -243,7 +243,8 @@ const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
         employeePhoto,
         loading,
         employees,
-        employeeId
+        employeeId,
+        mode
     }
 }
 

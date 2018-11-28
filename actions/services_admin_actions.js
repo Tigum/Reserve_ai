@@ -23,7 +23,11 @@ import {
     NEW_SERVICE_ADDED_SUCCESS,
     LOAD_REGISTERED_SERVICES,
     FIND_EMPLOYEES_NAMES_BY_ID,
-    CLEAR_SERVICE_FORM
+    CLEAR_SERVICE_FORM,
+    EDIT_SERVICE,
+    START_EDIT_SERVICE,
+    SERVICE_LOADING,
+    SET_SERVICE_MODE
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -278,6 +282,7 @@ export const serviceLoadingOff = () => {
 
 
 export const addNewService = (serviceInfo) => async (dispatch) => {
+    setServiceMode(dispatch, 'add')
     const { currentUser } = await firebase.auth()
     const serviceId = await random(17, 'aA0');
     serviceInfo['serviceId'] = serviceId
@@ -420,4 +425,68 @@ export const deleteService = (serviceId) => () => {
         ],
         { cancelable: false }
     )
+}
+
+
+export const editService = (service) => (dispatch) => {
+    startEditService(dispatch, service)
+    NavigationServices.navigate('addService')
+}
+
+
+const startEditService = (dispatch, service) => {
+    dispatch({
+        type: START_EDIT_SERVICE,
+        payload: service
+    })
+}
+
+export const completeServiceEdit = (service, serviceId) => async (dispatch) => {
+    serviceLoading(dispatch, true)
+    const { currentUser } = await firebase.auth()
+    console.log('serviceIdAction', serviceId)   
+    try {
+        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update(service)
+        editServiceSuccess(dispatch)
+        serviceLoading(dispatch, false)
+        setServiceMode(dispatch, '')
+    } catch (err) {
+        console.log(err)
+        serviceLoading(dispatch, false)
+        setServiceMode(dispatch, '')
+    }
+    NavigationServices.navigate('servicesAdmin')
+}
+
+const editServiceSuccess = (dispatch) => {
+    dispatch({
+        type: CLEAR_SERVICE_FORM,
+    })
+}
+
+const serviceLoading = (dispatch, data) => {
+    dispatch({
+        type: SERVICE_LOADING,
+        payload: data
+    })
+}
+
+const setServiceMode = (dispatch, mode) => {
+    dispatch({
+        type: SET_SERVICE_MODE,
+        payload: mode
+    })
+}
+
+export const setServiceModeExport = (mode) => {
+    return {
+        type: SET_SERVICE_MODE,
+        payload: mode
+    }
+}
+
+export const clearServiceFormExport = () => {
+    return {
+        type: CLEAR_SERVICE_FORM,
+    }
 }

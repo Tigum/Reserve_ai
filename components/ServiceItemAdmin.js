@@ -5,7 +5,7 @@ import firebase from 'firebase'
 import { Divider, Avatar } from 'react-native-elements'
 import { View, Text } from 'react-native';
 import { sanFranciscoWeights } from 'react-native-typography';
-import { findEmployeesNamesById, deactivateService, activateService, deleteService } from '../actions'
+import { findEmployeesNamesById, deactivateService, activateService, deleteService, editService } from '../actions'
 import CardButton from './CardButton'
 
 class ServiceItemAdmin extends Component {
@@ -120,6 +120,10 @@ class ServiceItemAdmin extends Component {
 
     }
 
+    onEditService() {
+        this.props.editService(this.props.service)
+    }
+
     render() {
         const isActive = this.state.isActive ? { backgroundColor: 'green' } : { backgroundColor: 'red' }
         const isActiveTextColor = this.state.isActive ? { color: 'green' } : { color: 'red' }
@@ -153,7 +157,12 @@ class ServiceItemAdmin extends Component {
                     <Divider style={styles.divider} />
 
                     <View style={styles.buttonsView}>
-                        <CardButton text='Editar' onAction={() => { }} backgroundColor='white' color='#3577e6' />
+                        <CardButton 
+                            text='Editar' 
+                            onAction={this.onEditService.bind(this)} 
+                            backgroundColor='white' 
+                            color='#3577e6' 
+                        />
                         <CardButton
                             text='Deletar'
                             onAction={this.onHandleDeletion.bind(this)}
@@ -252,4 +261,4 @@ const mapStateToProps = ({ servicesAdmin }) => {
     return {}
 }
 
-export default connect(mapStateToProps, { findEmployeesNamesById, deactivateService, activateService, deleteService })(ServiceItemAdmin)
+export default connect(mapStateToProps, { findEmployeesNamesById, deactivateService, activateService, deleteService, editService })(ServiceItemAdmin)

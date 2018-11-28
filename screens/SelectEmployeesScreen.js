@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import { View, TouchableWithoutFeedback, ScrollView, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { showCurrentEmployees, clearEmployeeForm, addNewService } from '../actions'
+import { showCurrentEmployees, clearEmployeeForm, addNewService, completeServiceEdit } from '../actions'
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { sanFranciscoWeights } from 'react-native-typography';
 import EmployeeList from '../components/EmployeeList'
@@ -12,6 +12,10 @@ class SelectEmployeesScreen extends Component {
 
     componentWillMount() {
         this.props.showCurrentEmployees()
+    }
+
+    componentDidMount() {
+        this.props.navigation.setParams({ props: this.props })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -36,16 +40,23 @@ class SelectEmployeesScreen extends Component {
                 <TouchableWithoutFeedback onPress={async () => {
                     const { currentUser } = await firebase.auth()
                     const ownerUid = currentUser.uid
-                    const { serviceName, serviceDescription, serviceDuration, servicePrice, employeesSelected } = navigation.state.params.props
+                    const { serviceName, serviceDescription, serviceDuration, servicePrice, employeesSelected, mode, serviceId } = navigation.state.params.props
                     const serviceInfo = {
                         serviceName,
                         serviceDescription,
                         serviceDuration,
                         servicePrice,
                         employeesSelected,
-                        ownerUid
+                        ownerUid,
+                        isActive: true
                     }
-                    navigation.state.params.props.addNewService(serviceInfo)
+                    console.log('mode', mode)
+                    if(mode && mode === 'edit') {
+                        navigation.state.params.props.completeServiceEdit(serviceInfo, serviceId)
+                    }else{
+                        navigation.state.params.props.addNewService(serviceInfo)
+                    }
+                    
                 }}>
                     <View style={{ paddingRight: 10 }}>
                         <MaterialIcons name="done" size={25} color="#3577e6" />
@@ -100,7 +111,9 @@ const mapStateToProps = ({ servicesAdmin }) => {
         servicePrice,
         serviceDuration,
         employeeId,
-        employeesSelected
+        employeesSelected,
+        mode,
+        serviceId
     } = servicesAdmin
     return {
         employees,
@@ -111,7 +124,9 @@ const mapStateToProps = ({ servicesAdmin }) => {
         serviceDuration,
         employeeId,
         employeesSelected,
+        mode,
+        serviceId
     }
 }
 
-export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm, addNewService })(SelectEmployeesScreen);
+export default connect(mapStateToProps, { showCurrentEmployees, clearEmployeeForm, addNewService, completeServiceEdit })(SelectEmployeesScreen);

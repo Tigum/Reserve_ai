@@ -36,7 +36,7 @@ class AddServicesScreen extends Component {
     render() {
         return (
             <DefaultModal
-                title='Adicionar serviço'
+                title={this.props.mode && this.props.mode === 'edit' ? 'Editar serviço' : 'Adicionar serviço'}
                 buttonText='Continuar'
                 dismissIcon='close'
                 buttonAction={this.onContinuePress.bind(this)}
@@ -125,14 +125,15 @@ const styles = {
 
 const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     const { user } = mainAdmin
-    const { serviceName, serviceDescription, servicePrice, serviceDuration } = servicesAdmin
+    const { serviceName, serviceDescription, servicePrice, serviceDuration, mode } = servicesAdmin
 
     return { 
         user,
         serviceName,
         serviceDescription,
         servicePrice,
-        serviceDuration
+        serviceDuration,
+        mode
     }
 }
 
@@ -143,6 +144,6 @@ export default connect(mapStateToProps,
         serviceNameChanged,
         serviceDescriptionChanged,
         servicePriceChanged,
-        serviceDurationChanged
+        serviceDurationChanged,
     }
 )(AddServicesScreen);

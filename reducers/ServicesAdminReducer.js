@@ -18,7 +18,11 @@ import {
     NEW_SERVICE_ADDED_SUCCESS,
     LOAD_REGISTERED_SERVICES,
     FIND_EMPLOYEES_NAMES_BY_ID,
-    CLEAR_SERVICE_FORM
+    CLEAR_SERVICE_FORM,
+    START_EDIT_SERVICE,
+    EDIT_SERVICE,
+    SERVICE_LOADING,
+    SET_SERVICE_MODE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -33,7 +37,8 @@ const INITIAL_STATE = {
     loading: false,
     employeesSelected: [],
     registeredServices: [],
-    employeesByJob: []
+    employeesByJob: [],
+    mode: ''
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -56,6 +61,8 @@ export default (state = INITIAL_STATE, action) => {
         case NEW_EMPLOYEE_LOADING_ON:
             return { ...state, loading: action.payload }
         case NEW_EMPLOYEE_LOADING_OFF:
+            return { ...state, loading: action.payload }
+        case SERVICE_LOADING:
             return { ...state, loading: action.payload }
         case NEW_EMPLOYEE_ADDED:
             return { ...state, employees: [...this, action.payload] }
@@ -81,18 +88,32 @@ export default (state = INITIAL_STATE, action) => {
         case NEW_SERVICE_ADDED_SUCCESS:
             return { ...state }
         case LOAD_REGISTERED_SERVICES:
-            return { ...state,  registeredServices: action.payload}
+            return { ...state, registeredServices: action.payload }
         case FIND_EMPLOYEES_NAMES_BY_ID:
-            return { ...state, employeesByJob: action.payload}
+            return { ...state, employeesByJob: action.payload }
         case CLEAR_SERVICE_FORM:
-            return { ...state, 
-            serviceName: '',
-            serviceDescription: '',
-            servicePrice: '',
-            serviceDuration: '',
-            employees: [],
-            employeesSelected: []
-        }
+            return {
+                ...state,
+                serviceName: '',
+                serviceDescription: '',
+                servicePrice: '',
+                serviceDuration: '',
+                employees: [],
+                employeesSelected: []
+            }
+        case START_EDIT_SERVICE:
+            return {
+                ...state,
+                employeesSelected: action.payload.employeesSelected,
+                serviceDescription: action.payload.serviceDescription,
+                serviceDuration: action.payload.serviceDuration,
+                serviceId: action.payload.serviceId,
+                serviceName: action.payload.serviceName,
+                servicePrice: action.payload.servicePrice,
+                mode: 'edit'
+            }
+        case SET_SERVICE_MODE:
+            return { ...state, mode: action.payload}
         default:
             return state;
     }

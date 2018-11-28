@@ -2,15 +2,25 @@ import React, { Component } from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { getAdminUserInfo, loadRegisteredServices } from '../actions'
+import { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearServiceFormExport } from '../actions'
 import ServicesListAdmin from '../components/ServicesListAdmin'
 import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 import { Spinner } from '../components/Spinner'
 
 class ServicesAdminScreen extends Component {
 
+    componentDidMount() {
+        this.props.navigation.setParams({ props: this.props })
+    }
+
     componentWillMount() {
         this.props.loadRegisteredServices()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.mode !== nextProps.mode) {
+            this.props.navigation.setParams({ props: nextProps })
+        }
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -18,7 +28,11 @@ class ServicesAdminScreen extends Component {
         return {
             headerTitle: 'Serviços Cadastrados',
             headerRight: (
-                <TouchableWithoutFeedback onPress={() => navigate('addService')}>
+                <TouchableWithoutFeedback onPress={() => {
+                    navigation.state.params.props.clearServiceFormExport()
+                    navigation.state.params.props.setServiceModeExport('add')
+                    navigate('addService')
+                }}>
                     <View style={{ paddingRight: 10 }}>
                         <AntDesign name="plus" size={25} color="white" />
                     </View>
@@ -55,4 +69,4 @@ const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     return { user, registeredServices, loading }
 }
 
-export default connect(mapStateToProps, { getAdminUserInfo, loadRegisteredServices })(ServicesAdminScreen);
+export default connect(mapStateToProps, { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearServiceFormExport })(ServicesAdminScreen);
