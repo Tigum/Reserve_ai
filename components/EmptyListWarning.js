@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import { View, Text, Dimensions, Image } from 'react-native';
 import { sanFranciscoWeights } from 'react-native-typography';
+import { AntDesign } from '@expo/vector-icons';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
 class EmptyListWarning extends Component {
     render() {
-        const { text } = this.props
+        const { text, textColor, textSize, icon, iconSize, iconColor, backgroundColor } = this.props
         return (
-            <View style={styles.noServicesView}>
-                <View style={styles.innerView}>
-                <Image
-                    style={styles.image}
-                    source={require('../img/logo.png')}
-                />
-                <Text style={[sanFranciscoWeights.thin, styles.text]}>
-                    Não há serviços disponiveis
+            <View style={[styles.noServicesView, {backgroundColor: backgroundColor || 'white'}]}>
+                <View style={[styles.innerView, {backgroundColor: backgroundColor || 'white'}]}>
+                <AntDesign name={icon} size={iconSize || 25} color={iconColor || '#b7b7b7'} />
+
+                <Text style={[sanFranciscoWeights.thin, {color: textColor || '#b7b7b7', fontSize: textSize || 15}]}>
+                    {text}
                     </Text>
                 </View>
             </View>
@@ -28,7 +27,6 @@ const styles = {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
-        backgroundColor: 'white',
         alignItems: 'center',
         height: SCREEN_HEIGHT - 113,
     },
@@ -39,12 +37,8 @@ const styles = {
     innerView: {
         flexDirection: 'column',
         justifyContent: 'center',
-        backgroundColor: 'white',
         alignItems: 'center',
     },
-    text: {
-        color: '#b7b7b7'
-    }
 }
 
 export default EmptyListWarning;

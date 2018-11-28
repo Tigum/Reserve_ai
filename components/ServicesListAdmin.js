@@ -19,7 +19,10 @@ class ServicesListAdmin extends Component {
         } else {
             return (
                 <EmptyListWarning
-                    text='Não há serviços registrados'
+                    text='NÃO HÁ SERVIÇOS REGISTRADOS'
+                    icon='book'
+                    iconSize={30}
+                    textSize={12}
                 />
             )
         }
