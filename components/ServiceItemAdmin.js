@@ -5,12 +5,14 @@ import firebase from 'firebase'
 import { Divider, Avatar } from 'react-native-elements'
 import { View, Text } from 'react-native';
 import { sanFranciscoWeights } from 'react-native-typography';
-import { findEmployeesNamesById } from '../actions'
+import { findEmployeesNamesById, deactivateService, activateService } from '../actions'
+import CardButton from './CardButton'
 
 class ServiceItemAdmin extends Component {
     state = {
         employeesNames: [],
         employeesPics: [],
+        isActive: ''
     }
 
     async componentWillMount() {
@@ -46,6 +48,13 @@ class ServiceItemAdmin extends Component {
                             })
                         }
                     })
+
+                await firebase.database().ref(`services/${currentUser.uid}/${this.props.service.serviceId}`)
+                    .on('value', async snapshot => {
+                        const doc = await snapshot.val()
+                        this.setState({ isActive: doc.isActive })
+                    })
+
             } catch (err) {
                 console.log(err)
             }
@@ -98,8 +107,19 @@ class ServiceItemAdmin extends Component {
         }
     }
 
-    render() {
+    onHandleActivation() {
+        if(this.state.isActive){
+            this.props.deactivateService(this.props.service.serviceId)
+        }else {
+            this.props.activateService(this.props.service.serviceId)
+        }
+    }
 
+    render() {
+        const isActive = this.state.isActive ? { backgroundColor: 'green' } : { backgroundColor: 'red' }
+        const isActiveTextColor = this.state.isActive ? { color: 'green' } : { color: 'red' }
+        const isActiveText = this.state.isActive ? 'Ativado' : 'Desativado'
+        const isActiveButton = this.state.isActive ? 'Desativar' : 'Ativar'
         return (
             <View style={styles.itemOutterView}>
                 <View style={styles.itemInnerView}>
@@ -107,14 +127,15 @@ class ServiceItemAdmin extends Component {
                     <View style={styles.titleView}>
                         <Text style={[sanFranciscoWeights.light, styles.itemTitle]}>{this.props.service.serviceName}</Text>
                         <View style={styles.activationView}>
-                            <View style={styles.circle} /><Text style={[sanFranciscoWeights.thin, styles.activation]}> Ativado</Text>
+                            <View style={[styles.circle, isActive]} />
+                            <Text style={[sanFranciscoWeights.thin, isActiveTextColor]}> {isActiveText}</Text>
                         </View>
                     </View>
 
                     <Text style={[sanFranciscoWeights.thin, styles.itemDescription]}>{this.props.service.serviceDescription}</Text>
                     <Text style={[sanFranciscoWeights.thin, styles.itemAdditionalInfo]}>Duração:{this.props.service.serviceDuration} min</Text>
                     <Text style={[sanFranciscoWeights.thin, styles.itemAdditionalInfo]}>Preço: R${this.props.service.servicePrice}</Text>
-                    {/* <Divider style={styles.divider} /> */}
+
 
                     <View>
                         <Text style={[sanFranciscoWeights.thin, styles.employeeText]}>Funcionário(s) selecionado(s)</Text>
@@ -122,6 +143,19 @@ class ServiceItemAdmin extends Component {
                             {this.renderEmployeePicList()}
                             {this.renderEmployeeNameList()}
                         </View>
+                    </View>
+
+                    <Divider style={styles.divider} />
+
+                    <View style={styles.buttonsView}>
+                        <CardButton text='Editar' onAction={() => { }} backgroundColor='white' color='#3577e6' />
+                        <CardButton text='Deletar' onAction={() => { }} backgroundColor='white' color='#3577e6' />
+                        <CardButton
+                            text={isActiveButton}
+                            onAction={this.onHandleActivation.bind(this)}
+                            backgroundColor='white' color='#3577e6'
+                            isActive={this.state.isActive}
+                        />
                     </View>
 
                 </View>
@@ -157,11 +191,11 @@ const styles = {
         width: 10,
         height: 10,
         borderRadius: 10 / 2,
-        backgroundColor: 'green',
+        // backgroundColor: 'green',
         marginTop: 3
     },
     activation: {
-        color: 'green',
+        // color: 'green',
     },
     divider: {
         marginTop: 10,
@@ -195,6 +229,11 @@ const styles = {
         color: '#8c8c8c',
         fontSize: 13,
         marginTop: 18
+    },
+    buttonsView: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-between'
     }
 }
 
@@ -203,4 +242,4 @@ const mapStateToProps = ({ servicesAdmin }) => {
     return {}
 }
 
-export default connect(mapStateToProps, { findEmployeesNamesById })(ServiceItemAdmin)
+export default connect(mapStateToProps, { findEmployeesNamesById, deactivateService, activateService })(ServiceItemAdmin)

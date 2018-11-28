@@ -280,6 +280,7 @@ export const addNewService = (serviceInfo) => async (dispatch) => {
     const { currentUser } = await firebase.auth()
     const serviceId = await random(17, 'aA0');
     serviceInfo['serviceId'] = serviceId
+    serviceInfo['isActive'] = true
     try {
         await firebase.database().ref(`/services/${currentUser.uid}/${serviceId}`).set(serviceInfo)
         NavigationServices.navigate('servicesAdmin')
@@ -333,15 +334,15 @@ export const loadRegisteredServices = () => async (dispatch) => {
 export const findEmployeesNamesById = (keys) => async (dispatch) => {
     let list = []
     const { currentUser } = await firebase.auth()
-    
+
     await keys.map(async (item) => {
         try {
             await firebase.database().ref(`/users/${currentUser.uid}/employees/${item}`)
                 .on('value', async snapshot => {
                     const employee = await snapshot.val()
-                    if(!employee) {
+                    if (!employee) {
                         list.push('Você')
-                    }else{
+                    } else {
                         list.push(employee.name)
                     }
                 })
@@ -354,4 +355,46 @@ export const findEmployeesNamesById = (keys) => async (dispatch) => {
         type: FIND_EMPLOYEES_NAMES_BY_ID,
         payload: list
     })
+}
+
+export const deactivateService = (serviceId) => () => {
+    Alert.alert(
+        'Desativar serviço',
+        'Tem certeza que deseja desativar este serviço? Desta maneira o serviço ficará indisponível para seus clientes!',
+        [
+            {
+                text: 'Sim, desativar!', onPress: async () => {
+                    const { currentUser } = await firebase.auth()
+                    try {
+                        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update({ isActive: false })
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            },
+            { text: 'Cancelar', onPress: () => { }, style: 'cancel' },
+        ],
+        { cancelable: false }
+    )
+}
+
+export const activateService = (serviceId) => () => {
+    Alert.alert(
+        'Ativar serviço',
+        'Tem certeza que deseja ativar este serviço?',
+        [
+            {
+                text: 'Sim, ativar!', onPress: async () => {
+                    const { currentUser } = await firebase.auth()
+                    try {
+                        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update({ isActive: true })
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            },
+            { text: 'Cancelar', onPress: () => { }, style: 'cancel' },
+        ],
+        { cancelable: false }
+    )
 }
