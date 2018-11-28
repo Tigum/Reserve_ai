@@ -17,7 +17,8 @@ import {
     SET_EMPLOYEEID_TO_NULL,
     NEW_SERVICE_ADDED_SUCCESS,
     LOAD_REGISTERED_SERVICES,
-    FIND_EMPLOYEES_NAMES_BY_ID
+    FIND_EMPLOYEES_NAMES_BY_ID,
+    CLEAR_SERVICE_FORM
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -83,6 +84,15 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state,  registeredServices: action.payload}
         case FIND_EMPLOYEES_NAMES_BY_ID:
             return { ...state, employeesByJob: action.payload}
+        case CLEAR_SERVICE_FORM:
+            return { ...state, 
+            serviceName: '',
+            serviceDescription: '',
+            servicePrice: '',
+            serviceDuration: '',
+            employees: [],
+            employeesSelected: []
+        }
         default:
             return state;
     }

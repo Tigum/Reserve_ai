@@ -22,7 +22,8 @@ import {
     SELECTED_EMPLOYEE_ID,
     NEW_SERVICE_ADDED_SUCCESS,
     LOAD_REGISTERED_SERVICES,
-    FIND_EMPLOYEES_NAMES_BY_ID
+    FIND_EMPLOYEES_NAMES_BY_ID,
+    CLEAR_SERVICE_FORM
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -284,14 +285,15 @@ export const addNewService = (serviceInfo) => async (dispatch) => {
     try {
         await firebase.database().ref(`/services/${currentUser.uid}/${serviceId}`).set(serviceInfo)
         NavigationServices.navigate('servicesAdmin')
+        clearServiceForm(dispatch)
     } catch (err) {
         console.log(err)
     }
 }
 
-const serviceAddedSuccess = (dispatch) => {
+const clearServiceForm = (dispatch) => {
     dispatch({
-        type: NEW_SERVICE_ADDED_SUCCESS,
+        type: CLEAR_SERVICE_FORM,
     })
 }
 

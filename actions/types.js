@@ -86,3 +86,4 @@ export const SELECTED_EMPLOYEE_ID = 'selected_employee_id'
 //REGISTERED SERVICES SCREEN
 export const LOAD_REGISTERED_SERVICES = 'load_registered_services'
 export const FIND_EMPLOYEES_NAMES_BY_ID = 'find_employees_names_by_id'
+export const CLEAR_SERVICE_FORM = 'clear_service_form'
