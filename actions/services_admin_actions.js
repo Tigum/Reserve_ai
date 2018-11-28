@@ -398,3 +398,24 @@ export const activateService = (serviceId) => () => {
         { cancelable: false }
     )
 }
+
+export const deleteService = (serviceId) => () => {
+    Alert.alert(
+        'Deletar serviço',
+        'Tem certeza que deseja deletar este serviço permanentemente?',
+        [
+            {
+                text: 'Sim, deletar!', onPress: async () => {
+                    const { currentUser } = await firebase.auth()
+                    try {
+                        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).remove()
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            },
+            { text: 'Cancelar', onPress: () => { }, style: 'cancel' },
+        ],
+        { cancelable: false }
+    )
+}

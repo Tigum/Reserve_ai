@@ -5,7 +5,7 @@ import firebase from 'firebase'
 import { Divider, Avatar } from 'react-native-elements'
 import { View, Text } from 'react-native';
 import { sanFranciscoWeights } from 'react-native-typography';
-import { findEmployeesNamesById, deactivateService, activateService } from '../actions'
+import { findEmployeesNamesById, deactivateService, activateService, deleteService } from '../actions'
 import CardButton from './CardButton'
 
 class ServiceItemAdmin extends Component {
@@ -108,11 +108,16 @@ class ServiceItemAdmin extends Component {
     }
 
     onHandleActivation() {
-        if(this.state.isActive){
+        if (this.state.isActive) {
             this.props.deactivateService(this.props.service.serviceId)
-        }else {
+        } else {
             this.props.activateService(this.props.service.serviceId)
         }
+    }
+
+    onHandleDeletion() {
+        this.props.deleteService(this.props.service.serviceId)
+
     }
 
     render() {
@@ -149,7 +154,12 @@ class ServiceItemAdmin extends Component {
 
                     <View style={styles.buttonsView}>
                         <CardButton text='Editar' onAction={() => { }} backgroundColor='white' color='#3577e6' />
-                        <CardButton text='Deletar' onAction={() => { }} backgroundColor='white' color='#3577e6' />
+                        <CardButton
+                            text='Deletar'
+                            onAction={this.onHandleDeletion.bind(this)}
+                            backgroundColor='white'
+                            color='#3577e6'
+                        />
                         <CardButton
                             text={isActiveButton}
                             onAction={this.onHandleActivation.bind(this)}
@@ -242,4 +252,4 @@ const mapStateToProps = ({ servicesAdmin }) => {
     return {}
 }
 
-export default connect(mapStateToProps, { findEmployeesNamesById, deactivateService, activateService })(ServiceItemAdmin)
+export default connect(mapStateToProps, { findEmployeesNamesById, deactivateService, activateService, deleteService })(ServiceItemAdmin)
