@@ -22,6 +22,17 @@ export const COMPANY_NAME_ADMIN_REGISTER_CHANGED = 'company_name_admin_register_
 export const PHONE_ADMIN_REGISTER_CHANGED = 'phone_admin_register_changed'
 export const PASSWORD_ADMIN_REGISTER_CHANGED = 'password_admin_register_changed'
 export const PASSWORD_CONFIRMATION_ADMIN_REGISTER_CHANGED = 'password_confirmation_admin_register_changed'
+
+export const STREET_NAME_ADMIN_REGISTER_CHANGED = 'street_name_admin_register_changed'
+export const NUMBER_ADMIN_REGISTER_CHANGED = 'number_admin_register_changed'
+export const CITY_ADMIN_REGISTER_CHANGED = 'city_admin_register_changed'
+export const STATE_ADMIN_REGISTER_CHANGED = 'state_admin_register_changed'
+export const CEP_ADMIN_REGISTER_CHANGED = 'cep_admin_register_changed'
+export const LOAD_STATES = 'load_states'
+export const LOAD_CITIES = 'load_cities'
+export const CLEAR_CITY = 'clear_city'
+
+
 export const ADMIN_USER_REGISTERED_SUCCESS = 'admin_user_registered_success'
 export const ADMIN_USER_REGISTERED_FAILED = 'admin_user_registered_failed'
 export const CONTINUE_ADMIN_REGISTRATION = 'continue_admin_registration'

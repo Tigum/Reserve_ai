@@ -31,6 +31,11 @@ import {
     SET_SATURDAY_HOUR_END,
     SET_SUNDAY_HOUR_START,
     SET_SUNDAY_HOUR_END,
+    LOAD_STATES,
+    LOAD_CITIES,
+    STATE_ADMIN_REGISTER_CHANGED,
+    CITY_ADMIN_REGISTER_CHANGED,
+    CLEAR_CITY
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -57,7 +62,15 @@ const INITIAL_STATE = {
     saturdayHourEndSelected: '',
     sundayHourStartSelected: '',
     sundayHourEndSelected: '',
-    role: 'admin'
+    role: 'admin',
+    hasLocation: true,
+    streetName: '',
+    number: '',
+    state: '',
+    cep: '',
+    city: '',
+    states: [],
+    cities: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -135,6 +148,16 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, sundayHourStartSelected: action.payload }
         case SET_SUNDAY_HOUR_END:
             return { ...state, sundayHourEndSelected: action.payload }
+        case LOAD_STATES:
+            return { ...state, states: action.payload }
+        case STATE_ADMIN_REGISTER_CHANGED:
+            return { ...state, state: action.payload }
+        case LOAD_CITIES:
+            return { ...state, cities: action.payload }
+        case CITY_ADMIN_REGISTER_CHANGED:
+            return { ...state, city: action.payload }
+        case CLEAR_CITY:
+            return { ...state, city: '' }
         default:
             return state;
     }

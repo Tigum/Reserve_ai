@@ -49,16 +49,16 @@ class RegisterAdminFormScreen extends Component {
 
     onRegisterButtonPress() {
         const { name, email, companyName, phone, password, passwordConfirmation } = this.props
-        if (!name) return alert('Nome não informado')
-        if (!email) return alert('E-mail não informado')
-        if (!companyName) return alert('Nome do empreendimento não informado')
-        if (!phone) return alert('Telefone não informado')
-        if (password.length < 6) return alert('A senha precisa ter no mínimo 6 caracteres')
-        if (!password || !passwordConfirmation) return alert('Senha ou confirmação de senha não informado')
-        if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
+        // if (!name) return alert('Nome não informado')
+        // if (!email) return alert('E-mail não informado')
+        // if (!companyName) return alert('Nome do empreendimento não informado')
+        // if (!phone) return alert('Telefone não informado')
+        // if (password.length < 6) return alert('A senha precisa ter no mínimo 6 caracteres')
+        // if (!password || !passwordConfirmation) return alert('Senha ou confirmação de senha não informado')
+        // if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
         const errorMessage = 'O e-mail informado já possui uma conta.'
         const errorRouteName = 'auth'
-        const successRouteName = 'hoursForm'
+        const successRouteName = 'stateAndCityForm'
 
         this.props.checkIfEmailExists({email, errorMessage, errorRouteName, successRouteName})
     }

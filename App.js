@@ -10,6 +10,8 @@ import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterAdminFormScreen from './screens/RegisterAdminFormScreen'
+import RegisterAdminAddressScreen from './screens/RegisterAdminAddressScreen'
+import RegisterAdminCityAndStateScreen from './screens/RegisterAdminCityAndStateScreen'
 import RegisterAdminHoursScreen from './screens/RegisterAdminHoursScreen'
 import RegisterAdminDaysScreen from './screens/RegisterAdminDaysScreen'
 import RegisterAdminPicScreen from './screens/RegisterAdminPicScreen'
@@ -63,6 +65,24 @@ export default class App extends React.Component {
           },
           hoursForm: {
             screen: RegisterAdminHoursScreen,
+            navigationOptions: () => ({
+              // title: 'Cadastre-se',
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
+          addressForm: {
+            screen: RegisterAdminAddressScreen,
+            navigationOptions: () => ({
+              // title: 'Cadastre-se',
+              headerStyle: {
+                display: 'none'
+              }
+            })
+          },
+          stateAndCityForm: {
+            screen: RegisterAdminCityAndStateScreen,
             navigationOptions: () => ({
               // title: 'Cadastre-se',
               headerStyle: {

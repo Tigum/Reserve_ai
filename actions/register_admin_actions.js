@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import _ from 'lodash';
 import { RNS3 } from 'react-native-aws3';
 import NavigationService from './NavigationServices';
 import {
@@ -34,7 +35,13 @@ import {
     SET_SATURDAY_HOUR_END,
     SET_SUNDAY_HOUR_START,
     SET_SUNDAY_HOUR_END,
+    LOAD_STATES,
+    LOAD_CITIES,
+    STATE_ADMIN_REGISTER_CHANGED,
+    CITY_ADMIN_REGISTER_CHANGED,
+    CLEAR_CITY
 } from './types';
+import statesAndCities from '../states_and_cities.json'
 
 export const mondaySelected = () => {
     return {
@@ -416,3 +423,45 @@ const clearForm = (dispatch) => {
     })
 }
 
+export const loadStates = () => async (dispatch) => {
+    let states = []
+    const list = statesAndCities.estados
+    list.map((item) => {
+        states.push(item.nome)
+    })
+    dispatch({
+        type: LOAD_STATES,
+        payload: states
+    })
+}
+
+export const selectState = (state) => async (dispatch) => {
+    dispatch({
+        type: STATE_ADMIN_REGISTER_CHANGED,
+        payload: state
+    })
+    dispatch({
+        type: CLEAR_CITY,
+    })
+}
+
+export const loadCities = (state) => async (dispatch) => {
+    let cities = []
+    const list = statesAndCities.estados
+    list.map((item) => {
+        if(item.nome === state) {
+            cities.push(item.cidades)
+        }
+    })
+    dispatch({
+        type: LOAD_CITIES,
+        payload: cities
+    })
+}
+
+export const selectCity = (city) => {
+    return {
+        type: CITY_ADMIN_REGISTER_CHANGED,
+        payload: city
+    }
+}
