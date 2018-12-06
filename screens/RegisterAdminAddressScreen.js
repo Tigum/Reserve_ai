@@ -33,21 +33,14 @@ class RegisterAdminFormScreen extends Component {
     }
 
 
-    // onRegisterButtonPress() {
-    //     const { name, email, companyName, phone, password, passwordConfirmation } = this.props
-    //     if (!name) return alert('Nome não informado')
-    //     if (!email) return alert('E-mail não informado')
-    //     if (!companyName) return alert('Nome do empreendimento não informado')
-    //     if (!phone) return alert('Telefone não informado')
-    //     if (password.length < 6) return alert('A senha precisa ter no mínimo 6 caracteres')
-    //     if (!password || !passwordConfirmation) return alert('Senha ou confirmação de senha não informado')
-    //     if (password !== passwordConfirmation) return alert('Confirmação de senha incorreta')
-    //     const errorMessage = 'O e-mail informado já possui uma conta.'
-    //     const errorRouteName = 'auth'
-    //     const successRouteName = 'hoursForm'
-
-    //     this.props.checkIfEmailExists({email, errorMessage, errorRouteName, successRouteName})
-    // }
+    onRegisterButtonPress() {
+        const { serviceAtHome, streetName, number, cep } = this.props
+        if (serviceAtHome) return this.props.navigation.navigate('hoursForm')
+        if (!streetName) return alert('Favor informar o nome da rua')
+        if (!number) return alert('Favor informar o número do estabelecimento')
+        if (!cep) return alert('Favor informar o CEP do estabelecimento')
+        this.props.navigation.navigate('hoursForm')
+    }
 
     onRenderCheckBox() {
         return (
@@ -75,7 +68,7 @@ class RegisterAdminFormScreen extends Component {
                     </KeyboardAwareScrollView>
                     <BottomButton
                         buttonText='Continuar'
-                    // buttonAction={this.onRegisterButtonPress.bind(this)}
+                        buttonAction={this.onRegisterButtonPress.bind(this)}
                     />
                 </View>
             )
@@ -136,11 +129,11 @@ class RegisterAdminFormScreen extends Component {
                             inputStyle={sanFranciscoWeights.thin}
                         />
                     </View>
-                    
+
                 </KeyboardAwareScrollView>
                 <BottomButton
                     buttonText='Continuar'
-                // buttonAction={this.onRegisterButtonPress.bind(this)}
+                    buttonAction={this.onRegisterButtonPress.bind(this)}
                 />
             </View>
         )
