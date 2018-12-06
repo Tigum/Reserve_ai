@@ -1,25 +1,37 @@
 import React, { Component } from 'react';
-import { View, Text, Keyboard, Dimensions, Picker } from 'react-native';
+import { View, Keyboard, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { FormLabel, FormInput } from 'react-native-elements';
+import { FormLabel, FormInput, CheckBox } from 'react-native-elements';
 import Header from '../components/Header';
 import BottomButton from '../components/BottomButton';
 import { connect } from 'react-redux';
 import {
-    
+    streetNameChanged,
+    numberChanged,
+    cepChanged,
+    serviceAtHomeChanged
 } from '../actions';
 import { Spinner } from '../components/Spinner';
 import { sanFranciscoWeights } from 'react-native-typography';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-
 class RegisterAdminFormScreen extends Component {
 
-    // onNameChange(text) {
-    //     this.props.nameAdminChanged(text)
-    // }
+    onStreetNameChange(text) {
+        this.props.streetNameChanged(text)
+    }
 
-   
+    onNumberChange(text) {
+        this.props.numberChanged(text)
+    }
+
+    onCepChange(text) {
+        this.props.cepChanged(text)
+    }
+
+    onServiceAtHomeChange() {
+        this.props.serviceAtHomeChanged(this.props.serviceAtHome)
+    }
+
 
     // onRegisterButtonPress() {
     //     const { name, email, companyName, phone, password, passwordConfirmation } = this.props
@@ -37,86 +49,98 @@ class RegisterAdminFormScreen extends Component {
     //     this.props.checkIfEmailExists({email, errorMessage, errorRouteName, successRouteName})
     // }
 
-    // renderError() {
-    //     if (this.props.error) {
-    //         return (
-    //             <View style={{ backgroundColor: 'transparent' }}>
-    //                 <Text style={styles.errorTextStyle}>
-    //                     {this.props.error}
-    //                 </Text>
-    //             </View>
-    //         )
-    //     }
-    // }
+    onRenderCheckBox() {
+        return (
+            <View style={styles.inputViews}>
+                <CheckBox
+                    title={<Text style={[sanFranciscoWeights.thin, styles.checkBoxText]}>Não possuo endereço, atendo a domicílio</Text>}
+                    onPress={this.onServiceAtHomeChange.bind(this)}
+                    checked={this.props.serviceAtHome}
+                />
+            </View>
+        )
+    }
 
     renderContent() {
         if (this.props.loading) {
             return <Spinner text='Validando usuário...' />
         }
 
+        if (this.props.serviceAtHome) {
+            return (
+                <View style={styles.mainView}>
+                    <KeyboardAwareScrollView>
+                        <Header headerText='Endereço' icon='leftcircleo' />
+                        {this.onRenderCheckBox()}
+                    </KeyboardAwareScrollView>
+                    <BottomButton
+                        buttonText='Continuar'
+                    // buttonAction={this.onRegisterButtonPress.bind(this)}
+                    />
+                </View>
+            )
+        }
+
         return (
             <View style={styles.mainView}>
-            <KeyboardAwareScrollView
-                // style={styles.mainView}
-                // behavior="padding"
-            >
-                <Header headerText='Endereço' icon='leftcircleo' />
-                {/* {this.renderError()} */}
-                <View style={styles.inputViews}>
-                    <FormLabel
-                        labelStyle={sanFranciscoWeights.light}
-                    >
-                        NOME DA RUA
+                <KeyboardAwareScrollView>
+                    <Header headerText='Endereço' icon='leftcircleo' />
+                    {this.onRenderCheckBox()}
+                    <View style={styles.inputViews}>
+                        <FormLabel
+                            labelStyle={sanFranciscoWeights.light}
+                        >
+                            NOME DA RUA
                     </FormLabel>
 
-                    <FormInput
-                        placeholder='Digite o nome da sua rua'
-                        returnKeyType={"next"}
-                        // onChangeText={this.onNameChange.bind(this)}
-                        // value={this.props.name}
-                        onBlur={() => Keyboard.dismiss()}
-                        inputStyle={sanFranciscoWeights.thin}
-                    />
-                </View>
-                <View style={styles.inputViews}>
-                    <FormLabel
-                        labelStyle={sanFranciscoWeights.light}
-                    >
-                        NÚMERO
+                        <FormInput
+                            placeholder='Digite o nome da sua rua'
+                            returnKeyType={"next"}
+                            onChangeText={this.onStreetNameChange.bind(this)}
+                            value={this.props.streetName}
+                            onBlur={() => Keyboard.dismiss()}
+                            inputStyle={sanFranciscoWeights.thin}
+                        />
+                    </View>
+                    <View style={styles.inputViews}>
+                        <FormLabel
+                            labelStyle={sanFranciscoWeights.light}
+                        >
+                            NÚMERO
                     </FormLabel>
 
-                    <FormInput
-                        placeholder='Digite o número'
-                        returnKeyType={"next"}
-                        // onChangeText={this.onEmailChange.bind(this)}
-                        // value={this.props.email}
-                        onBlur={() => Keyboard.dismiss()}
-                        autoCapitalize='none'
-                        inputStyle={sanFranciscoWeights.thin}
-                    />
-                </View>
-                <View style={styles.inputViews}>
-                    <FormLabel
-                        labelStyle={sanFranciscoWeights.light}
-                    >
-                        CEP
+                        <FormInput
+                            placeholder='Digite o número'
+                            returnKeyType={"next"}
+                            onChangeText={this.onNumberChange.bind(this)}
+                            value={this.props.number}
+                            onBlur={() => Keyboard.dismiss()}
+                            inputStyle={sanFranciscoWeights.thin}
+                            keyboardType='numeric'
+                        />
+                    </View>
+                    <View style={styles.inputViews}>
+                        <FormLabel
+                            labelStyle={sanFranciscoWeights.light}
+                        >
+                            CEP
                     </FormLabel>
 
-                    <FormInput
-                        placeholder='Digite seu CEP'
-                        returnKeyType={"next"}
-                        // onChangeText={this.onPasswordChange.bind(this)}
-                        // value={this.props.password}
-                        keyboardType='numeric'
-                        onBlur={() => Keyboard.dismiss()}
-                        inputStyle={sanFranciscoWeights.thin}
-                    />
-                </View>
-                
-            </KeyboardAwareScrollView>
-            <BottomButton
+                        <FormInput
+                            placeholder='Digite seu CEP'
+                            returnKeyType={"next"}
+                            onChangeText={this.onCepChange.bind(this)}
+                            value={this.props.cep}
+                            keyboardType='numeric'
+                            onBlur={() => Keyboard.dismiss()}
+                            inputStyle={sanFranciscoWeights.thin}
+                        />
+                    </View>
+                    
+                </KeyboardAwareScrollView>
+                <BottomButton
                     buttonText='Continuar'
-                    // buttonAction={this.onRegisterButtonPress.bind(this)}
+                // buttonAction={this.onRegisterButtonPress.bind(this)}
                 />
             </View>
         )
@@ -138,36 +162,28 @@ const styles = {
         paddingTop: 35,
         paddingBottom: 35
     },
-    errorTextStyle: {
-        fontSize: 20,
-        alignSelf: 'center',
-        color: 'red'
-    },
-    spinnerView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        alignSelf: 'center',
-        width: SCREEN_WIDTH
-    },
     inputViews: {
         paddingTop: 10
+    },
+    checkBoxText: {
+        paddingLeft: 5,
+        color: 'grey'
     }
 }
 
 const mapStateToProps = ({ registerAdmin }) => {
-    const { hasLocation, streetName, number, state, cep, city } = registerAdmin;
+    const { serviceAtHome, streetName, number, cep } = registerAdmin;
     return {
-        hasLocation,
+        serviceAtHome,
         streetName,
         number,
-        state,
         cep,
-        city
     }
 }
 
 export default connect(mapStateToProps, {
-    
+    streetNameChanged,
+    numberChanged,
+    cepChanged,
+    serviceAtHomeChanged
 })(RegisterAdminFormScreen);

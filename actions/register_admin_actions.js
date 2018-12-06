@@ -39,7 +39,11 @@ import {
     LOAD_CITIES,
     STATE_ADMIN_REGISTER_CHANGED,
     CITY_ADMIN_REGISTER_CHANGED,
-    CLEAR_CITY
+    CLEAR_CITY,
+    STREET_NAME_ADMIN_REGISTER_CHANGED,
+    NUMBER_ADMIN_REGISTER_CHANGED,
+    CEP_ADMIN_REGISTER_CHANGED,
+    SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -463,5 +467,33 @@ export const selectCity = (city) => {
     return {
         type: CITY_ADMIN_REGISTER_CHANGED,
         payload: city
+    }
+}
+
+export const streetNameChanged = (text) => {
+    return {
+        type: STREET_NAME_ADMIN_REGISTER_CHANGED,
+        payload: text
+    }
+}
+
+export const numberChanged = (text) => {
+    return {
+        type: NUMBER_ADMIN_REGISTER_CHANGED,
+        payload: text
+    }
+}
+
+export const cepChanged = (text) => {
+    return {
+        type: CEP_ADMIN_REGISTER_CHANGED,
+        payload: text
+    }
+}
+
+export const serviceAtHomeChanged = (input) => {
+    return {
+        type: SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
+        payload: !input
     }
 }
