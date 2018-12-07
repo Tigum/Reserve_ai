@@ -220,7 +220,7 @@ const styles = {
     }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, registerAdmin }) => {
     const { email, password, error, loading, routeName, user } = auth;
     return {
         email,
@@ -228,7 +228,7 @@ const mapStateToProps = ({ auth }) => {
         error,
         loading,
         routeName,
-        user
+        user,
     }
 }
 
@@ -238,5 +238,5 @@ export default connect(mapStateToProps, {
     loginUser,
     facebookLogin,
     doFacebookLogin,
-    checkIfUserAlreadyLoggedIn
+    checkIfUserAlreadyLoggedIn,
 })(LoginScreen);

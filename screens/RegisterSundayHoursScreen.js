@@ -8,7 +8,7 @@ import {
     continueRegisterAdmin,
     sundayHourStart,
     sundayHourEnd,
-    registerAdminUser
+    registerAdminUser,
 } from '../actions'
 import { sanFranciscoWeights } from 'react-native-typography';
 
@@ -42,7 +42,7 @@ class RegisterSaturdayHoursScreen extends Component {
             saturdayHourStartSelected,
             saturdayHourEndSelected,
             sundayHourStartSelected,
-            sundayHourEndSelected
+            sundayHourEndSelected,
         } = this.props
 
         if (sundayHourStartSelected && sundayHourEndSelected) {
@@ -79,7 +79,7 @@ class RegisterSaturdayHoursScreen extends Component {
             saturdayHourStartSelected,
             saturdayHourEndSelected,
             sundayHourStartSelected,
-            sundayHourEndSelected
+            sundayHourEndSelected,
         }
         this.props.registerAdminUser(userInfo)
         this.props.navigation.navigate('picForm')
@@ -260,5 +260,5 @@ export default connect(mapStateToProps, {
     continueRegisterAdmin,
     sundayHourStart,
     sundayHourEnd,
-    registerAdminUser
+    registerAdminUser,
 })(RegisterSaturdayHoursScreen);

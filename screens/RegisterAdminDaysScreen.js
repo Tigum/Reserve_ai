@@ -19,7 +19,7 @@ import {
     fridayUnselected,
     saturdayUnselected,
     sundayUnselected,
-    registerAdminUser
+    registerAdminUser,
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
@@ -65,7 +65,7 @@ class RegisterAdminDaysScreen extends Component {
             number,
             additionalInfo,
             cep,
-            serviceAtHome
+            serviceAtHome,
         } = this.props
 
         if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) return alert('É obrigatório escolher um dia de funcionamento no mínimo.')
@@ -349,7 +349,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         number,
         additionalInfo,
         cep,
-        serviceAtHome
+        serviceAtHome,
     } = registerAdmin;
     return {
         name,
@@ -375,7 +375,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         number,
         additionalInfo,
         cep,
-        serviceAtHome
+        serviceAtHome,
     }
 }
 
@@ -395,5 +395,5 @@ export default connect(mapStateToProps, {
     fridayUnselected,
     saturdayUnselected,
     sundayUnselected,
-    registerAdminUser
+    registerAdminUser,
 })(RegisterAdminDaysScreen);

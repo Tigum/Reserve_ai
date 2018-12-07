@@ -11,7 +11,8 @@ import {
     REGISTER_CLIENT_LOADING_OFF,
     CLEAR_FORM,
     CLIENT_USER_REGISTERED_SUCCESS,
-    CONTINUE_CLIENT_REGISTRATION
+    CONTINUE_CLIENT_REGISTRATION,
+    REGISTERING_NEW_USER
 } from './types';
 
 export const nameClientChanged = (text) => {
@@ -105,20 +106,32 @@ export const uploadPhotoClient = ({ uri, S3Options, uid, successRouteName }) => 
                     console.log('imageError', err)
                     alert('Erro ao carregar a foto. Tente novamente.')
                     registerClientLoadingOff(dispatch)
+                    dispatch({
+                        type: REGISTERING_NEW_USER,
+                        payload: false
+                    })
                 })
         }
     }).catch((err) => {
         console.log('imageError', err)
         alert('Erro ao carregar a foto. Tente novamente.')
         registerClientLoadingOff(dispatch)
+        dispatch({
+            type: REGISTERING_NEW_USER,
+            payload: false
+        })
     });
 }
 
-export const continueRegisterClient = (userInfo) => {
-    return {
+export const continueRegisterClient = (userInfo) => async (dispatch) =>{
+    dispatch({
+        type: REGISTERING_NEW_USER,
+        payload: false
+    })
+    dispatch({
         type: CONTINUE_CLIENT_REGISTRATION,
         payload: userInfo
-    }
+    })
 }
 
 

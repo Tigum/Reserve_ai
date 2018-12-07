@@ -93,6 +93,7 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                         }
 
                     })
+                    
                 NavigationService.navigate('mainAdminScreen', {})
                 authLoadingOff(dispatch)
 

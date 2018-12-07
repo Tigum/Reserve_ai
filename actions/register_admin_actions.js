@@ -44,7 +44,8 @@ import {
     NUMBER_ADMIN_REGISTER_CHANGED,
     CEP_ADMIN_REGISTER_CHANGED,
     SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
-    ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED
+    ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
+    REGISTERING_NEW_USER
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -201,7 +202,7 @@ export const registerAdminUser = (
         saturdayHourStartSelected,
         saturdayHourEndSelected,
         sundayHourStartSelected,
-        sundayHourEndSelected
+        sundayHourEndSelected,
     }
 ) => async (dispatch) => {
     console.log('entrou')

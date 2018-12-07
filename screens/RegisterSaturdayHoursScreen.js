@@ -8,7 +8,7 @@ import {
     continueRegisterAdmin,
     saturdayHourStart,
     saturdayHourEnd,
-    registerAdminUser
+    registerAdminUser,
 } from '../actions'
 import { sanFranciscoWeights } from 'react-native-typography';
 
@@ -40,7 +40,7 @@ class RegisterSaturdayHoursScreen extends Component {
             number,
             additionalInfo,
             cep,
-            serviceAtHome
+            serviceAtHome,
         } = this.props
 
         if (saturdayHourStartSelected && saturdayHourEndSelected) {
@@ -222,7 +222,8 @@ const mapStateToProps = ({ registerAdmin }) => {
         additionalInfo,
         cep,
         serviceAtHome,
-        saturdayHourEndSelected } = registerAdmin;
+        saturdayHourEndSelected 
+    } = registerAdmin;
     return {
         name,
         email,
@@ -249,7 +250,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         number,
         additionalInfo,
         cep,
-        serviceAtHome
+        serviceAtHome,
     }
 }
 
@@ -257,5 +258,5 @@ export default connect(mapStateToProps, {
     continueRegisterAdmin,
     saturdayHourStart,
     saturdayHourEnd,
-    registerAdminUser
+    registerAdminUser,
 })(RegisterSaturdayHoursScreen);

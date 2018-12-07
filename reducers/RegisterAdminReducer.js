@@ -76,7 +76,7 @@ const INITIAL_STATE = {
     city: '',
     states: [],
     cities: [],
-    additionalInfo: ''
+    additionalInfo: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
