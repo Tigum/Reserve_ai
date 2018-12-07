@@ -43,7 +43,8 @@ import {
     STREET_NAME_ADMIN_REGISTER_CHANGED,
     NUMBER_ADMIN_REGISTER_CHANGED,
     CEP_ADMIN_REGISTER_CHANGED,
-    SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED
+    SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
+    ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -190,6 +191,13 @@ export const registerAdminUser = (
         friday,
         saturday,
         sunday,
+        state,
+        city,
+        streetName,
+        number,
+        additionalInfo,
+        cep,
+        serviceAtHome,
         saturdayHourStartSelected,
         saturdayHourEndSelected,
         sundayHourStartSelected,
@@ -197,6 +205,7 @@ export const registerAdminUser = (
     }
 ) => async (dispatch) => {
     console.log('entrou')
+
     let userInfo = {
         name,
         email,
@@ -209,6 +218,16 @@ export const registerAdminUser = (
         seenWelcomePage: false,
         role: 'admin',
         imageUrl: '',
+        serviceAtHome,
+        state,
+        city
+    }
+
+    if(!serviceAtHome) {
+        userInfo['streetName'] = streetName
+        userInfo['number'] = number
+        userInfo['additionalInfo'] = additionalInfo
+        userInfo['cep'] = cep
     }
 
     const days = [
@@ -453,7 +472,7 @@ export const loadCities = (state) => async (dispatch) => {
     let cities = []
     const list = statesAndCities.estados
     list.map((item) => {
-        if(item.nome === state) {
+        if (item.nome === state) {
             cities.push(item.cidades)
         }
     })
@@ -495,5 +514,12 @@ export const serviceAtHomeChanged = (input) => {
     return {
         type: SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
         payload: !input
+    }
+}
+
+export const additionalInfoChanged = (text) => {
+    return {
+        type: ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
+        payload: text
     }
 }

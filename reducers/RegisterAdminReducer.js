@@ -39,7 +39,8 @@ import {
     STREET_NAME_ADMIN_REGISTER_CHANGED,
     NUMBER_ADMIN_REGISTER_CHANGED,
     CEP_ADMIN_REGISTER_CHANGED,
-    SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED
+    SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
+    ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -74,7 +75,8 @@ const INITIAL_STATE = {
     cep: '',
     city: '',
     states: [],
-    cities: []
+    cities: [],
+    additionalInfo: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -170,6 +172,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, cep: action.payload }
         case SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED:
             return { ...state, serviceAtHome: action.payload }
+        case ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED:
+            return { ...state, additionalInfo: action.payload }
         default:
             return state;
     }

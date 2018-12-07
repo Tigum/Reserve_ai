@@ -41,7 +41,7 @@ class RegisterAdminDaysScreen extends Component {
         sunday: false
     }
 
-    
+
     onRegisterButtonPress() {
         const {
             name,
@@ -58,9 +58,16 @@ class RegisterAdminDaysScreen extends Component {
             thursday,
             friday,
             saturday,
-            sunday
+            sunday,
+            state,
+            city,
+            streetName,
+            number,
+            additionalInfo,
+            cep,
+            serviceAtHome
         } = this.props
-        
+
         if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) return alert('É obrigatório escolher um dia de funcionamento no mínimo.')
 
         if (saturday) {
@@ -87,6 +94,13 @@ class RegisterAdminDaysScreen extends Component {
             friday,
             saturday,
             sunday,
+            state,
+            city,
+            streetName,
+            number,
+            additionalInfo,
+            cep,
+            serviceAtHome,
             saturdayHourStartSelected: null,
             saturdayHourEndSelected: null,
             sundayHourStartSelected: null,
@@ -328,7 +342,14 @@ const mapStateToProps = ({ registerAdmin }) => {
         thursday,
         friday,
         saturday,
-        sunday
+        sunday,
+        state,
+        city,
+        streetName,
+        number,
+        additionalInfo,
+        cep,
+        serviceAtHome
     } = registerAdmin;
     return {
         name,
@@ -347,7 +368,14 @@ const mapStateToProps = ({ registerAdmin }) => {
         thursday,
         friday,
         saturday,
-        sunday
+        sunday,
+        state,
+        city,
+        streetName,
+        number,
+        additionalInfo,
+        cep,
+        serviceAtHome
     }
 }
 

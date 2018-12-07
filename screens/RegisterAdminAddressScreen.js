@@ -9,7 +9,8 @@ import {
     streetNameChanged,
     numberChanged,
     cepChanged,
-    serviceAtHomeChanged
+    serviceAtHomeChanged,
+    additionalInfoChanged
 } from '../actions';
 import { Spinner } from '../components/Spinner';
 import { sanFranciscoWeights } from 'react-native-typography';
@@ -32,6 +33,9 @@ class RegisterAdminFormScreen extends Component {
         this.props.serviceAtHomeChanged(this.props.serviceAtHome)
     }
 
+    onAdditionalInfoChange(text) {
+        this.props.additionalInfoChanged(text)
+    }
 
     onRegisterButtonPress() {
         const { serviceAtHome, streetName, number, cep } = this.props
@@ -116,6 +120,22 @@ class RegisterAdminFormScreen extends Component {
                         <FormLabel
                             labelStyle={sanFranciscoWeights.light}
                         >
+                            COMPLEMENTO (Opcional)
+                    </FormLabel>
+
+                        <FormInput
+                            placeholder='Digite o complemento'
+                            returnKeyType={"next"}
+                            onChangeText={this.onAdditionalInfoChange.bind(this)}
+                            value={this.props.additionalInfo}
+                            onBlur={() => Keyboard.dismiss()}
+                            inputStyle={sanFranciscoWeights.thin}
+                        />
+                    </View>
+                    <View style={styles.inputViews}>
+                        <FormLabel
+                            labelStyle={sanFranciscoWeights.light}
+                        >
                             CEP
                     </FormLabel>
 
@@ -165,12 +185,13 @@ const styles = {
 }
 
 const mapStateToProps = ({ registerAdmin }) => {
-    const { serviceAtHome, streetName, number, cep } = registerAdmin;
+    const { serviceAtHome, streetName, number, cep, additionalInfo } = registerAdmin;
     return {
         serviceAtHome,
         streetName,
         number,
         cep,
+        additionalInfo
     }
 }
 
@@ -178,5 +199,6 @@ export default connect(mapStateToProps, {
     streetNameChanged,
     numberChanged,
     cepChanged,
-    serviceAtHomeChanged
+    serviceAtHomeChanged,
+    additionalInfoChanged
 })(RegisterAdminFormScreen);

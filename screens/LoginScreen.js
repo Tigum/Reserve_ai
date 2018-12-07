@@ -9,11 +9,11 @@ import ButtonFacebook from '../components/ButtonFacebook'
 import { sanFranciscoWeights } from 'react-native-typography';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class LoginScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         const { navigate } = navigation
-
         return {
             tabBarVisible: false
         }
@@ -45,14 +45,9 @@ class LoginScreen extends Component {
 
     onFacebookButtonPress() {
         this.props.doFacebookLogin()
-        // this.props.navigation.navigate('welcome')
     }
 
     renderForm() {
-        // if (this.props.loading) {
-        //     return  <Spinner text='Autenticando usuário...'/>
-        // }
-
         return (
             <View style={styles.formView}>
                 <FormLabel
@@ -157,7 +152,7 @@ class LoginScreen extends Component {
                 <View style={styles.logoView}>
                     <Image
                         style={styles.logo}
-                        source={require('../img/logo_main.png')}
+                        source={require('../img/logo.png')}
                     />
                 </View>
             )
@@ -172,7 +167,7 @@ class LoginScreen extends Component {
         return (
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">
                 {this.onRenderLogo()}
-                <View>
+                <View style={{justifyContent: 'center', flex: 1}}>
                     {this.renderError()}
                     {this.renderForm()}
                 </View>
@@ -187,15 +182,18 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     logoView: {
         width: SCREEN_WIDTH,
-        paddingTop: 80
+        height: SCREEN_HEIGHT/3,
+        justifyContent: 'flex-end'
     },
     logo: {
         justifyContent: 'center',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        width: 120,
+        height: 125,
     },
     registerLink: {
         alignSelf: 'center',
@@ -204,7 +202,7 @@ const styles = {
         color: '#7fc3ff'
     },
     registerLinkView: {
-        paddingBottom: 20
+        paddingBottom: 10,
     },
     error: {
         alignSelf: 'center',
@@ -218,7 +216,7 @@ const styles = {
         marginTop: -800
     },
     formView: {
-        paddingBottom: 100
+        marginTop: -25,
     }
 }
 
