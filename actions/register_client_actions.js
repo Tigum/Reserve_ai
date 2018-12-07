@@ -54,7 +54,6 @@ export const checkIfClientEmailExistsAndRegister = ({ email, errorMessage, error
     registerClientLoadingOn(dispatch)
     const result = await firebase.auth().fetchSignInMethodsForEmail(email)
     if (result.length > 0) {
-        console.log('result', result)
         clearForm(dispatch)
         registerClientLoadingOff(dispatch)
         alert(errorMessage)

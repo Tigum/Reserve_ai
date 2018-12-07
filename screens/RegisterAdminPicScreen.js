@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import firebase from 'firebase'
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
 import {
     continueRegisterAdmin,
     uploadPhoto,
-    checkIfClientEmailExistsAndRegister
+    checkIfClientEmailExistsAndRegister,
+    ifNoPicWasUpdated
 } from '../actions'
 import Button from '../components/Button'
 import { bucket, region, accessKey, secretKey, successActionStatus} from '../s3'
@@ -25,7 +27,12 @@ const S3Options = {
 class RegisterAdminPicScreen extends Component {
 
     onRegisterButtonPress() {
-        this.props.navigation.navigate('mainAdminScreen')
+        const { currentUser } = firebase.auth()
+        if(currentUser){
+            this.props.ifNoPicWasUpdated(currentUser.uid)
+        } else {
+            alert('Você não está logado. Faça o login e tente novamente')
+        }
     }
 
     onOpenActionSheet = async () => {
@@ -205,5 +212,6 @@ const mapStateToProps = ({ registerAdmin }) => {
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
     uploadPhoto,
-    checkIfClientEmailExistsAndRegister
+    checkIfClientEmailExistsAndRegister,
+    ifNoPicWasUpdated
 })(connectActionSheet(RegisterAdminPicScreen));

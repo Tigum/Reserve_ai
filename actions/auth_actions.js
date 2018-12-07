@@ -35,7 +35,6 @@ export const passwordChanged = (text) => {
 
 export const loadLoggedInUser = () => async (dispatch) => {
     const { currentUser } = await firebase.auth()
-    console.log('currentUser', currentUser)
     firebase.database().ref(`/users/${currentUser.uid}`)
         .on('value', async snapshot => {
             const user = await snapshot.val()
@@ -88,15 +87,17 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                         const user = await snapshot.val()
                         try {
                             loginUserSuccess(dispatch, user)
+                            if (user.imageUrl.length === 0) {
+                                NavigationService.navigate('picForm', {})
+                                authLoadingOff(dispatch)
+                            } else {
+                                NavigationService.navigate('mainAdminScreen', {})
+                                authLoadingOff(dispatch)
+                            }
                         } catch (err) {
                             alert(err)
                         }
-
                     })
-                    
-                NavigationService.navigate('mainAdminScreen', {})
-                authLoadingOff(dispatch)
-
             } else {
                 authLoadingOff(dispatch)
                 NavigationService.navigate('auth', {})

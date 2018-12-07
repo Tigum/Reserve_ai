@@ -33,6 +33,7 @@ export const ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED = 'additional_info_home_admi
 export const LOAD_STATES = 'load_states'
 export const LOAD_CITIES = 'load_cities'
 export const CLEAR_CITY = 'clear_city'
+export const SET_PIC_TO_NULL = 'set_pic_to_null'
 
 
 export const ADMIN_USER_REGISTERED_SUCCESS = 'admin_user_registered_success'

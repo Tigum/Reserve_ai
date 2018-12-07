@@ -50,7 +50,6 @@ class SelectEmployeesScreen extends Component {
                         ownerUid,
                         isActive: true
                     }
-                    console.log('mode', mode)
                     if(mode && mode === 'edit') {
                         navigation.state.params.props.completeServiceEdit(serviceInfo, serviceId)
                     }else{

@@ -42,7 +42,7 @@ const INITIAL_STATE = {
 }
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action)
+    // console.log(action)
     switch (action.type) {
         case NEW_SERVICE_NAME_CHANGED:
             return { ...state, serviceName: action.payload };

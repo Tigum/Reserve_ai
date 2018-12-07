@@ -63,7 +63,6 @@ class RegisterAdminCityAndStasteScreen extends Component {
     }
 
     renderContent() {
-        console.log('cities2', this.props.cities)
         return (
 
             <KeyboardAvoidingView

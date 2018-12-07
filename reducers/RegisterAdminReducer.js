@@ -40,7 +40,8 @@ import {
     NUMBER_ADMIN_REGISTER_CHANGED,
     CEP_ADMIN_REGISTER_CHANGED,
     SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
-    ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED
+    ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
+    SET_PIC_TO_NULL
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -174,6 +175,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, serviceAtHome: action.payload }
         case ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED:
             return { ...state, additionalInfo: action.payload }
+        case SET_PIC_TO_NULL:
+            return { ...state, image: action.payload}
         default:
             return state;
     }

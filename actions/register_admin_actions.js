@@ -45,7 +45,8 @@ import {
     CEP_ADMIN_REGISTER_CHANGED,
     SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
     ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
-    REGISTERING_NEW_USER
+    REGISTERING_NEW_USER,
+    SET_PIC_TO_NULL
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -205,7 +206,6 @@ export const registerAdminUser = (
         sundayHourEndSelected,
     }
 ) => async (dispatch) => {
-    console.log('entrou')
 
     let userInfo = {
         name,
@@ -302,7 +302,6 @@ export const registerAdminUser = (
         }
     })
 
-    console.log('userInfo', userInfo)
     try {
         registerAdminLoadingOn(dispatch)
         await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -523,4 +522,21 @@ export const additionalInfoChanged = (text) => {
         type: ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
         payload: text
     }
+}
+
+export const ifNoPicWasUpdated = (uid) => async (dispatch) => {
+    await firebase.database().ref(`/users/${uid}`)
+        .on('value', async snapshot => {
+            const user = await snapshot.val()
+            if(user.imageUrl.length === 0){
+                await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
+                dispatch({
+                    type: SET_PIC_TO_NULL,
+                    payload: 'N/A'
+                })
+                NavigationService.navigate('mainAdminView')
+            } else {
+                NavigationService.navigate('mainAdminView')
+            }
+        })
 }
