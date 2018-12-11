@@ -128,6 +128,7 @@ class LoginScreen extends Component {
                     buttonAction={this.onFacebookButtonPress.bind(this)}
                     buttonHeight={50}
                 />
+                
             </View>
         )
     }
