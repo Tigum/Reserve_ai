@@ -13,6 +13,7 @@ export const REGISTER_CLIENT_LOADING_ON = 'register_client_loading_on'
 export const REGISTER_CLIENT_LOADING_OFF = 'register_client_loading_off'
 export const CLEAR_FORM = 'clear_form'
 export const LOAD_LOGGEDIN_USER = 'load_loggedin_user'
+export const EMAIL_PASSWORD_INPUT_FOCUS = 'email_password_input_focus'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 

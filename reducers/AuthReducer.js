@@ -9,7 +9,8 @@ import {
     FACEBOOK_LOGOUT_SUCCESS,
     AUTH_LOADING_ON,
     AUTH_LOADING_OFF,
-    LOAD_LOGGEDIN_USER
+    LOAD_LOGGEDIN_USER,
+    EMAIL_PASSWORD_INPUT_FOCUS
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -20,7 +21,8 @@ const INITIAL_STATE = {
     loading: false,
     token: '',
     userName: '',
-    routeName: ''
+    routeName: '',
+    emailAndPasswordFocus: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -54,6 +56,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: action.payload };
         case LOAD_LOGGEDIN_USER:
             return { ...state, user: action.payload };
+        case EMAIL_PASSWORD_INPUT_FOCUS:
+            return { ...state, emailAndPasswordFocus: action.payload };
         default:
             return state;
     }

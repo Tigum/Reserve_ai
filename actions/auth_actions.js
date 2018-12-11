@@ -14,10 +14,17 @@ import {
     AUTH_LOADING_ON,
     AUTH_LOADING_OFF,
     CLEAR_FORM,
-    LOAD_LOGGEDIN_USER
+    LOAD_LOGGEDIN_USER,
+    EMAIL_PASSWORD_INPUT_FOCUS
 } from './types';
 import NavigationServices from './NavigationServices';
 
+export const emailAndPasswordInputFocus = (input) => {
+    return {
+        type: EMAIL_PASSWORD_INPUT_FOCUS,
+        payload: input
+    }
+}
 
 export const emailChanged = (text) => {
     return {

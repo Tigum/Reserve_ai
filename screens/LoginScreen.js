@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { View, Text, Image, Dimensions, KeyboardAvoidingView, Keyboard, Animated, Easing } from 'react-native';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin, checkIfUserAlreadyLoggedIn } from '../actions'
+import {
+    emailChanged,
+    passwordChanged,
+    loginUser,
+    facebookLogin,
+    doFacebookLogin,
+    checkIfUserAlreadyLoggedIn,
+    emailAndPasswordInputFocus
+} from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
 import ButtonFacebook from '../components/ButtonFacebook'
@@ -19,6 +27,10 @@ class LoginScreen extends Component {
         }
     }
 
+    state = {
+        animatedValue: new Animated.Value(0)
+    }
+
     componentWillMount() {
         this.props.facebookLogin()
         this.props.checkIfUserAlreadyLoggedIn()
@@ -27,6 +39,22 @@ class LoginScreen extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.routeName !== nextProps.routeName) {
             this.props.navigation.navigate(nextProps.routeName)
+        }
+
+        if (this.props.emailAndPasswordFocus !== nextProps.emailAndPasswordFocus) {
+            if (nextProps.emailAndPasswordFocus) {
+                Animated.timing(this.state.animatedValue, {
+                    toValue: 1,
+                    duration: 200,
+                    easing: Easing.ease
+                }).start()
+            } else {
+                Animated.timing(this.state.animatedValue, {
+                    toValue: 0,
+                    duration: 200,
+                    easing: Easing.ease
+                }).start()
+            }
         }
     }
 
@@ -47,30 +75,39 @@ class LoginScreen extends Component {
         this.props.doFacebookLogin()
     }
 
+    handleAnimation() {
+        this.props.emailAndPasswordInputFocus(true)
+    }
+
+    dismissTextInput() {
+        this.props.emailAndPasswordInputFocus(false)
+        Keyboard.dismiss()
+    }
+
     renderForm() {
         return (
             <View style={styles.formView}>
                 <FormLabel
                     labelStyle={sanFranciscoWeights.light}
                 >
-                EMAIL
+                    EMAIL
                 </FormLabel>
 
-                <FormInput onPress={() => this.setState({ emailInputFocus: true })}
+                <FormInput onFocus={() => this.handleAnimation()}
                     placeholder='Digite seu email'
                     returnKeyType={"next"}
                     onChangeText={this.onEmailChange.bind(this)}
                     value={this.props.email}
                     autoCapitalize='none'
                     inputStyle={sanFranciscoWeights.thin}
-                    onBlur={() => Keyboard.dismiss()}
+                    onBlur={() => this.dismissTextInput()}
                 />
 
                 <FormLabel
                     labelStyle={sanFranciscoWeights.light}
                 >SENHA
                 </FormLabel>
-                <FormInput
+                <FormInput onFocus={() => this.handleAnimation()}
                     secureTextEntry
                     placeholder='Digite seu password'
                     onChangeText={this.onPasswordChange.bind(this)}
@@ -78,15 +115,15 @@ class LoginScreen extends Component {
                     autoCapitalize='none'
                     containerStyle={styles.formStyle}
                     inputStyle={sanFranciscoWeights.thin}
-                    onBlur={() => Keyboard.dismiss()}
+                    onBlur={() => this.dismissTextInput()}
                 />
-                <Button 
+                <Button
                     buttonText='Entrar'
                     buttonAction={this.onLoginButtonPress.bind(this)}
                     buttonBackgroundColor='#7f7f7f'
                     buttonHeight={50}
                 />
-                <ButtonFacebook 
+                <ButtonFacebook
                     buttonText='Entrar com Facebook'
                     buttonAction={this.onFacebookButtonPress.bind(this)}
                     buttonHeight={50}
@@ -100,7 +137,7 @@ class LoginScreen extends Component {
             return (
                 <View style={styles.registerLinkView}>
 
-                    <Button 
+                    <Button
                         buttonText='Não tem uma conta? Cadastre-se'
                         buttonBackgroundColor='white'
                         buttonBorderColor='#3577e6'
@@ -111,7 +148,7 @@ class LoginScreen extends Component {
                         buttonMarginTop={0}
                         buttonAction={this.onClientRegisterPress.bind(this)}
                     />
-                    <Button 
+                    <Button
                         buttonText='Cadastre-se como profissional!'
                         buttonBackgroundColor='white'
                         buttonBorderColor='#3577e6'
@@ -122,7 +159,7 @@ class LoginScreen extends Component {
                         buttonMarginTop={5}
                         buttonAction={this.onAdminRegisterPress.bind(this)}
                     />
-                
+
                 </View>
             )
         }
@@ -149,11 +186,32 @@ class LoginScreen extends Component {
     }
 
     onRenderLogo() {
-        if(!this.props.loading) {
+        if (!this.props.loading) {
             return (
                 <View style={styles.logoView}>
-                    <Image
-                        style={styles.logo}
+                    <Animated.Image
+                        style={[styles.logo, {
+                            transform: [
+                                {
+                                    translateY: this.state.animatedValue.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [0, -25]
+                                    })
+                                },
+                                {
+                                    scaleX: this.state.animatedValue.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [1, 0.7]
+                                    })
+                                },
+                                {
+                                    scaleY: this.state.animatedValue.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [1, 0.7]
+                                    })
+                                }
+                            ]
+                        }]}
                         source={require('../img/logo.png')}
                     />
                 </View>
@@ -163,15 +221,15 @@ class LoginScreen extends Component {
 
     render() {
         if (this.props.loading) {
-            return  <Spinner text='Autenticando usuário...'/>
+            return <Spinner text='Autenticando usuário...' />
         }
-        
+
         return (
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">
                 {this.onRenderLogo()}
                 {/* <KeyboardAvoidingView style={{justifyContent: 'center', flex: 1}}> */}
-                    {/* {this.renderError()} */}
-                    {this.renderForm()}
+                {/* {this.renderError()} */}
+                {this.renderForm()}
                 {/* </KeyboardAvoidingView> */}
                 {this.renderLinks()}
             </KeyboardAvoidingView>
@@ -188,7 +246,7 @@ const styles = {
     },
     logoView: {
         width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT/3,
+        height: SCREEN_HEIGHT / 3,
         justifyContent: 'flex-end'
     },
     logo: {
@@ -204,7 +262,7 @@ const styles = {
         color: '#7fc3ff'
     },
     registerLinkView: {
-        // paddingBottom: 10,
+        paddingTop: 30,
         position: 'fixed',
         bottom: 10
     },
@@ -220,12 +278,12 @@ const styles = {
         marginTop: -800
     },
     formView: {
-        marginTop: -25,
+        marginTop: -45,
     }
 }
 
-const mapStateToProps = ({ auth, registerAdmin }) => {
-    const { email, password, error, loading, routeName, user } = auth;
+const mapStateToProps = ({ auth }) => {
+    const { email, password, error, loading, routeName, user, emailAndPasswordFocus } = auth;
     return {
         email,
         password,
@@ -233,6 +291,7 @@ const mapStateToProps = ({ auth, registerAdmin }) => {
         loading,
         routeName,
         user,
+        emailAndPasswordFocus
     }
 }
 
@@ -243,4 +302,5 @@ export default connect(mapStateToProps, {
     facebookLogin,
     doFacebookLogin,
     checkIfUserAlreadyLoggedIn,
+    emailAndPasswordInputFocus
 })(LoginScreen);
