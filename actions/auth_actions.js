@@ -79,6 +79,8 @@ export const loginUser = ({ email, password }) => {
 export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
     try {
         authLoadingOn(dispatch)
+        const token = await AsyncStorage.getItem('fb_token_reserve');
+        if(token) return 
         await firebase.auth().onAuthStateChanged(async user => {
             if (user) {
                 const { currentUser } = await firebase.auth()
@@ -113,7 +115,6 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
 
 export const facebookLogin = () => async (dispatch) => {
     const token = await AsyncStorage.getItem('fb_token_reserve');
-
     if (token) {
         authLoadingOn(dispatch)
         const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
@@ -142,7 +143,8 @@ export const facebookLogout = () => async (dispatch) => {
 
 export const doFacebookLogin = () => async (dispatch) => {
     let { type, token } = await Facebook.logInWithReadPermissionsAsync('361785537896831', {
-        permissions: ['public_profile']
+        permissions: ['public_profile'],
+        behavior: 'web'
     });
     authLoadingOn(dispatch)
     if (type === 'cancel') {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Image, Dimensions, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, facebookLogin, doFacebookLogin, checkIfUserAlreadyLoggedIn } from '../actions'
@@ -63,6 +63,7 @@ class LoginScreen extends Component {
                     value={this.props.email}
                     autoCapitalize='none'
                     inputStyle={sanFranciscoWeights.thin}
+                    onBlur={() => Keyboard.dismiss()}
                 />
 
                 <FormLabel
@@ -77,6 +78,7 @@ class LoginScreen extends Component {
                     autoCapitalize='none'
                     containerStyle={styles.formStyle}
                     inputStyle={sanFranciscoWeights.thin}
+                    onBlur={() => Keyboard.dismiss()}
                 />
                 <Button 
                     buttonText='Entrar'
@@ -167,10 +169,10 @@ class LoginScreen extends Component {
         return (
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">
                 {this.onRenderLogo()}
-                <View style={{justifyContent: 'center', flex: 1}}>
-                    {this.renderError()}
+                {/* <KeyboardAvoidingView style={{justifyContent: 'center', flex: 1}}> */}
+                    {/* {this.renderError()} */}
                     {this.renderForm()}
-                </View>
+                {/* </KeyboardAvoidingView> */}
                 {this.renderLinks()}
             </KeyboardAvoidingView>
         )
@@ -202,7 +204,9 @@ const styles = {
         color: '#7fc3ff'
     },
     registerLinkView: {
-        paddingBottom: 10,
+        // paddingBottom: 10,
+        position: 'fixed',
+        bottom: 10
     },
     error: {
         alignSelf: 'center',
