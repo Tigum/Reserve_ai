@@ -222,7 +222,7 @@ class LoginScreen extends Component {
 
     render() {
         if (this.props.loading) {
-            return <Spinner text='Autenticando usuário...' />
+            return <Spinner fontSize={11} text='CARREGANDO...' />
         }
 
         return (

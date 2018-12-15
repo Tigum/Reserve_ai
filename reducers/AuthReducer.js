@@ -10,7 +10,8 @@ import {
     AUTH_LOADING_ON,
     AUTH_LOADING_OFF,
     LOAD_LOGGEDIN_USER,
-    EMAIL_PASSWORD_INPUT_FOCUS
+    EMAIL_PASSWORD_INPUT_FOCUS,
+    USER_LOG_OUT_SUCCESS
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -38,6 +39,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, ...INITIAL_STATE, user: action.payload };
         case LOGIN_USER_FAIL:
             return { ...state, error: 'Login ou senha incorretos', loading: false };
+        case USER_LOG_OUT_SUCCESS:
+            return { ...state, routeName: action.payload };
         case FACEBOOK_LOGIN_SUCCESS:
             return {
                 ...state, loading: false, error: '',

@@ -4,11 +4,11 @@ import { sanFranciscoWeights } from 'react-native-typography';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const Spinner = ({ size, text }) => {
+const Spinner = ({ size, text, fontSize }) => {
     return (
         <View style={styles.spinnerStyle}>
             <ActivityIndicator size={size || 'large'}/>
-            <Text style={[sanFranciscoWeights.thin, styles.loadingTextStyle]}>{text || 'Processando...'}</Text>
+            <Text style={[sanFranciscoWeights.thin, styles.loadingTextStyle, {fontSize: fontSize || 13}]}>{text || 'Processando...'}</Text>
         </View>    
     );
 };
@@ -24,7 +24,6 @@ const styles = {
     },
     loadingTextStyle: {
         color: '#8c8c8c',
-        fontSize: 13,
         paddingTop: 10
     }
 }

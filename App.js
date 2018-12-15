@@ -44,8 +44,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    const MainNavigator = createBottomTabNavigator({
 
+    const authStack = createStackNavigator({
       auth: {
 
         screen: createStackNavigator({
@@ -151,10 +151,12 @@ export default class App extends React.Component {
 
         }),
         navigationOptions: () => ({
-          tabBarVisible: false,
+          header: null
         })
-      },
+      }
+    });
 
+    const MainNavigator = createBottomTabNavigator({
       mainAdminScreen: {
         screen: createStackNavigator({
           mainAdminScreen: {
@@ -169,7 +171,7 @@ export default class App extends React.Component {
         }),
         navigationOptions: () => ({
           // title: '',
-          tabBarLabel: ({tintColor}) => <AntDesign name="home" style={{paddingBottom: 7}} size={25} color={tintColor}/>,
+          tabBarLabel: ({ tintColor }) => <AntDesign name="home" style={{ paddingBottom: 7 }} size={25} color={tintColor} />,
         })
       },
 
@@ -181,34 +183,37 @@ export default class App extends React.Component {
         }),
         navigationOptions: () => ({
           // title: 'Settings',
-          tabBarLabel: ({tintColor}) => <AntDesign name="menuunfold" style={{paddingBottom: 7}} size={25} color={tintColor}/>
+          tabBarLabel: ({ tintColor }) => <AntDesign name="menuunfold" style={{ paddingBottom: 7 }} size={25} color={tintColor} />
         })
       }
     },
-    {
-      
-      tabBarOptions: {
-        activeTintColor: HEADER_BACKGROUND_COLOR,
-        inactiveTintColor: '#737373',
-        labelStyle: {
-          fontSize: 12,
-        },
-        style: {
-          backgroundColor: BOTTOM_NAV_BACKGROUND_COLOR,
-        },
-      }
-    });
+      {
+
+        tabBarOptions: {
+          activeTintColor: HEADER_BACKGROUND_COLOR,
+          inactiveTintColor: '#737373',
+          labelStyle: {
+            fontSize: 12,
+          },
+          style: {
+            backgroundColor: BOTTOM_NAV_BACKGROUND_COLOR,
+          },
+        }
+      });
 
     const RootStack = createStackNavigator(
       {
+        auth: {
+          screen: authStack
+        },
         Main: {
-          screen: MainNavigator,
+          screen: MainNavigator
         },
         addService: {
-          screen: AddServicesScreen,
+          screen: AddServicesScreen
         },
         addEmployee: {
-          screen: AddEmployeesScreen,
+          screen: AddEmployeesScreen
         },
       },
       {
@@ -222,7 +227,7 @@ export default class App extends React.Component {
         <ActionSheetProvider>
           <View style={styles.container}>
             {/* <MainNavigator /> */}
-            <RootStack 
+            <RootStack
               ref={navigatorRef => {
                 NavigationService.setTopLevelNavigator(navigatorRef);
               }}

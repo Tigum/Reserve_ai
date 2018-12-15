@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 import NavigationService from './NavigationServices';
 import { Facebook } from 'expo'
 import {
@@ -15,7 +15,8 @@ import {
     AUTH_LOADING_OFF,
     CLEAR_FORM,
     LOAD_LOGGEDIN_USER,
-    EMAIL_PASSWORD_INPUT_FOCUS
+    EMAIL_PASSWORD_INPUT_FOCUS,
+    USER_LOG_OUT_SUCCESS
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -87,7 +88,7 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
     try {
         authLoadingOn(dispatch)
         const token = await AsyncStorage.getItem('fb_token_reserve');
-        if(token) return 
+        if (token) return
         await firebase.auth().onAuthStateChanged(async user => {
             if (user) {
                 const { currentUser } = await firebase.auth()
@@ -129,7 +130,7 @@ export const facebookLogin = () => async (dispatch) => {
             const token = result.credential.accessToken;
             const user = result.user;
             const name = user.displayName
-            const routeName = 'welcome'
+            const routeName = 'mainAdminScreen'
             await facebookLoginSuccess(dispatch, token, name, routeName, user)
             authLoadingOff(dispatch)
         }).catch((err) => {
@@ -166,7 +167,7 @@ export const doFacebookLogin = () => async (dispatch) => {
         const token = result.credential.accessToken;
         const user = result.user;
         const name = user.displayName
-        const routeName = 'welcome'
+        const routeName = 'mainAdminScreen'
         await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
     }).catch((err) => {
@@ -185,6 +186,13 @@ const facebookLoginSuccess = (dispatch, token, userName, routeName, user) => {
 const facebookLogoutSuccess = (dispatch, routeName) => {
     dispatch({
         type: FACEBOOK_LOGOUT_SUCCESS,
+        payload: routeName
+    })
+}
+
+const userLogoutSuccess = (dispatch, routeName) => {
+    dispatch({
+        type: USER_LOG_OUT_SUCCESS,
         payload: routeName
     })
 }
@@ -220,4 +228,37 @@ const clearForm = (dispatch) => {
     dispatch({
         type: CLEAR_FORM,
     })
+}
+
+export const userLogOut = () => async (dispatch) => {
+    Alert.alert(
+        'Log out',
+        'Tem certeza que deseja sair de sua conta?',
+        [
+            {
+                text: 'Sim', onPress: async () => {
+                    try {
+                        const token = await AsyncStorage.getItem('fb_token_reserve');
+                        const routeName = 'auth'
+                        if (token) {
+                            await firebase.auth().signOut()
+                            await AsyncStorage.setItem('fb_token_reserve', '');
+                            return facebookLogoutSuccess(dispatch, routeName)
+                        }
+                        await firebase.auth().signOut()
+                        userLogoutSuccess(dispatch, routeName)
+                    } catch (err) {
+                        alert(err)
+                    }
+                }
+            },
+            {
+                text: 'Não', onPress: () => {
+                }
+            },
+        ],
+        { cancelable: false }
+    )
+
+
 }
