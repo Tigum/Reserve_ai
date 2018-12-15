@@ -96,7 +96,7 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                         const user = await snapshot.val()
                         try {
                             loginUserSuccess(dispatch, user)
-                            if (user.imageUrl.length === 0) {
+                            if (user.imageUrl && user.imageUrl.length === 0) {
                                 NavigationService.navigate('picForm', {})
                                 authLoadingOff(dispatch)
                             } else {
@@ -104,7 +104,7 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                                 authLoadingOff(dispatch)
                             }
                         } catch (err) {
-                            alert(err)
+                            console.log(err)
                         }
                     })
             } else {

@@ -1,5 +1,5 @@
 export const HEADER_BACKGROUND_COLOR = '#3577e6'
 export const HEADER_TEXT_COLOR = 'white'
 export const HEADER_TEXT_FONT_WEIGHT = '200'
-export const BOTTOM_NAV_BACKGROUND_COLOR = '#3577e6'
+export const BOTTOM_NAV_BACKGROUND_COLOR = '#f1f1f1'
 export const BOTTOM_NAV_TEXT_COLOR = 'white'
