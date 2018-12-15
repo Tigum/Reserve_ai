@@ -31,10 +31,10 @@ class LoginScreen extends Component {
         animatedValue: new Animated.Value(0)
     }
 
-    componentWillMount() {
-        this.props.facebookLogin()
-        this.props.checkIfUserAlreadyLoggedIn()
-    }
+    // componentWillMount() {
+    //     this.props.facebookLogin()
+    //     this.props.checkIfUserAlreadyLoggedIn()
+    // }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.routeName !== nextProps.routeName) {

@@ -69,12 +69,16 @@ export const loginUser = ({ email, password }) => {
                         const user = await snapshot.val()
                         try {
                             await loginUserSuccess(dispatch, user)
-                            NavigationService.navigate('mainAdminScreen', {});
-                            authLoadingOff(dispatch)
+                            if (user.role === 'admin') {
+                                NavigationService.navigate('mainAdminScreen', {});
+                                authLoadingOff(dispatch)
+                            } else {
+                                NavigationService.navigate('mainClientScreen', {});
+                                authLoadingOff(dispatch)
+                            }
                         } catch (err) {
                             alert(err)
                         }
-
                     })
             })
             .catch((error) => {
@@ -88,6 +92,7 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
     try {
         authLoadingOn(dispatch)
         const token = await AsyncStorage.getItem('fb_token_reserve');
+        console.log('token', token)
         if (token) return
         await firebase.auth().onAuthStateChanged(async user => {
             if (user) {
@@ -101,8 +106,13 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                                 NavigationService.navigate('picForm', {})
                                 authLoadingOff(dispatch)
                             } else {
-                                NavigationService.navigate('mainAdminScreen', {})
-                                authLoadingOff(dispatch)
+                                if (user.role === 'admin') {
+                                    NavigationService.navigate('mainAdminScreen', {})
+                                    authLoadingOff(dispatch)
+                                } else {
+                                    NavigationService.navigate('mainClientScreen', {})
+                                    authLoadingOff(dispatch)
+                                }
                             }
                         } catch (err) {
                             console.log(err)
@@ -128,11 +138,21 @@ export const facebookLogin = () => async (dispatch) => {
         const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
         firebase.auth().signInAndRetrieveDataWithCredential(provider).then(async function (result) {
             const token = result.credential.accessToken;
-            const user = result.user;
-            const name = user.displayName
-            const routeName = 'mainAdminScreen'
-            await facebookLoginSuccess(dispatch, token, name, routeName, user)
-            authLoadingOff(dispatch)
+            const { currentUser } = firebase.auth();
+            await firebase.database().ref(`/users/${currentUser.uid}`)
+                .on('value', async snapshot => {
+                    let user = await snapshot.val()
+                    try {
+                        const name = currentUser.displayName
+                        const routeName = 'mainClientScreen'
+                        user['uid'] = currentUser.uid
+                        await facebookLoginSuccess(dispatch, token, name, routeName, user)
+                        authLoadingOff(dispatch)
+                        NavigationService.navigate(routeName)
+                    } catch (err) {
+                        console.log(err)
+                    }
+                })
         }).catch((err) => {
             console.log(err)
         })
@@ -158,22 +178,18 @@ export const doFacebookLogin = () => async (dispatch) => {
     if (type === 'cancel') {
         return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: token })
     }
-
     await AsyncStorage.setItem('fb_token_reserve', token);
-
     const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
-
     firebase.auth().signInAndRetrieveDataWithCredential(provider).then(async function (result) {
         const token = result.credential.accessToken;
         const user = result.user;
         const name = user.displayName
-        const routeName = 'mainAdminScreen'
+        const routeName = 'mainClientScreen'
         await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
     }).catch((err) => {
         console.log(err)
     })
-
 }
 
 const facebookLoginSuccess = (dispatch, token, userName, routeName, user) => {
