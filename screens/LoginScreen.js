@@ -45,13 +45,13 @@ class LoginScreen extends Component {
             if (nextProps.emailAndPasswordFocus) {
                 Animated.timing(this.state.animatedValue, {
                     toValue: 1,
-                    duration: 200,
+                    duration: 300,
                     easing: Easing.ease
                 }).start()
             } else {
                 Animated.timing(this.state.animatedValue, {
                     toValue: 0,
-                    duration: 200,
+                    duration: 300,
                     easing: Easing.ease
                 }).start()
             }
