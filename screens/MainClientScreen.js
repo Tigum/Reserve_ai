@@ -22,7 +22,7 @@ class MainClientScreen extends Component {
 
             <View style={styles.mainView}>
                 <SearchBarHeader icon='search1'/>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView>
                     <Card
                         title='HELLO WORLD'
                         image={require('../img/logo_main.png')}>
@@ -84,12 +84,6 @@ const styles = {
         flexDirection: 'column',
         flex: 1
     },
-    scrollView: {
-        // backgroundColor: 'white',
-        // flexDirection: 'column',
-        // flex: 1,
-        // width: SCREEN_WIDTH,
-    }
 }
 
 const mapStateToProps = ({ auth }) => {
