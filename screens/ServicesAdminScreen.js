@@ -6,6 +6,7 @@ import { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearSe
 import ServicesListAdmin from '../components/ServicesListAdmin'
 import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 import { Spinner } from '../components/Spinner'
+import Header from '../components/Header'
 
 class ServicesAdminScreen extends Component {
 
@@ -48,6 +49,10 @@ class ServicesAdminScreen extends Component {
         }
     };
 
+    addService() {
+        this.props.navigation.navigate('addService')
+    }
+
     render() {
         if (this.props.loading) {
             return  <Spinner text='CARREGANDO SERVIÇOS...'/>
@@ -55,6 +60,7 @@ class ServicesAdminScreen extends Component {
 
         return (
             <View>
+                <Header icon='plus' headerText='Meus serviços' iconAction={this.addService.bind(this)} goBack/>
                 <ServicesListAdmin
                     data={this.props.registeredServices}
                 />

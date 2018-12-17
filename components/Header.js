@@ -14,11 +14,23 @@ class Header extends Component {
 
     render() {
         const { headerText, icon, iconAction, goBack } = this.props
+
+        if (!goBack) {
+            return (
+                <View style={styles.viewStyle}>
+                    <Text style={[styles.textStyle, sanFranciscoWeights.thin]}>{headerText}</Text>
+                    <TouchableWithoutFeedback onPress={iconAction || this.goBack.bind(this)}>
+                        <AntDesign style={styles.closeIconStyle} name={icon} size={25} color="black" />
+                    </TouchableWithoutFeedback>
+                </View>
+            )
+        }
+
         return (
             <View style={styles.viewStyle}>
 
                 <TouchableWithoutFeedback onPress={this.goBack.bind(this)}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <AntDesign style={styles.closeIconStyle} name='arrowleft' size={25} color="black" />
                         <Text style={[styles.textStyle, sanFranciscoWeights.thin]}>{headerText}</Text>
                     </View>

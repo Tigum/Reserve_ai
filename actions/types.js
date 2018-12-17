@@ -108,3 +108,7 @@ export const EDIT_SERVICE = 'edit_service'
 export const EDIT_SERVICE_SUCCESS = 'edit_service_success'
 export const SERVICE_LOADING = 'service_loading'
 export const SET_SERVICE_MODE = ''
+
+
+// SERVICES CLIENT
+export const LOAD_AVAILABLE_SERVICES = 'load_available_services'

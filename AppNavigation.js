@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import NavigationService from './actions/NavigationServices';
-// import firebase from 'firebase'
 import { connect } from 'react-redux'
 import { AntDesign } from '@expo/vector-icons';
 import { BOTTOM_NAV_BACKGROUND_COLOR, HEADER_BACKGROUND_COLOR } from './app_styles'
@@ -70,7 +69,6 @@ class AppNavigation extends Component {
                     adminForm: {
                         screen: RegisterAdminFormScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -79,7 +77,6 @@ class AppNavigation extends Component {
                     hoursForm: {
                         screen: RegisterAdminHoursScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -88,7 +85,6 @@ class AppNavigation extends Component {
                     addressForm: {
                         screen: RegisterAdminAddressScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -97,7 +93,6 @@ class AppNavigation extends Component {
                     stateAndCityForm: {
                         screen: RegisterAdminCityAndStateScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -106,7 +101,6 @@ class AppNavigation extends Component {
                     daysForm: {
                         screen: RegisterAdminDaysScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -115,7 +109,6 @@ class AppNavigation extends Component {
                     picForm: {
                         screen: RegisterAdminPicScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -124,7 +117,6 @@ class AppNavigation extends Component {
                     picFormClient: {
                         screen: RegisterClientPicScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -133,7 +125,6 @@ class AppNavigation extends Component {
                     saturdayForm: {
                         screen: RegisterSaturdayHoursScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -142,7 +133,6 @@ class AppNavigation extends Component {
                     sundayForm: {
                         screen: RegisterSundayHoursScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -151,7 +141,6 @@ class AppNavigation extends Component {
                     clientForm: {
                         screen: RegisterClientFormScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
@@ -172,21 +161,24 @@ class AppNavigation extends Component {
                     mainAdminScreen: {
                         screen: MainAdminScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
                         })
                     },
                     servicesAdmin: {
-                        screen: ServicesAdminScreen
+                        screen: ServicesAdminScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
                     },
                     selectEmployee: {
                         screen: SelectEmployeesScreen
                     }
                 }),
                 navigationOptions: () => ({
-                    // title: '',
                     tabBarLabel: ({ tintColor }) => <AntDesign name="home" style={{ paddingBottom: 7 }} size={25} color={tintColor} />,
                 })
             },
@@ -195,10 +187,14 @@ class AppNavigation extends Component {
                 screen: createStackNavigator({
                     settingsScreen: {
                         screen: SettingsScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
                     }
                 }),
                 navigationOptions: () => ({
-                    // title: 'Settings',
                     tabBarLabel: ({ tintColor }) => <AntDesign name="menuunfold" style={{ paddingBottom: 7 }} size={25} color={tintColor} />
                 })
             }
@@ -224,21 +220,13 @@ class AppNavigation extends Component {
                     mainClientScreen: {
                         screen: MainClientScreen,
                         navigationOptions: () => ({
-                            // title: 'Cadastre-se',
                             headerStyle: {
                                 display: 'none'
                             }
                         })
                     },
-                    // servicesAdmin: {
-                    //     screen: ServicesAdminScreen
-                    // },
-                    // selectEmployee: {
-                    //     screen: SelectEmployeesScreen
-                    // }
                 }),
                 navigationOptions: () => ({
-                    // title: '',
                     tabBarLabel: ({ tintColor }) => <AntDesign name="home" style={{ paddingBottom: 7 }} size={25} color={tintColor} />,
                 })
             },
@@ -247,10 +235,14 @@ class AppNavigation extends Component {
                 screen: createStackNavigator({
                     settingsScreen: {
                         screen: SettingsScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
                     }
                 }),
                 navigationOptions: () => ({
-                    // title: 'Settings',
                     tabBarLabel: ({ tintColor }) => <AntDesign name="menuunfold" style={{ paddingBottom: 7 }} size={25} color={tintColor} />
                 })
             }
