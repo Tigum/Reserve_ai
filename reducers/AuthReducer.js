@@ -44,9 +44,9 @@ export default (state = INITIAL_STATE, action) => {
         case FACEBOOK_LOGIN_SUCCESS:
             return {
                 ...state, loading: false, error: '',
-                token: action.payload.token,
-                userName: action.payload.userName,
-                routeName: action.payload.routeName,
+                // token: action.payload.token,
+                // userName: action.payload.userName,
+                // routeName: action.payload.routeName,
                 user: action.payload.user
             };
         case FACEBOOK_LOGIN_FAIL:

@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { AsyncStorage, Alert } from 'react-native'
-import NavigationService from './NavigationServices';
+import NavigationServices from './NavigationServices';
 import { Facebook } from 'expo'
 import {
     EMAIL_CHANGED,
@@ -16,9 +16,9 @@ import {
     CLEAR_FORM,
     LOAD_LOGGEDIN_USER,
     EMAIL_PASSWORD_INPUT_FOCUS,
-    USER_LOG_OUT_SUCCESS
+    USER_LOG_OUT_SUCCESS,
+    CLEAR_MAIN_BUSINESS_LIST
 } from './types';
-import NavigationServices from './NavigationServices';
 
 export const emailAndPasswordInputFocus = (input) => {
     return {
@@ -70,10 +70,10 @@ export const loginUser = ({ email, password }) => {
                         try {
                             await loginUserSuccess(dispatch, user)
                             if (user.role === 'admin') {
-                                NavigationService.navigate('mainAdminScreen', {});
+                                NavigationServices.navigate('mainAdminScreen', {});
                                 authLoadingOff(dispatch)
                             } else {
-                                NavigationService.navigate('mainClientScreen', {});
+                                NavigationServices.navigate('mainClientScreen', {});
                                 authLoadingOff(dispatch)
                             }
                         } catch (err) {
@@ -102,14 +102,14 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                         try {
                             loginUserSuccess(dispatch, user)
                             if (user.imageUrl && user.imageUrl.length === 0) {
-                                NavigationService.navigate('picForm', {})
+                                NavigationServices.navigate('picForm', {})
                                 authLoadingOff(dispatch)
                             } else {
                                 if (user.role === 'admin') {
-                                    NavigationService.navigate('mainAdminScreen', {})
+                                    NavigationServices.navigate('mainAdminScreen', {})
                                     authLoadingOff(dispatch)
                                 } else {
-                                    NavigationService.navigate('mainClientScreen', {})
+                                    NavigationServices.navigate('mainClientScreen', {})
                                     authLoadingOff(dispatch)
                                 }
                             }
@@ -119,7 +119,7 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                     })
             } else {
                 authLoadingOff(dispatch)
-                NavigationService.navigate('auth', {})
+                NavigationServices.navigate('auth', {})
             }
         })
 
@@ -147,7 +147,7 @@ export const facebookLogin = () => async (dispatch) => {
                         user['uid'] = currentUser.uid
                         await facebookLoginSuccess(dispatch, token, name, routeName, user)
                         authLoadingOff(dispatch)
-                        NavigationService.navigate(routeName)
+                        NavigationServices.navigate(routeName)
                     } catch (err) {
                         console.log(err)
                     }
@@ -185,7 +185,8 @@ export const doFacebookLogin = () => async (dispatch) => {
         const name = user.displayName
         const routeName = 'mainClientScreen'
         await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
-        facebookLoginSuccess(dispatch, token, name, routeName, user).then(() => authLoadingOff(dispatch))
+        facebookLoginSuccess(dispatch, token, name, routeName, user)
+        NavigationServices.navigate(routeName)
     }).catch((err) => {
         console.log(err)
     })
@@ -258,10 +259,14 @@ export const userLogOut = () => async (dispatch) => {
                         if (token) {
                             await firebase.auth().signOut()
                             await AsyncStorage.setItem('fb_token_reserve', '');
-                            return facebookLogoutSuccess(dispatch, routeName)
+                            facebookLogoutSuccess(dispatch, routeName)
+                            clearMainBusinessList(dispatch)
+                            return NavigationServices.navigate(routeName)
                         }
                         await firebase.auth().signOut()
                         userLogoutSuccess(dispatch, routeName)
+                        clearMainBusinessList(dispatch)
+                        NavigationServices.navigate(routeName)
                     } catch (err) {
                         alert(err)
                     }
@@ -274,6 +279,10 @@ export const userLogOut = () => async (dispatch) => {
         ],
         { cancelable: false }
     )
+}
 
-
+const clearMainBusinessList = (dispatch) => {
+    dispatch ({
+        type: CLEAR_MAIN_BUSINESS_LIST,
+    })
 }

@@ -37,9 +37,7 @@ class LoginScreen extends Component {
     // }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.routeName !== nextProps.routeName) {
-            this.props.navigation.navigate(nextProps.routeName)
-        }
+        
 
         if (this.props.emailAndPasswordFocus !== nextProps.emailAndPasswordFocus) {
             if (nextProps.emailAndPasswordFocus) {
@@ -56,6 +54,7 @@ class LoginScreen extends Component {
                 }).start()
             }
         }
+
     }
 
     onEmailChange(text) {
