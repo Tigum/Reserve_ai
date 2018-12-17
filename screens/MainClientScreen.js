@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 import SearchBarHeader from '../components/SearchBarHeader'
 
-const SCREEN_WIDTH = Dimensions.get('window').width
-const SCREEN_HEIGHT = Dimensions.get('window').height
 
 class MainClientScreen extends Component {
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.user !== nextProps.user) {
-            this.props.navigation.setParams({ props: nextProps })
-        }
-    }
 
     render() {
         return (
