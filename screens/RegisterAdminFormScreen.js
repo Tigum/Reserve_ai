@@ -12,7 +12,6 @@ import {
     phoneAdminChanged,
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
-    registerAdminUser,
     continueRegisterAdmin,
     checkIfEmailExists
 } from '../actions';
@@ -254,7 +253,6 @@ export default connect(mapStateToProps, {
     phoneAdminChanged,
     passwordAdminChanged,
     passwordConfirmationAdminChanged,
-    registerAdminUser,
     continueRegisterAdmin,
     checkIfEmailExists
 })(RegisterAdminFormScreen);

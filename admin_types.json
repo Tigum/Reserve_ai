@@ -1,0 +1,20 @@
+{
+    "types": [
+        "Dentista",
+        "Salão de beleza",
+        "Manicure",
+        "Personal Trainer",
+        "Médico",
+        "Massagista",
+        "Jardineiro",
+        "Piscineiro",
+        "Cabelereiro",
+        "Barbearia",
+        "Pedicure",
+        "Professor particular",
+        "Faxineira",
+        "Diarista",
+        "Cuidador de animais",
+        "Pediatra"
+    ]
+}
