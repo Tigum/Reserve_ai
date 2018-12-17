@@ -44,7 +44,6 @@ class AppNavigation extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.user !== nextProps.user) {
-            console.log('usuario', nextProps.user)
         }
     }
 

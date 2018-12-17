@@ -6,7 +6,9 @@ class ServiceItemClient extends Component {
         const { service } = this.props
         return (
             <View style={styles.mainView}>
-                <Text>{service.serviceName}</Text>
+                <View>
+                    <Text>{service.serviceName}</Text>
+                </View>
             </View>
         )
     }
@@ -16,7 +18,7 @@ const styles = {
     mainView: {
         flexDirection: 'row',
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'grey'
     }
 }
 

@@ -2,22 +2,27 @@ import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import SearchBarHeader from '../components/SearchBarHeader'
-import { loadAvailableServices } from '../actions'
-import ServicesListClient from '../components/ServiceListClient'
+import { loadAvailableBusinesses } from '../actions'
+import BusinessList from '../components/BusinessList'
+import { Spinner } from '../components/Spinner'
 
 
 class MainClientScreen extends Component {
 
     componentWillMount() {
-        this.props.loadAvailableServices()
+        this.props.loadAvailableBusinesses()
     }
 
     render() {
+        if (this.props.loading) {
+            return <Spinner fontSize={11} text='PROCURANDO SERVIÇOS DISPONÍVEIS...' />
+        }
+
         return (
             <View style={styles.mainView}>
                 <SearchBarHeader icon='search1' />
                 <ScrollView>
-                    <ServicesListClient data={this.props.services} />
+                    <BusinessList data={this.props.businesses} />
                 </ScrollView>
             </View>
         )
@@ -33,9 +38,9 @@ const styles = {
 }
 
 const mapStateToProps = ({ servicesClient, auth }) => {
-    const { services } = servicesClient
+    const { businesses, loading } = servicesClient
     const { user } = auth
-    return { services, user }
+    return { businesses, user, loading }
 }
 
-export default connect(mapStateToProps, { loadAvailableServices })(MainClientScreen);
+export default connect(mapStateToProps, { loadAvailableBusinesses })(MainClientScreen);

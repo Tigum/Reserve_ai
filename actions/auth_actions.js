@@ -92,7 +92,6 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
     try {
         authLoadingOn(dispatch)
         const token = await AsyncStorage.getItem('fb_token_reserve');
-        console.log('token', token)
         if (token) return
         await firebase.auth().onAuthStateChanged(async user => {
             if (user) {

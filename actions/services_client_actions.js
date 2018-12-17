@@ -1,16 +1,28 @@
 import firebase from 'firebase';
 import { Alert } from 'react-native'
-import Geocoder from 'react-native-geocoding';
 import _ from 'lodash';
 import {
     LOAD_AVAILABLE_SERVICES,
     LOADING_CLIENT_SERVICES_ON,
-    LOADING_CLIENT_SERVICES_OFF
+    LOADING_CLIENT_SERVICES_OFF,
+    LOAD_AVAILABLE_BUSINESSES,
+    ADD_BUSINESS_TO_MAIN_LIST
 } from './types';
 import NavigationServices from './NavigationServices';
 
+export const loadAvailableBusinesses = () => async (dispatch) => {
+    loadingOn(dispatch)
+    const usersRef = await firebase.database().ref().child('users')
+    await usersRef.orderByChild('role').equalTo('admin').on('child_added', async snapshot => {
+        const business = await snapshot.val()
+        business['uid'] = await snapshot.key
+        addBusinessToMainList(dispatch, business)
+    })
+    loadingOff(dispatch)
+}
+
 export const loadAvailableServices = (input) => async (dispatch) => {
-    const { currentUser } =  await firebase.auth()
+    const { currentUser } = await firebase.auth()
     loadingOn(dispatch)
     firebase.database().ref(`/services`)
         .on('value', async snapshot => {
@@ -23,8 +35,6 @@ export const loadAvailableServices = (input) => async (dispatch) => {
                     services.push(element)
                 })
             })
-
-            console.log('info', services)
             loadServices(dispatch, services)
             loadingOff(dispatch)
         })
@@ -48,5 +58,19 @@ const loadServices = (dispatch, services) => {
     dispatch({
         type: LOAD_AVAILABLE_SERVICES,
         payload: services
+    })
+}
+
+const loadBusinesses = (dispatch, businesses) => {
+    dispatch({
+        type: LOAD_AVAILABLE_BUSINESSES,
+        payload: services
+    })
+}
+
+const addBusinessToMainList = (dispatch, business) => {
+    dispatch({
+        type: ADD_BUSINESS_TO_MAIN_LIST,
+        payload: business
     })
 }
