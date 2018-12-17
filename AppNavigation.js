@@ -44,7 +44,7 @@ class AppNavigation extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.user !== nextProps.user) {
+        if (this.props.user !== nextProps.user) {
             console.log('usuario', nextProps.user)
         }
     }
@@ -171,6 +171,12 @@ class AppNavigation extends Component {
                 screen: createStackNavigator({
                     mainAdminScreen: {
                         screen: MainAdminScreen,
+                        navigationOptions: () => ({
+                            // title: 'Cadastre-se',
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
                     },
                     servicesAdmin: {
                         screen: ServicesAdminScreen
@@ -212,50 +218,56 @@ class AppNavigation extends Component {
             });
 
 
-            const MainNavigatorClient = createBottomTabNavigator({
-                mainClientScreen: {
-                    screen: createStackNavigator({
-                        mainClientScreen: {
-                            screen: MainClientScreen,
-                        },
-                        // servicesAdmin: {
-                        //     screen: ServicesAdminScreen
-                        // },
-                        // selectEmployee: {
-                        //     screen: SelectEmployeesScreen
-                        // }
-                    }),
-                    navigationOptions: () => ({
-                        // title: '',
-                        tabBarLabel: ({ tintColor }) => <AntDesign name="home" style={{ paddingBottom: 7 }} size={25} color={tintColor} />,
-                    })
-                },
-    
-                settingsScreen: {
-                    screen: createStackNavigator({
-                        settingsScreen: {
-                            screen: SettingsScreen,
-                        }
-                    }),
-                    navigationOptions: () => ({
-                        // title: 'Settings',
-                        tabBarLabel: ({ tintColor }) => <AntDesign name="menuunfold" style={{ paddingBottom: 7 }} size={25} color={tintColor} />
-                    })
-                }
+        const MainNavigatorClient = createBottomTabNavigator({
+            mainClientScreen: {
+                screen: createStackNavigator({
+                    mainClientScreen: {
+                        screen: MainClientScreen,
+                        navigationOptions: () => ({
+                            // title: 'Cadastre-se',
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    },
+                    // servicesAdmin: {
+                    //     screen: ServicesAdminScreen
+                    // },
+                    // selectEmployee: {
+                    //     screen: SelectEmployeesScreen
+                    // }
+                }),
+                navigationOptions: () => ({
+                    // title: '',
+                    tabBarLabel: ({ tintColor }) => <AntDesign name="home" style={{ paddingBottom: 7 }} size={25} color={tintColor} />,
+                })
             },
-                {
-    
-                    tabBarOptions: {
-                        activeTintColor: HEADER_BACKGROUND_COLOR,
-                        inactiveTintColor: '#737373',
-                        labelStyle: {
-                            fontSize: 12,
-                        },
-                        style: {
-                            backgroundColor: BOTTOM_NAV_BACKGROUND_COLOR,
-                        },
+
+            settingsScreen: {
+                screen: createStackNavigator({
+                    settingsScreen: {
+                        screen: SettingsScreen,
                     }
-                });
+                }),
+                navigationOptions: () => ({
+                    // title: 'Settings',
+                    tabBarLabel: ({ tintColor }) => <AntDesign name="menuunfold" style={{ paddingBottom: 7 }} size={25} color={tintColor} />
+                })
+            }
+        },
+            {
+
+                tabBarOptions: {
+                    activeTintColor: HEADER_BACKGROUND_COLOR,
+                    inactiveTintColor: '#737373',
+                    labelStyle: {
+                        fontSize: 12,
+                    },
+                    style: {
+                        backgroundColor: BOTTOM_NAV_BACKGROUND_COLOR,
+                    },
+                }
+            });
 
 
         const RootStack = createStackNavigator(

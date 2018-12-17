@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { View, Dimensions, TouchableWithoutFeedback, Text } from 'react-native';
 import { sanFranciscoWeights } from 'react-native-typography';
 import { AntDesign } from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';
@@ -8,25 +8,15 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 
 class Header extends Component {
 
-    goBack() {
-        this.props.navigation.goBack()
-    }
-
     render() {
-        const { headerText, icon, iconAction, goBack } = this.props
+        const { iconAction, icon } = this.props
         return (
             <View style={styles.viewStyle}>
-
-                <TouchableWithoutFeedback onPress={this.goBack.bind(this)}>
-                    <View style={{flexDirection: 'row'}}>
-                        <AntDesign style={styles.closeIconStyle} name='arrowleft' size={25} color="black" />
-                        <Text style={[styles.textStyle, sanFranciscoWeights.thin]}>{headerText}</Text>
-                    </View>
-                </TouchableWithoutFeedback>
-
-
-                <TouchableWithoutFeedback onPress={iconAction || this.goBack.bind(this)}>
+                <TouchableWithoutFeedback onPress={() => iconAction || this.props.navigation.goBack()}>
                     <AntDesign style={styles.closeIconStyle} name={icon} size={25} color="black" />
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => iconAction || this.props.navigation.goBack()}>
+                    <Text style={[styles.textStyle, sanFranciscoWeights.thin]}>Encontre serviços...</Text>
                 </TouchableWithoutFeedback>
             </View>
         )
@@ -37,7 +27,7 @@ class Header extends Component {
 const styles = {
     viewStyle: {
         backgroundColor: '#f8f8f8',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
         height: 80,
         paddingTop: 35,
@@ -58,6 +48,6 @@ const styles = {
         paddingTop: 3,
         paddingRight: 15
     }
-};
+}
 
 export default withNavigation(Header);
