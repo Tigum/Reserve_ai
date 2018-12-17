@@ -24,7 +24,6 @@ class Header extends Component {
                     </View>
                 </TouchableWithoutFeedback>
 
-
                 <TouchableWithoutFeedback onPress={iconAction || this.goBack.bind(this)}>
                     <AntDesign style={styles.closeIconStyle} name={icon} size={25} color="black" />
                 </TouchableWithoutFeedback>
