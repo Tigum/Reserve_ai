@@ -17,6 +17,7 @@ export const EMAIL_PASSWORD_INPUT_FOCUS = 'email_password_input_focus'
 export const USER_LOG_OUT_SUCCESS = 'user_log_out_success'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
+export const RESET_APPLICATION_TO_INITIAL_STATE = 'reset_application_to_initial_state'
 
 export const NAME_ADMIN_REGISTER_CHANGED = 'name_admin_register_changed'
 export const EMAIL_ADMIN_REGISTER_CHANGED = 'email_admin_register_changed'

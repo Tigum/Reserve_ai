@@ -22,7 +22,8 @@ import {
     START_EDIT_SERVICE,
     EDIT_SERVICE,
     SERVICE_LOADING,
-    SET_SERVICE_MODE
+    SET_SERVICE_MODE,
+    RESET_APPLICATION_TO_INITIAL_STATE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -113,7 +114,9 @@ export default (state = INITIAL_STATE, action) => {
                 mode: 'edit'
             }
         case SET_SERVICE_MODE:
-            return { ...state, mode: action.payload}
+            return { ...state, mode: action.payload }
+        case RESET_APPLICATION_TO_INITIAL_STATE:
+            return { ...state, ...INITIAL_STATE }
         default:
             return state;
     }

@@ -41,7 +41,8 @@ import {
     CEP_ADMIN_REGISTER_CHANGED,
     SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
     ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
-    SET_PIC_TO_NULL
+    SET_PIC_TO_NULL,
+    RESET_APPLICATION_TO_INITIAL_STATE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -176,7 +177,9 @@ export default (state = INITIAL_STATE, action) => {
         case ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED:
             return { ...state, additionalInfo: action.payload }
         case SET_PIC_TO_NULL:
-            return { ...state, image: action.payload}
+            return { ...state, image: action.payload }
+        case RESET_APPLICATION_TO_INITIAL_STATE:
+            return { ...state, ...INITIAL_STATE }
         default:
             return state;
     }

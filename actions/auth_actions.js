@@ -17,7 +17,8 @@ import {
     LOAD_LOGGEDIN_USER,
     EMAIL_PASSWORD_INPUT_FOCUS,
     USER_LOG_OUT_SUCCESS,
-    CLEAR_MAIN_BUSINESS_LIST
+    CLEAR_MAIN_BUSINESS_LIST,
+    RESET_APPLICATION_TO_INITIAL_STATE
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -260,12 +261,12 @@ export const userLogOut = () => async (dispatch) => {
                             await firebase.auth().signOut()
                             await AsyncStorage.setItem('fb_token_reserve', '');
                             facebookLogoutSuccess(dispatch, routeName)
-                            clearMainBusinessList(dispatch)
+                            resetApplicationToInitialState(dispatch)
                             return NavigationServices.navigate(routeName)
                         }
                         await firebase.auth().signOut()
                         userLogoutSuccess(dispatch, routeName)
-                        clearMainBusinessList(dispatch)
+                        resetApplicationToInitialState(dispatch)
                         NavigationServices.navigate(routeName)
                     } catch (err) {
                         alert(err)
@@ -281,8 +282,8 @@ export const userLogOut = () => async (dispatch) => {
     )
 }
 
-const clearMainBusinessList = (dispatch) => {
+const resetApplicationToInitialState = (dispatch) => {
     dispatch ({
-        type: CLEAR_MAIN_BUSINESS_LIST,
+        type: RESET_APPLICATION_TO_INITIAL_STATE,
     })
 }

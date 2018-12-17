@@ -4,7 +4,8 @@ import {
     LOADING_CLIENT_SERVICES_OFF,
     LOAD_AVAILABLE_BUSINESSES,
     ADD_BUSINESS_TO_MAIN_LIST,
-    CLEAR_MAIN_BUSINESS_LIST
+    CLEAR_MAIN_BUSINESS_LIST,
+    RESET_APPLICATION_TO_INITIAL_STATE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -27,8 +28,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, businesses: action.payload };
         case ADD_BUSINESS_TO_MAIN_LIST:
             return { ...state, businesses: [...state.businesses, action.payload] }
-        case CLEAR_MAIN_BUSINESS_LIST:
-            return { ...state, businesses: []}
+        case RESET_APPLICATION_TO_INITIAL_STATE:
+            return { ...state, ...INITIAL_STATE }
         default:
             return state;
     }

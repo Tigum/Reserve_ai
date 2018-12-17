@@ -11,7 +11,8 @@ import {
     AUTH_LOADING_OFF,
     LOAD_LOGGEDIN_USER,
     EMAIL_PASSWORD_INPUT_FOCUS,
-    USER_LOG_OUT_SUCCESS
+    USER_LOG_OUT_SUCCESS,
+    RESET_APPLICATION_TO_INITIAL_STATE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -61,6 +62,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, user: action.payload };
         case EMAIL_PASSWORD_INPUT_FOCUS:
             return { ...state, emailAndPasswordFocus: action.payload };
+        case RESET_APPLICATION_TO_INITIAL_STATE:
+            return { ...state, ...INITIAL_STATE }
         default:
             return state;
     }

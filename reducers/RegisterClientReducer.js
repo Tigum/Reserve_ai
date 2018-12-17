@@ -7,7 +7,8 @@ import {
     CLIENT_USER_REGISTERED_SUCCESS,
     CLEAR_FORM,
     REGISTER_CLIENT_LOADING_ON,
-    REGISTER_CLIENT_LOADING_OFF
+    REGISTER_CLIENT_LOADING_OFF,
+    RESET_APPLICATION_TO_INITIAL_STATE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -43,6 +44,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: action.payload };
         case CLEAR_FORM:
             return { ...state, ...INITIAL_STATE };
+        case RESET_APPLICATION_TO_INITIAL_STATE:
+            return { ...state, ...INITIAL_STATE }
         default:
             return state;
     }
