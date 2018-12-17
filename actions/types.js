@@ -112,3 +112,5 @@ export const SET_SERVICE_MODE = ''
 
 // SERVICES CLIENT
 export const LOAD_AVAILABLE_SERVICES = 'load_available_services'
+export const LOADING_CLIENT_SERVICES_ON = 'loading_client_services_on'
+export const LOADING_CLIENT_SERVICES_OFF = 'loading_client_services_off'

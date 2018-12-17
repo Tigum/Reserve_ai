@@ -1,70 +1,25 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { Card, Button } from 'react-native-elements'
+import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import SearchBarHeader from '../components/SearchBarHeader'
+import { loadAvailableServices } from '../actions'
+import ServicesListClient from '../components/ServiceListClient'
 
 
 class MainClientScreen extends Component {
 
+    componentWillMount() {
+        this.props.loadAvailableServices()
+    }
+
     render() {
         return (
-
             <View style={styles.mainView}>
-                <SearchBarHeader icon='search1'/>
+                <SearchBarHeader icon='search1' />
                 <ScrollView>
-                    <Card
-                        title='HELLO WORLD'
-                        image={require('../img/logo_main.png')}>
-                        <Text style={{ marginBottom: 10 }}>
-                            The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
-                        <Button
-                            icon={{ name: 'code' }}
-                            backgroundColor='#03A9F4'
-                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='VIEW NOW' />
-                    </Card>
-                    <Card
-                        title='HELLO WORLD'
-                        image={require('../img/logo_main.png')}>
-                        <Text style={{ marginBottom: 10 }}>
-                            The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
-                        <Button
-                            icon={{ name: 'code' }}
-                            backgroundColor='#03A9F4'
-                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='VIEW NOW' />
-                    </Card>
-                    <Card
-                        title='HELLO WORLD'
-                        image={require('../img/logo_main.png')}>
-                        <Text style={{ marginBottom: 10 }}>
-                            The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
-                        <Button
-                            icon={{ name: 'code' }}
-                            backgroundColor='#03A9F4'
-                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='VIEW NOW' />
-                    </Card>
-                    <Card
-                        title='HELLO WORLD'
-                        image={require('../img/logo_main.png')}>
-                        <Text style={{ marginBottom: 10 }}>
-                            The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
-                        <Button
-                            icon={{ name: 'code' }}
-                            backgroundColor='#03A9F4'
-                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                            title='VIEW NOW' />
-                    </Card>
+                    <ServicesListClient data={this.props.services} />
                 </ScrollView>
             </View>
-
         )
     }
 }
@@ -77,9 +32,10 @@ const styles = {
     },
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ servicesClient, auth }) => {
+    const { services } = servicesClient
     const { user } = auth
-    return { user }
+    return { services, user }
 }
 
-export default connect(mapStateToProps, {})(MainClientScreen);
+export default connect(mapStateToProps, { loadAvailableServices })(MainClientScreen);
