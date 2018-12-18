@@ -22,6 +22,8 @@ import {
     ADD_AREA_TO_ADMIN,
     REMOVE_AREA_TO_ADMIN,
     REDIRECT_EXISTING_USER,
+    REGISTERING_ON,
+    REGISTERING_OFF,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -270,5 +272,19 @@ export const loadUser = (user) => (dispatch) => {
             type: REDIRECT_EXISTING_USER,
             payload: 'mainClientScreen'
         })
+    }
+}
+
+export const registeringOn = () => {
+    return {
+        type: REGISTERING_ON,
+        payload: true
+    }
+}
+
+export const registeringOff = () => {
+    return {
+        type: REGISTERING_OFF,
+        payload: false
     }
 }

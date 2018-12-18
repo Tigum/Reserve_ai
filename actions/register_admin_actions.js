@@ -312,10 +312,12 @@ export const registerAdminUser = (
         await currentUser.updateProfile({ displayName: name })
         await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
         await firebase.auth().signInWithEmailAndPassword(email, password)
-        await adminUserRegisteredSuccess(dispatch, user)
-        // clearForm(dispatch)
-        registerAdminLoadingOff(dispatch)
-
+        firebase.database().ref(`/users/${user.uid}`).on('value', async snapshot => {
+            const userData = snapshot.val()
+            adminUserRegisteredSuccess(dispatch, userData)
+            NavigationService.navigate('picForm')
+            registerAdminLoadingOff(dispatch)
+        })
     } catch (err) {
         registerAdminLoadingOn(dispatch)
         console.log(err)

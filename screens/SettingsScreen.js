@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { userLogOut } from '../actions'
+import { userLogOut, registeringOff } from '../actions'
 import Header from '../components/Header'
 
 class SettingsScreen extends Component {
 
     userLogOut() {
+        this.props.registeringOff()
         this.props.userLogOut()
     }
 
@@ -25,4 +26,4 @@ const mapStateToProps = ({ auth }) => {
     return { routeName }
 }
 
-export default connect(mapStateToProps, { userLogOut })(SettingsScreen);
+export default connect(mapStateToProps, { userLogOut, registeringOff })(SettingsScreen);

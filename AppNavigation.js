@@ -7,7 +7,7 @@ import NavigationService from './actions/NavigationServices';
 import { connect } from 'react-redux'
 import { AntDesign } from '@expo/vector-icons';
 import { BOTTOM_NAV_BACKGROUND_COLOR, HEADER_BACKGROUND_COLOR } from './app_styles'
-import { loadUser, authLoadingOnExport, authLoadingOffExport } from './actions'
+import { loadUser, authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff } from './actions'
 
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -36,8 +36,13 @@ import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 
 class AppNavigation extends Component {
 
+  
+
     componentDidMount() {
-        this.loadExistingUser()
+        console.log('registering', this.props.registering)
+        if (!this.props.registering) {
+            // this.loadExistingUser()
+        }
     }
 
     loadExistingUser() {
@@ -53,13 +58,14 @@ class AppNavigation extends Component {
                         this.props.authLoadingOffExport()
                     })
                 })
-            }else{
+            } else {
+                this.props.registeringOn()
                 this.props.authLoadingOffExport()
             }
         })
     }
 
-
+ 
     render() {
 
         if (this.props.loading) {
@@ -334,8 +340,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-    const { token, userName, routeName, user, loading } = auth
-    return { token, userName, routeName, user, loading }
+    const { token, userName, routeName, user, loading, registering} = auth
+    return { token, userName, routeName, user, loading, registering }
 }
 
-export default connect(mapStateToProps, {loadUser, authLoadingOnExport, authLoadingOffExport})(AppNavigation);
+export default connect(mapStateToProps, {loadUser, authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff })(AppNavigation);

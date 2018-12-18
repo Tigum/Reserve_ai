@@ -20,6 +20,7 @@ import {
     saturdayUnselected,
     sundayUnselected,
     registerAdminUser,
+    registeringOff
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
@@ -109,7 +110,7 @@ class RegisterAdminDaysScreen extends Component {
             areasSelected
         }
         this.props.registerAdminUser(userInfo)
-        this.props.navigation.navigate('picForm')
+        // this.props.navigation.navigate('picForm')
     }
 
     mondayColor() {
@@ -400,4 +401,5 @@ export default connect(mapStateToProps, {
     saturdayUnselected,
     sundayUnselected,
     registerAdminUser,
+    registeringOff
 })(RegisterAdminDaysScreen);

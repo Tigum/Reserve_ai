@@ -18,6 +18,8 @@ export const USER_LOG_OUT_SUCCESS = 'user_log_out_success'
 export const ADD_AREA_TO_ADMIN = 'add_area_to_admin'
 export const REMOVE_AREA_TO_ADMIN = 'remove_area_to_admin'
 export const REDIRECT_EXISTING_USER = 'redirect_existing_user'
+export const REGISTERING_ON = 'registering_on'
+export const REGISTERING_OFF = 'registering_off'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 export const RESET_APPLICATION_TO_INITIAL_STATE = 'reset_application_to_initial_state'
