@@ -33,6 +33,7 @@ import {
     facebookLogin,
     checkIfUserAlreadyLoggedIn,
 } from './actions'
+import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 
 
 class AppNavigation extends Component {
@@ -59,6 +60,14 @@ class AppNavigation extends Component {
                 screen: createStackNavigator({
                     auth: {
                         screen: LoginScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    },
+                    adminTypeForm: {
+                        screen: RegisterAdminTypeScreen,
                         navigationOptions: () => ({
                             headerStyle: {
                                 display: 'none'
