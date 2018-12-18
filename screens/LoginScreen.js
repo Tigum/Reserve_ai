@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'firebase'
 import { View, Text, Image, Dimensions, KeyboardAvoidingView, Keyboard, Animated, Easing } from 'react-native';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
@@ -6,10 +7,10 @@ import {
     emailChanged,
     passwordChanged,
     loginUser,
-    facebookLogin,
     doFacebookLogin,
-    checkIfUserAlreadyLoggedIn,
-    emailAndPasswordInputFocus
+    emailAndPasswordInputFocus,
+    authLoadingOnExport,
+    authLoadingOffExport
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
@@ -20,6 +21,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class LoginScreen extends Component {
+    _isMounted = false;
+
     static navigationOptions = ({ navigation }) => {
         const { navigate } = navigation
         return {
@@ -28,7 +31,36 @@ class LoginScreen extends Component {
     }
 
     state = {
-        animatedValue: new Animated.Value(0)
+        animatedValue: new Animated.Value(0),
+        loading: false
+
+    }
+
+    async componentDidMount() {
+        this._isMounted = true;
+        await firebase.auth().onAuthStateChanged(async user => {
+            if (user) {
+                if (this._isMounted) {
+                    this.setState({ loading: true })
+                }
+                const uid = await user.uid
+                firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
+                    const userInfo = await snapshot.val()
+                    if (userInfo.role === 'admin') {
+                        this.props.navigation.navigate('mainAdminScreen')
+                    } else {
+                        this.props.navigation.navigate('mainClientScreen')
+                    }
+                })
+            }
+        })
+        if (this._isMounted) {
+            this.setState({ loading: false })
+        }
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -119,42 +151,40 @@ class LoginScreen extends Component {
                     buttonAction={this.onFacebookButtonPress.bind(this)}
                     buttonHeight={50}
                 />
-                
+
             </View>
         )
     }
 
     renderLinks() {
-        if (!this.props.loading) {
-            return (
-                <View style={styles.registerLinkView}>
+        return (
+            <View style={styles.registerLinkView}>
 
-                    <Button
-                        buttonText='Não tem uma conta? Cadastre-se'
-                        buttonBackgroundColor='white'
-                        buttonBorderColor='#3577e6'
-                        buttonBorderStyle='solid'
-                        buttonHeight={30}
-                        buttonTextColor='#3577e6'
-                        buttonFontSize={15}
-                        buttonMarginTop={0}
-                        buttonAction={this.onClientRegisterPress.bind(this)}
-                    />
-                    <Button
-                        buttonText='Cadastre-se como profissional!'
-                        buttonBackgroundColor='white'
-                        buttonBorderColor='#3577e6'
-                        buttonBorderStyle='solid'
-                        buttonHeight={30}
-                        buttonTextColor='#3577e6'
-                        buttonFontSize={15}
-                        buttonMarginTop={5}
-                        buttonAction={this.onAdminRegisterPress.bind(this)}
-                    />
+                <Button
+                    buttonText='Não tem uma conta? Cadastre-se'
+                    buttonBackgroundColor='white'
+                    buttonBorderColor='#3577e6'
+                    buttonBorderStyle='solid'
+                    buttonHeight={30}
+                    buttonTextColor='#3577e6'
+                    buttonFontSize={15}
+                    buttonMarginTop={0}
+                    buttonAction={this.onClientRegisterPress.bind(this)}
+                />
+                <Button
+                    buttonText='Cadastre-se como profissional!'
+                    buttonBackgroundColor='white'
+                    buttonBorderColor='#3577e6'
+                    buttonBorderStyle='solid'
+                    buttonHeight={30}
+                    buttonTextColor='#3577e6'
+                    buttonFontSize={15}
+                    buttonMarginTop={5}
+                    buttonAction={this.onAdminRegisterPress.bind(this)}
+                />
 
-                </View>
-            )
-        }
+            </View>
+        )
     }
 
     renderError() {
@@ -178,42 +208,40 @@ class LoginScreen extends Component {
     }
 
     onRenderLogo() {
-        if (!this.props.loading) {
-            return (
-                <View style={styles.logoView}>
-                    <Animated.Image
-                        style={[styles.logo, {
-                            transform: [
-                                {
-                                    translateY: this.state.animatedValue.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [0, -25]
-                                    })
-                                },
-                                {
-                                    scaleX: this.state.animatedValue.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [1, 0.7]
-                                    })
-                                },
-                                {
-                                    scaleY: this.state.animatedValue.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [1, 0.7]
-                                    })
-                                }
-                            ]
-                        }]}
-                        source={require('../img/logo.png')}
-                    />
-                </View>
-            )
-        }
+        return (
+            <View style={styles.logoView}>
+                <Animated.Image
+                    style={[styles.logo, {
+                        transform: [
+                            {
+                                translateY: this.state.animatedValue.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [0, -25]
+                                })
+                            },
+                            {
+                                scaleX: this.state.animatedValue.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [1, 0.7]
+                                })
+                            },
+                            {
+                                scaleY: this.state.animatedValue.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [1, 0.7]
+                                })
+                            }
+                        ]
+                    }]}
+                    source={require('../img/logo.png')}
+                />
+            </View>
+        )
     }
 
     render() {
         console.log('PROPS', this.props)
-        if (this.props.loading) {
+        if (this.state.loading) {
             return <Spinner fontSize={11} text='CARREGANDO...' />
         }
 
@@ -294,8 +322,8 @@ export default connect(mapStateToProps, {
     emailChanged,
     passwordChanged,
     loginUser,
-    facebookLogin,
     doFacebookLogin,
-    checkIfUserAlreadyLoggedIn,
-    emailAndPasswordInputFocus
+    emailAndPasswordInputFocus,
+    authLoadingOnExport,
+    authLoadingOffExport
 })(LoginScreen);

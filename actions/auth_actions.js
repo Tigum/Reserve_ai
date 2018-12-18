@@ -92,38 +92,20 @@ export const loginUser = ({ email, password }) => {
 export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
     try {
         authLoadingOn(dispatch)
-        const token = await AsyncStorage.getItem('fb_token_reserve');
-        if (token) return
         await firebase.auth().onAuthStateChanged(async user => {
+            console.log('currentUser', user)
             if (user) {
-                const { currentUser } = await firebase.auth()
-                await firebase.database().ref(`/users/${currentUser.uid}`)
-                    .on('value', async snapshot => {
-                        const user = await snapshot.val()
-                        try {
-                            loginUserSuccess(dispatch, user)
-                            if (user.imageUrl && user.imageUrl.length === 0) {
-                                NavigationServices.navigate('picForm', {})
-                                // authLoadingOff(dispatch)
-                            } else {
-                                if (user.role === 'admin') {
-                                    NavigationServices.navigate('mainAdminScreen', {})
-                                    // authLoadingOff(dispatch)
-                                } else {
-                                    NavigationServices.navigate('mainClientScreen', {})
-                                    // authLoadingOff(dispatch)
-                                }
-                            }
-                        } catch (err) {
-                            console.log(err)
-                        }
-                    })
-            } else {
-                authLoadingOff(dispatch)
-                NavigationServices.navigate('auth', {})
+                const uid = await user.uid
+                firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
+                    const userInfo = await snapshot.val()
+                    if (userInfo.role === 'admin') {
+                        NavigationServices.navigate('mainAdminScreen')
+                    } else {
+                        NavigationServices.navigate('mainClientScreen')
+                    }
+                })
             }
         })
-
     } catch (err) {
         authLoadingOff(dispatch)
         loginUserFail(dispatch, null)
@@ -188,13 +170,13 @@ export const doFacebookLogin = () => async (dispatch) => {
             const name = user.displayName
             firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         })
-        // NavigationServices.navigate('mainClientScreen')
         authLoadingOff(dispatch)
     } catch (err) {
         alert(err+'oi')
         authLoadingOff(dispatch)
+        return
     }
-
+    NavigationServices.navigate('mainClientScreen', {})
 }
 
 const facebookLoginSuccess = (dispatch, token, userName, routeName, user) => {
@@ -290,4 +272,18 @@ const resetApplicationToInitialState = (dispatch) => {
     dispatch({
         type: RESET_APPLICATION_TO_INITIAL_STATE,
     })
+}
+
+export const authLoadingOnExport = () => {
+    return{
+        type: AUTH_LOADING_ON,
+        payload: true
+    }
+}
+
+export const authLoadingOffExport = () => {
+    return{
+        type: AUTH_LOADING_ON,
+        payload: true
+    }
 }

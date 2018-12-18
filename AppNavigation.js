@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
+import firebase from 'firebase';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import NavigationService from './actions/NavigationServices';
@@ -37,16 +38,6 @@ import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 
 
 class AppNavigation extends Component {
-
-    componentWillMount() {
-        this.props.facebookLogin()
-        this.props.checkIfUserAlreadyLoggedIn()
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.user !== nextProps.user) {
-        }
-    }
 
     render() {
 
