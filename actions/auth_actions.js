@@ -185,10 +185,7 @@ export const doFacebookLogin = () => async (dispatch) => {
         const user = result.user;
         const name = user.displayName
         const routeName = 'mainClientScreen'
-        firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' }).then(function () {
-            facebookLoginSuccess(dispatch, token, name, routeName, user)
-
-        })
+        firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
     })
 }
 
