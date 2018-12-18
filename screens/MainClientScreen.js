@@ -9,29 +9,23 @@ import { Spinner } from '../components/Spinner'
 
 
 class MainClientScreen extends Component {
+
     state = {
-        isMounted: false
+        userLoaded: false
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.props.authLoadingOffExport()
     }
 
     componentDidMount() {
-        this.setState({ isMounted: true }, async () => {
-            const { currentUser } = await firebase.auth()
-            if (currentUser) {
-                this.props.loadAvailableBusinesses()
-            }
-        })
-    }
+        this.props.loadAvailableBusinesses()
 
-    componentWillUnmount() {
-        this.setState({ isMounted: false })
     }
 
     render() {
-        if (this.props.loading || !this.state.isMounted) {
+        console.log('clientProps', this.props)
+        if (this.props.loading) {
             return <Spinner fontSize={11} text='PROCURANDO SERVIÇOS DISPONÍVEIS...' />
         }
 

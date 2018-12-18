@@ -24,6 +24,7 @@ import {
     REDIRECT_EXISTING_USER,
     REGISTERING_ON,
     REGISTERING_OFF,
+    LOAD_REDIRECTED_USER,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -45,23 +46,6 @@ export const passwordChanged = (text) => {
         type: PASSWORD_CHANGED,
         payload: text
     }
-}
-
-export const loadLoggedInUser = () => async (dispatch) => {
-    const { currentUser } = await firebase.auth()
-    firebase.database().ref(`/users/${currentUser.uid}`)
-        .on('value', async snapshot => {
-            const user = await snapshot.val()
-            try {
-                await dispatch({
-                    type: LOAD_LOGGEDIN_USER,
-                    payload: user
-                })
-            } catch (err) {
-                alert(err)
-            }
-
-        })
 }
 
 export const loginUser = ({ email, password }) => {
@@ -256,23 +240,11 @@ export const authLoadingOffExport = () => {
     }
 }
 
-export const loadUser = (user) => (dispatch) => {
+const loadedRedictedUserSuccess = (dispatch, user) => {
     dispatch({
-        type: LOAD_LOGGEDIN_USER,
+        type: LOAD_REDIRECTED_USER,
         payload: user
     })
-
-    if (user.role === 'admin') {
-        dispatch({
-            type: REDIRECT_EXISTING_USER,
-            payload: 'mainAdminScreen'
-        })
-    } else {
-        dispatch({
-            type: REDIRECT_EXISTING_USER,
-            payload: 'mainClientScreen'
-        })
-    }
 }
 
 export const registeringOn = () => {
@@ -287,4 +259,21 @@ export const registeringOff = () => {
         type: REGISTERING_OFF,
         payload: false
     }
+}
+
+export const loadLoggedInUser = () => async (dispatch) => {
+    const { currentUser } = await firebase.auth()
+    firebase.database().ref(`/users/${currentUser.uid}`)
+        .on('value', async snapshot => {
+            const user = await snapshot.val()
+            try {
+                await dispatch({
+                    type: LOAD_LOGGEDIN_USER,
+                    payload: user
+                })
+            } catch (err) {
+                alert(err)
+            }
+
+        })
 }

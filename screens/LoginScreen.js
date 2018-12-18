@@ -33,15 +33,6 @@ class LoginScreen extends Component {
         loading: false
     }
 
-    componentWillMount(){
-        if(this.props.routeName === 'mainAdminScreen'){
-            this.props.navigation.navigate('mainAdminScreen')
-        }
-        if(this.props.routeName === 'mainClientScreen'){
-            this.props.navigation.navigate('mainClientScreen')
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         if (this.props.emailAndPasswordFocus !== nextProps.emailAndPasswordFocus) {
             if (nextProps.emailAndPasswordFocus) {
@@ -219,18 +210,19 @@ class LoginScreen extends Component {
     }
 
     render() {
-        if (!this.props.loading) {
-            return (
-                <KeyboardAvoidingView style={styles.mainView} behavior="padding">
-                    {this.onRenderLogo()}
-                    {/* <KeyboardAvoidingView style={{justifyContent: 'center', flex: 1}}> */}
-                    {/* {this.renderError()} */}
-                    {this.renderForm()}
-                    {/* </KeyboardAvoidingView> */}
-                    {this.renderLinks()}
-                </KeyboardAvoidingView>
-            )
+        if (this.props.loading) {
+            return <Spinner text='CARREGANDO...' fontSize={11}/>
         }
+        return (
+            <KeyboardAvoidingView style={styles.mainView} behavior="padding">
+                {this.onRenderLogo()}
+                {/* <KeyboardAvoidingView style={{justifyContent: 'center', flex: 1}}> */}
+                {/* {this.renderError()} */}
+                {this.renderForm()}
+                {/* </KeyboardAvoidingView> */}
+                {this.renderLinks()}
+            </KeyboardAvoidingView>
+        )
     }
 }
 

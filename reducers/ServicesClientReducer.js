@@ -16,7 +16,7 @@ const INITIAL_STATE = {
 }
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action)
+    console.log('TESTE2',action)
     switch (action.type) {
         case LOADING_CLIENT_SERVICES_ON:
             return { ...state, loading: action.payload };

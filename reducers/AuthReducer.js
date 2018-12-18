@@ -16,7 +16,8 @@ import {
     REDIRECT_EXISTING_USER,
     REGISTERING_ON,
     REGISTERING_OFF,
-    ADMIN_USER_REGISTERED_SUCCESS
+    ADMIN_USER_REGISTERED_SUCCESS,
+    LOAD_REDIRECTED_USER
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -33,7 +34,7 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-    // console.log(action)
+    console.log('teste', action)
     switch (action.type) {
         case EMAIL_CHANGED:
             return { ...state, email: action.payload };
@@ -75,6 +76,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, registering: action.payload };
         case REGISTERING_OFF:
             return { ...state, registering: action.payload };
+        case LOAD_REDIRECTED_USER:
+            return { ...state, user: action.payload };
         case RESET_APPLICATION_TO_INITIAL_STATE:
             return { ...state, ...INITIAL_STATE }
         default:

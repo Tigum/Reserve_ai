@@ -7,7 +7,7 @@ import NavigationService from './actions/NavigationServices';
 import { connect } from 'react-redux'
 import { AntDesign } from '@expo/vector-icons';
 import { BOTTOM_NAV_BACKGROUND_COLOR, HEADER_BACKGROUND_COLOR } from './app_styles'
-import { loadUser, authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff } from './actions'
+import { authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff } from './actions'
 
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -32,58 +32,25 @@ import AddServicesScreen from './screens/AddServicesScreen'
 import AddEmployeesScreen from './screens/AddEmployeesScreen'
 import { Spinner } from './components/Spinner'
 import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
+import RedirectingScreen from './screens/RedirectingScreen'
 
 
 class AppNavigation extends Component {
-
-  
-
-    componentDidMount() {
-        console.log('registering', this.props.registering)
-        if (!this.props.registering) {
-            // this.loadExistingUser()
-        }
-    }
-
-    loadExistingUser() {
-        this.props.authLoadingOnExport()
-        firebase.auth().onAuthStateChanged(async user => {
-            const userAuth = await user
-            if (userAuth) {
-                this.setState({ loading: true }, async () => {
-                    const uid = await user.uid
-                    firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
-                        const userInfo = await snapshot.val()
-                        this.props.loadUser(userInfo)
-                        this.props.authLoadingOffExport()
-                    })
-                })
-            } else {
-                this.props.registeringOn()
-                this.props.authLoadingOffExport()
-            }
-        })
-    }
-
  
     render() {
-
-        if (this.props.loading) {
-            return <Spinner fontSize={11} text='CARREGANDO...' />
-        }
 
         const authStack = createStackNavigator({
             auth: {
 
                 screen: createStackNavigator({
-                    // picForm: {
-                    //     screen: RegisterAdminPicScreen,
-                    //     navigationOptions: () => ({
-                    //         headerStyle: {
-                    //             display: 'none'
-                    //         }
-                    //     })
-                    // },
+                     redirect: {
+                        screen: RedirectingScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    },
                     auth: {
                         screen: LoginScreen,
                         navigationOptions: () => ({
@@ -302,7 +269,10 @@ class AppNavigation extends Component {
                     screen: authStack
                 },
                 Main: {
-                    screen: this.props.user && this.props.user.role === 'admin' ? MainNavigatorAdmin : MainNavigatorClient
+                    screen: MainNavigatorAdmin
+                },
+                Client: {
+                    screen:MainNavigatorClient
                 },
                 addService: {
                     screen: AddServicesScreen
@@ -344,4 +314,4 @@ const mapStateToProps = ({ auth }) => {
     return { token, userName, routeName, user, loading, registering }
 }
 
-export default connect(mapStateToProps, {loadUser, authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff })(AppNavigation);
+export default connect(mapStateToProps, { authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff })(AppNavigation);
