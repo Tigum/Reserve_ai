@@ -23,8 +23,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 class LoginScreen extends Component {
     _isMounted = false;
 
-    static navigationOptions = ({ navigation }) => {
-        const { navigate } = navigation
+    static navigationOptions = () => {
         return {
             tabBarVisible: false
         }
@@ -33,33 +32,36 @@ class LoginScreen extends Component {
     state = {
         animatedValue: new Animated.Value(0),
         loading: false
-
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this._isMounted = true;
-        await firebase.auth().onAuthStateChanged(async user => {
-            if (user) {
-                if (this._isMounted) {
-                    this.setState({ loading: true })
-                }
-                const uid = await user.uid
-                firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
-                    const userInfo = await snapshot.val()
-                    if (userInfo.role === 'admin') {
-                        this.props.navigation.navigate('mainAdminScreen')
-                    } else {
-                        this.props.navigation.navigate('mainClientScreen')
+        this.checkIfUserAlreadyLoggedIn()
+    }
+
+    checkIfUserAlreadyLoggedIn() {
+        if(this._isMounted){
+            firebase.auth().onAuthStateChanged(async user => {
+                if (await user) {
+                    if (this._isMounted) {
+                        this.setState({ loading: true })
                     }
-                })
-            }
-        })
-        if (this._isMounted) {
-            this.setState({ loading: false })
+                    const uid = await user.uid
+                    firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
+                        const userInfo = await snapshot.val()
+                        if (userInfo.role === 'admin') {
+                            this.props.navigation.navigate('mainAdminScreen')
+                        } else {
+                            this.props.navigation.navigate('mainClientScreen')
+                        }
+                    })
+                }
+            })
         }
     }
 
     componentWillUnmount() {
+        console.log('LoginScreen')
         this._isMounted = false;
     }
 

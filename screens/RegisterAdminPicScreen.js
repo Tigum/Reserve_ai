@@ -11,7 +11,7 @@ import {
     ifNoPicWasUpdated
 } from '../actions'
 import Button from '../components/Button'
-import { bucket, region, accessKey, secretKey, successActionStatus} from '../s3'
+import { bucket, region, accessKey, secretKey, successActionStatus } from '../s3'
 import { Spinner } from '../components/Spinner'
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { ImagePicker, Permissions } from 'expo'
@@ -25,79 +25,77 @@ const S3Options = {
 }
 
 class RegisterAdminPicScreen extends Component {
+    _isMounted = false;
 
-    onRegisterButtonPress() {
-        const { currentUser } = firebase.auth()
-        if(currentUser){
-            this.props.ifNoPicWasUpdated(currentUser.uid)
-        } else {
-            alert('Você não está logado. Faça o login e tente novamente')
+    componentDidMount() {
+        this._isMounted = true
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+
+    async onRegisterButtonPress() {
+        if (this._isMounted) {
+            const { currentUser } = await firebase.auth()
+            if (currentUser) {
+                this.props.ifNoPicWasUpdated(currentUser.uid)
+            } else {
+                alert('Você não está logado. Faça o login e tente novamente')
+            }
         }
     }
 
     onOpenActionSheet = async () => {
-        let options = ['Camera', 'Biblioteca', 'Cancel'];
-        // let destructiveButtonIndex = 0;
-        let cancelButtonIndex = 2;
+        if (this._isMounted) {
+            let options = ['Camera', 'Biblioteca', 'Cancel'];
+            // let destructiveButtonIndex = 0;
+            let cancelButtonIndex = 2;
 
-        this.props.showActionSheetWithOptions({
-            options,
-            cancelButtonIndex,
-            // destructiveButtonIndex,
-        },
-            async (buttonIndex) => {
+            this.props.showActionSheetWithOptions({
+                options,
+                cancelButtonIndex,
+                // destructiveButtonIndex,
+            },
+                async (buttonIndex) => {
 
-                if (buttonIndex === 0) {
-                    const { status } = await Permissions.getAsync(Permissions.CAMERA);
-                    if (status === 'granted') {
-                        let result = await ImagePicker.launchCameraAsync({
-                            allowsEditing: true,
-                            aspect: [4, 4],
-                        });
-                        if (!result.cancelled) {
-                            const uid = await this.props.user.uid
-                            const uri = result.uri
-                            const successRouteName = 'mainAdminScreen'
-                            await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
-                        }
-                    } else {
-                        await Permissions.askAsync(Permissions.CAMERA)
+                    if (buttonIndex === 0) {
                         const { status } = await Permissions.getAsync(Permissions.CAMERA);
                         if (status === 'granted') {
                             let result = await ImagePicker.launchCameraAsync({
                                 allowsEditing: true,
                                 aspect: [4, 4],
                             });
-                            const uid = await this.props.user.uid
                             if (!result.cancelled) {
+                                const uid = await this.props.user.uid
                                 const uri = result.uri
                                 const successRouteName = 'mainAdminScreen'
                                 await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
                             }
                         } else {
-                            alert('Permissão para acessar camera negada')
-                            throw new Error('Permissão para acessar camera negada');
+                            await Permissions.askAsync(Permissions.CAMERA)
+                            const { status } = await Permissions.getAsync(Permissions.CAMERA);
+                            if (status === 'granted') {
+                                let result = await ImagePicker.launchCameraAsync({
+                                    allowsEditing: true,
+                                    aspect: [4, 4],
+                                });
+                                const uid = await this.props.user.uid
+                                if (!result.cancelled) {
+                                    const uri = result.uri
+                                    const successRouteName = 'mainAdminScreen'
+                                    await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                }
+                            } else {
+                                alert('Permissão para acessar camera negada')
+                                throw new Error('Permissão para acessar camera negada');
+                            }
                         }
                     }
-                }
 
-                if (buttonIndex === 1) {
-                    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
-
-                    if (status === 'granted') {
-                        let result = await ImagePicker.launchImageLibraryAsync({
-                            allowsEditing: true,
-                            aspect: [4, 4],
-                        });
-                        if (!result.cancelled) {
-                            const uid = await this.props.user.uid
-                            const uri = result.uri
-                            const successRouteName = 'mainAdminScreen'
-                            await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
-                        }
-                    } else {
-                        await Permissions.askAsync(Permissions.CAMERA_ROLL)
+                    if (buttonIndex === 1) {
                         const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+
                         if (status === 'granted') {
                             let result = await ImagePicker.launchImageLibraryAsync({
                                 allowsEditing: true,
@@ -110,12 +108,27 @@ class RegisterAdminPicScreen extends Component {
                                 await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
                             }
                         } else {
-                            alert('Permissão para acessar a biblioteca negada')
-                            throw new Error('Permissão para acessar a biblioteca negada');
+                            await Permissions.askAsync(Permissions.CAMERA_ROLL)
+                            const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+                            if (status === 'granted') {
+                                let result = await ImagePicker.launchImageLibraryAsync({
+                                    allowsEditing: true,
+                                    aspect: [4, 4],
+                                });
+                                if (!result.cancelled) {
+                                    const uid = await this.props.user.uid
+                                    const uri = result.uri
+                                    const successRouteName = 'mainAdminScreen'
+                                    await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                }
+                            } else {
+                                alert('Permissão para acessar a biblioteca negada')
+                                throw new Error('Permissão para acessar a biblioteca negada');
+                            }
                         }
                     }
-                }
-            });
+                });
+        }
     }
 
 

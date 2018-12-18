@@ -30,6 +30,15 @@ const BUTTONS_COLOR = '#9f9f9f'
 const BUTTONS_COLOR_SELECTED = '#3577e6'
 
 class RegisterAdminDaysScreen extends Component {
+    _isMounted = false;
+
+    componentDidMount() {
+        this._isMounted = true
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
+    }
 
     state = {
         monday: false,
@@ -224,7 +233,8 @@ class RegisterAdminDaysScreen extends Component {
 
 
     renderContent() {
-        if (this.props.loading) {
+        console.log('DAY', this._isMounted)
+        if (this.props.loading || !this._isMounted) {
             return <Spinner />
         }
         return (

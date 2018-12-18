@@ -39,9 +39,22 @@ import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 
 class AppNavigation extends Component {
 
+    state = {
+        isMounted: false
+    }
+
+    componentDidMount(){
+        this.setState({isMounted: true})
+    }
+    
+    componentWillUnmount(){
+        this.setState({isMounted: false})
+    }
+
+
     render() {
 
-        if (this.props.loading) {
+        if (this.props.loading || !this.state.isMounted) {
             return <Spinner fontSize={11} text='CARREGANDO...' />
         }
 
