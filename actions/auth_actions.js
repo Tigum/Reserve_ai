@@ -72,10 +72,10 @@ export const loginUser = ({ email, password }) => {
                             await loginUserSuccess(dispatch, user)
                             if (user.role === 'admin') {
                                 NavigationServices.navigate('mainAdminScreen', {});
-                                authLoadingOff(dispatch)
+                                // authLoadingOff(dispatch)
                             } else {
                                 NavigationServices.navigate('mainClientScreen', {});
-                                authLoadingOff(dispatch)
+                                // authLoadingOff(dispatch)
                             }
                         } catch (err) {
                             alert(err)
@@ -104,14 +104,14 @@ export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
                             loginUserSuccess(dispatch, user)
                             if (user.imageUrl && user.imageUrl.length === 0) {
                                 NavigationServices.navigate('picForm', {})
-                                authLoadingOff(dispatch)
+                                // authLoadingOff(dispatch)
                             } else {
                                 if (user.role === 'admin') {
                                     NavigationServices.navigate('mainAdminScreen', {})
-                                    authLoadingOff(dispatch)
+                                    // authLoadingOff(dispatch)
                                 } else {
                                     NavigationServices.navigate('mainClientScreen', {})
-                                    authLoadingOff(dispatch)
+                                    // authLoadingOff(dispatch)
                                 }
                             }
                         } catch (err) {
@@ -147,10 +147,11 @@ export const facebookLogin = () => async (dispatch) => {
                         const routeName = 'mainClientScreen'
                         user['uid'] = currentUser.uid
                         await facebookLoginSuccess(dispatch, token, name, routeName, user)
-                        authLoadingOff(dispatch)
+                        // authLoadingOff(dispatch)
                         NavigationServices.navigate(routeName)
                     } catch (err) {
-                        console.log(err)
+                        alert(err)
+                        // authLoadingOff(dispatch)
                     }
                 })
         }).catch((err) => {
@@ -176,17 +177,24 @@ export const doFacebookLogin = () => async (dispatch) => {
     });
     authLoadingOn(dispatch)
     if (type === 'cancel') {
-        return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: token })
+        return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: '' })
     }
-    await AsyncStorage.setItem('fb_token_reserve', token);
-    const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
-    firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
-        const token = result.credential.accessToken;
-        const user = result.user;
-        const name = user.displayName
-        const routeName = 'mainClientScreen'
-        firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
-    })
+
+    try {
+        await AsyncStorage.setItem('fb_token_reserve', token);
+        const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
+        await firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
+            const user = result.user;
+            const name = user.displayName
+            firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
+        })
+        // NavigationServices.navigate('mainClientScreen')
+        authLoadingOff(dispatch)
+    } catch (err) {
+        alert(err+'oi')
+        authLoadingOff(dispatch)
+    }
+
 }
 
 const facebookLoginSuccess = (dispatch, token, userName, routeName, user) => {

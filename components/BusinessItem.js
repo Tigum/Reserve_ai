@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
 import { iOSUIKit, sanFranciscoWeights } from 'react-native-typography'
 
 class BusinessItem extends Component {
+    state = {
+        imageLoading: true
+    }
+
+    endLoadingImage() {
+        // console.log('OII', e)
+        this.setState({imageLoading: false})
+    }
+
+    loadImage() {
+        return <Image style={styles.image} 
+                source={this.state.imageLoading ? require('../img/loading.gif') : { uri: this.props.business.imageUrl }} 
+                onLoadEnd={this.endLoadingImage.bind(this)}
+            />
+    }
     render() {
         const { business } = this.props
         return (
             <View style={styles.mainView}>
                 <View>
-                    <Image style={styles.image} source={{ uri: business.imageUrl }} />
+                    {this.loadImage()}
+                    
                 </View>
                 <View style={styles.textView}>
                     <Text style={[iOSUIKit.largeTitleEmphasized, styles.title]}>{business.companyName}</Text>

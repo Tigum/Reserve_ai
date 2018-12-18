@@ -212,7 +212,7 @@ class LoginScreen extends Component {
     }
 
     render() {
-        console.log('PROPS', this.props.businesses)
+        console.log('PROPS', this.props)
         if (this.props.loading) {
             return <Spinner fontSize={11} text='CARREGANDO...' />
         }
