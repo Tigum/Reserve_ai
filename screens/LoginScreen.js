@@ -31,14 +31,7 @@ class LoginScreen extends Component {
         animatedValue: new Animated.Value(0)
     }
 
-    // componentWillMount() {
-    //     this.props.facebookLogin()
-    //     this.props.checkIfUserAlreadyLoggedIn()
-    // }
-
     componentWillReceiveProps(nextProps) {
-        
-
         if (this.props.emailAndPasswordFocus !== nextProps.emailAndPasswordFocus) {
             if (nextProps.emailAndPasswordFocus) {
                 Animated.timing(this.state.animatedValue, {
@@ -54,7 +47,6 @@ class LoginScreen extends Component {
                 }).start()
             }
         }
-
     }
 
     onEmailChange(text) {
@@ -220,6 +212,7 @@ class LoginScreen extends Component {
     }
 
     render() {
+        console.log('PROPS', this.props.businesses)
         if (this.props.loading) {
             return <Spinner fontSize={11} text='CARREGANDO...' />
         }
@@ -282,8 +275,9 @@ const styles = {
     }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, servicesClient }) => {
     const { email, password, error, loading, routeName, user, emailAndPasswordFocus } = auth;
+    const { businesses } = servicesClient
     return {
         email,
         password,
@@ -291,7 +285,8 @@ const mapStateToProps = ({ auth }) => {
         loading,
         routeName,
         user,
-        emailAndPasswordFocus
+        emailAndPasswordFocus,
+        businesses
     }
 }
 

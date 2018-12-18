@@ -180,16 +180,15 @@ export const doFacebookLogin = () => async (dispatch) => {
     }
     await AsyncStorage.setItem('fb_token_reserve', token);
     const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
-    firebase.auth().signInAndRetrieveDataWithCredential(provider).then(async function (result) {
+    firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
         const token = result.credential.accessToken;
         const user = result.user;
         const name = user.displayName
         const routeName = 'mainClientScreen'
-        await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
-        facebookLoginSuccess(dispatch, token, name, routeName, user)
-        NavigationServices.navigate(routeName)
-    }).catch((err) => {
-        console.log(err)
+        firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' }).then(function () {
+            facebookLoginSuccess(dispatch, token, name, routeName, user)
+
+        })
     })
 }
 
@@ -283,7 +282,7 @@ export const userLogOut = () => async (dispatch) => {
 }
 
 const resetApplicationToInitialState = (dispatch) => {
-    dispatch ({
+    dispatch({
         type: RESET_APPLICATION_TO_INITIAL_STATE,
     })
 }

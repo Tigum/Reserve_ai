@@ -14,7 +14,6 @@ class MainClientScreen extends Component {
     }
 
     render() {
-        console.log('businesses', this.props.businesses)
         if (this.props.loading) {
             return <Spinner fontSize={11} text='PROCURANDO SERVIÇOS DISPONÍVEIS...' />
         }

@@ -29,7 +29,7 @@ export default (state = INITIAL_STATE, action) => {
         case ADD_BUSINESS_TO_MAIN_LIST:
             return { ...state, businesses: [...state.businesses, action.payload] }
         case RESET_APPLICATION_TO_INITIAL_STATE:
-            return { ...state, ...INITIAL_STATE }
+            return { ...state, ...INITIAL_STATE, businesses:[] }
         default:
             return state;
     }
