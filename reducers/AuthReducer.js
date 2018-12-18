@@ -12,7 +12,8 @@ import {
     LOAD_LOGGEDIN_USER,
     EMAIL_PASSWORD_INPUT_FOCUS,
     USER_LOG_OUT_SUCCESS,
-    RESET_APPLICATION_TO_INITIAL_STATE
+    RESET_APPLICATION_TO_INITIAL_STATE,
+    REDIRECT_EXISTING_USER
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -24,7 +25,7 @@ const INITIAL_STATE = {
     token: '',
     userName: '',
     routeName: '',
-    emailAndPasswordFocus: false
+    emailAndPasswordFocus: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -62,6 +63,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, user: action.payload };
         case EMAIL_PASSWORD_INPUT_FOCUS:
             return { ...state, emailAndPasswordFocus: action.payload };
+        case REDIRECT_EXISTING_USER:
+            return { ...state, routeName: action.payload };
         case RESET_APPLICATION_TO_INITIAL_STATE:
             return { ...state, ...INITIAL_STATE }
         default:

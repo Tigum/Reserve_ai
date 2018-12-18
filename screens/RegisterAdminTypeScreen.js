@@ -14,6 +14,9 @@ import List from '../components/List'
 class RegisterAdminTypeScreen extends Component {
 
     onRegisterButtonPress() {
+        if(this.props.areasSelected.length === 0) {
+            return alert('É necessário escolher ao menos uma área de atuação')
+        }
         this.props.navigation.navigate('adminForm')
     }
 
@@ -56,10 +59,10 @@ const styles = {
 
 const mapStateToProps = ({ registerAdmin }) => {
     const {
-        
+        areasSelected
     } = registerAdmin;
     return {
-        
+        areasSelected
     }
 }
 

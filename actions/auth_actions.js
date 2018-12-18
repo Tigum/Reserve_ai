@@ -18,7 +18,10 @@ import {
     EMAIL_PASSWORD_INPUT_FOCUS,
     USER_LOG_OUT_SUCCESS,
     CLEAR_MAIN_BUSINESS_LIST,
-    RESET_APPLICATION_TO_INITIAL_STATE
+    RESET_APPLICATION_TO_INITIAL_STATE,
+    ADD_AREA_TO_ADMIN,
+    REMOVE_AREA_TO_ADMIN,
+    REDIRECT_EXISTING_USER,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -89,59 +92,6 @@ export const loginUser = ({ email, password }) => {
     }
 }
 
-export const checkIfUserAlreadyLoggedIn = () => async (dispatch) => {
-    try {
-        authLoadingOn(dispatch)
-        await firebase.auth().onAuthStateChanged(async user => {
-            console.log('currentUser', user)
-            if (user) {
-                const uid = await user.uid
-                firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
-                    const userInfo = await snapshot.val()
-                    if (userInfo.role === 'admin') {
-                        NavigationServices.navigate('mainAdminScreen')
-                    } else {
-                        NavigationServices.navigate('mainClientScreen')
-                    }
-                })
-            }
-        })
-    } catch (err) {
-        authLoadingOff(dispatch)
-        loginUserFail(dispatch, null)
-        alert(err)
-    }
-}
-
-export const facebookLogin = () => async (dispatch) => {
-    const token = await AsyncStorage.getItem('fb_token_reserve');
-    if (token) {
-        authLoadingOn(dispatch)
-        const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
-        firebase.auth().signInAndRetrieveDataWithCredential(provider).then(async function (result) {
-            const token = result.credential.accessToken;
-            const { currentUser } = firebase.auth();
-            await firebase.database().ref(`/users/${currentUser.uid}`)
-                .on('value', async snapshot => {
-                    let user = await snapshot.val()
-                    try {
-                        const name = currentUser.displayName
-                        const routeName = 'mainClientScreen'
-                        user['uid'] = currentUser.uid
-                        await facebookLoginSuccess(dispatch, token, name, routeName, user)
-                        // authLoadingOff(dispatch)
-                        NavigationServices.navigate(routeName)
-                    } catch (err) {
-                        alert(err)
-                        // authLoadingOff(dispatch)
-                    }
-                })
-        }).catch((err) => {
-            console.log(err)
-        })
-    }
-};
-
 export const facebookLogout = () => async (dispatch) => {
     const token = await AsyncStorage.getItem('fb_token_reserve');
     if (token) {
@@ -152,37 +102,53 @@ export const facebookLogout = () => async (dispatch) => {
     }
 };
 
-export const doFacebookLogin = () => async (dispatch) => {
-    let { type, token } = await Facebook.logInWithReadPermissionsAsync('361785537896831', {
-        permissions: ['public_profile'],
-        behavior: 'web'
-    });
-    authLoadingOn(dispatch)
-    if (type === 'cancel') {
-        return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: '' })
-    }
 
+export const doFacebookLogin = () => {
+    return (dispatch) => {
+        authLoadingOn(dispatch)
+        Facebook.logInWithReadPermissionsAsync('361785537896831', {
+            permissions: ['public_profile'],
+            behavior: 'web'
+        }).then((result) => {
+            console.log('result', result)
+            if (result.type === 'cancel') {
+                return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: '' })
+            }
+            facebookLoginSuccess(dispatch, result.token)
+        }).catch((err) => {
+            authLoadingOff(dispatch)
+            alert('Facebook authentication failed' + ' - ' + err)
+        }
+        );
+    }
+}   
+
+const facebookLoginSuccess = async (dispatch, token) => {
+    if (!token) {
+        authLoadingOff(dispatch)
+        return alert('Facebook authentication failed')
+    }
     try {
         await AsyncStorage.setItem('fb_token_reserve', token);
         const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
         await firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
+            console.log('result', result)
             const user = result.user;
             const name = user.displayName
             firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         })
-        authLoadingOff(dispatch)
     } catch (err) {
-        alert(err+'oi')
-        authLoadingOff(dispatch)
-        return
+        alert(err)
     }
-    NavigationServices.navigate('mainClientScreen', {})
-}
-
-const facebookLoginSuccess = (dispatch, token, userName, routeName, user) => {
-    dispatch({
-        type: FACEBOOK_LOGIN_SUCCESS,
-        payload: { token, userName, routeName, user }
+    const { currentUser } = await firebase.auth()
+    firebase.database().ref(`/users/${currentUser.uid}`).on('value', snapshot => {
+        const user = snapshot.val()
+        console.log('userrr', user)
+        authLoadingOff(dispatch)
+        dispatch({
+            type: FACEBOOK_LOGIN_SUCCESS,
+            payload: { token, user }
+        })
     })
 }
 
@@ -275,15 +241,34 @@ const resetApplicationToInitialState = (dispatch) => {
 }
 
 export const authLoadingOnExport = () => {
-    return{
+    return {
         type: AUTH_LOADING_ON,
         payload: true
     }
 }
 
 export const authLoadingOffExport = () => {
-    return{
+    return {
         type: AUTH_LOADING_ON,
-        payload: true
+        payload: false
+    }
+}
+
+export const loadUser = (user) => (dispatch) => {
+    dispatch({
+        type: LOAD_LOGGEDIN_USER,
+        payload: user
+    })
+
+    if (user.role === 'admin') {
+        dispatch({
+            type: REDIRECT_EXISTING_USER,
+            payload: 'mainAdminScreen'
+        })
+    } else {
+        dispatch({
+            type: REDIRECT_EXISTING_USER,
+            payload: 'mainClientScreen'
+        })
     }
 }

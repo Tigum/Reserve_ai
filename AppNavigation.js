@@ -7,6 +7,7 @@ import NavigationService from './actions/NavigationServices';
 import { connect } from 'react-redux'
 import { AntDesign } from '@expo/vector-icons';
 import { BOTTOM_NAV_BACKGROUND_COLOR, HEADER_BACKGROUND_COLOR } from './app_styles'
+import { loadUser, authLoadingOnExport, authLoadingOffExport } from './actions'
 
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -30,31 +31,38 @@ import ServicesAdminScreen from './screens/ServicesAdminScreen'
 import AddServicesScreen from './screens/AddServicesScreen'
 import AddEmployeesScreen from './screens/AddEmployeesScreen'
 import { Spinner } from './components/Spinner'
-import {
-    facebookLogin,
-    checkIfUserAlreadyLoggedIn,
-} from './actions'
 import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 
 
 class AppNavigation extends Component {
 
-    state = {
-        isMounted: false
+    componentDidMount() {
+        this.loadExistingUser()
     }
 
-    componentDidMount(){
-        this.setState({isMounted: true})
-    }
-    
-    componentWillUnmount(){
-        this.setState({isMounted: false})
+    loadExistingUser() {
+        this.props.authLoadingOnExport()
+        firebase.auth().onAuthStateChanged(async user => {
+            const userAuth = await user
+            if (userAuth) {
+                this.setState({ loading: true }, async () => {
+                    const uid = await user.uid
+                    firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
+                        const userInfo = await snapshot.val()
+                        this.props.loadUser(userInfo)
+                        this.props.authLoadingOffExport()
+                    })
+                })
+            }else{
+                this.props.authLoadingOffExport()
+            }
+        })
     }
 
 
     render() {
 
-        if (this.props.loading || !this.state.isMounted) {
+        if (this.props.loading) {
             return <Spinner fontSize={11} text='CARREGANDO...' />
         }
 
@@ -62,6 +70,14 @@ class AppNavigation extends Component {
             auth: {
 
                 screen: createStackNavigator({
+                    // picForm: {
+                    //     screen: RegisterAdminPicScreen,
+                    //     navigationOptions: () => ({
+                    //         headerStyle: {
+                    //             display: 'none'
+                    //         }
+                    //     })
+                    // },
                     auth: {
                         screen: LoginScreen,
                         navigationOptions: () => ({
@@ -294,7 +310,7 @@ class AppNavigation extends Component {
                 headerMode: 'none',
             }
         );
-
+        console.log('propssss', this.props)
         return (
             <ActionSheetProvider>
                 <View style={styles.container}>
@@ -322,4 +338,4 @@ const mapStateToProps = ({ auth }) => {
     return { token, userName, routeName, user, loading }
 }
 
-export default connect(mapStateToProps, { facebookLogin, checkIfUserAlreadyLoggedIn })(AppNavigation);
+export default connect(mapStateToProps, {loadUser, authLoadingOnExport, authLoadingOffExport})(AppNavigation);

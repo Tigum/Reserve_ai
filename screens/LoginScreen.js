@@ -21,7 +21,6 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class LoginScreen extends Component {
-    _isMounted = false;
 
     static navigationOptions = () => {
         return {
@@ -34,35 +33,13 @@ class LoginScreen extends Component {
         loading: false
     }
 
-    componentDidMount() {
-        this._isMounted = true;
-        this.checkIfUserAlreadyLoggedIn()
-    }
-
-    checkIfUserAlreadyLoggedIn() {
-        if(this._isMounted){
-            firebase.auth().onAuthStateChanged(async user => {
-                if (await user) {
-                    if (this._isMounted) {
-                        this.setState({ loading: true })
-                    }
-                    const uid = await user.uid
-                    firebase.database().ref(`/users/${uid}`).on('value', async snapshot => {
-                        const userInfo = await snapshot.val()
-                        if (userInfo.role === 'admin') {
-                            this.props.navigation.navigate('mainAdminScreen')
-                        } else {
-                            this.props.navigation.navigate('mainClientScreen')
-                        }
-                    })
-                }
-            })
+    componentWillMount(){
+        if(this.props.routeName === 'mainAdminScreen'){
+            this.props.navigation.navigate('mainAdminScreen')
         }
-    }
-
-    componentWillUnmount() {
-        console.log('LoginScreen')
-        this._isMounted = false;
+        if(this.props.routeName === 'mainClientScreen'){
+            this.props.navigation.navigate('mainClientScreen')
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -242,21 +219,18 @@ class LoginScreen extends Component {
     }
 
     render() {
-        console.log('PROPS', this.props)
-        if (this.state.loading) {
-            return <Spinner fontSize={11} text='CARREGANDO...' />
+        if (!this.props.loading) {
+            return (
+                <KeyboardAvoidingView style={styles.mainView} behavior="padding">
+                    {this.onRenderLogo()}
+                    {/* <KeyboardAvoidingView style={{justifyContent: 'center', flex: 1}}> */}
+                    {/* {this.renderError()} */}
+                    {this.renderForm()}
+                    {/* </KeyboardAvoidingView> */}
+                    {this.renderLinks()}
+                </KeyboardAvoidingView>
+            )
         }
-
-        return (
-            <KeyboardAvoidingView style={styles.mainView} behavior="padding">
-                {this.onRenderLogo()}
-                {/* <KeyboardAvoidingView style={{justifyContent: 'center', flex: 1}}> */}
-                {/* {this.renderError()} */}
-                {this.renderForm()}
-                {/* </KeyboardAvoidingView> */}
-                {this.renderLinks()}
-            </KeyboardAvoidingView>
-        )
     }
 }
 

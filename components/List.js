@@ -13,11 +13,8 @@ class List extends Component {
                     <ItemList
                         key={item}
                         item={item}
-                    >
-
-                    <Text>{item}</Text>
-
-                    </ItemList>
+                    />
+                    // <Text>item</Text>
                 ))
             )
         } else {

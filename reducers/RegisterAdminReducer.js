@@ -42,7 +42,9 @@ import {
     SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
     ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
     SET_PIC_TO_NULL,
-    RESET_APPLICATION_TO_INITIAL_STATE
+    RESET_APPLICATION_TO_INITIAL_STATE,
+    ADD_AREA_TO_ADMIN,
+    REMOVE_AREA_TO_ADMIN
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -79,6 +81,7 @@ const INITIAL_STATE = {
     states: [],
     cities: [],
     additionalInfo: '',
+    areasSelected: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -178,6 +181,17 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, additionalInfo: action.payload }
         case SET_PIC_TO_NULL:
             return { ...state, image: action.payload }
+        case ADD_AREA_TO_ADMIN:
+            return { ...state, areasSelected: [...state.areasSelected, action.payload] };
+        case REMOVE_AREA_TO_ADMIN:
+            const array = state.areasSelected
+            const newArray = []
+            array.map((item) => {
+                if (item !== action.payload) {
+                    newArray.push(item)
+                }
+            })
+            return { ...state, areasSelected: newArray };
         case RESET_APPLICATION_TO_INITIAL_STATE:
             return { ...state, ...INITIAL_STATE }
         default:

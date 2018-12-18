@@ -46,7 +46,9 @@ import {
     SERVICE_AT_HOME_ADMIN_REGISTER_CHANGED,
     ADDITIONAL_INFO_ADMIN_REGISTER_CHANGED,
     REGISTERING_NEW_USER,
-    SET_PIC_TO_NULL
+    SET_PIC_TO_NULL,
+    ADD_AREA_TO_ADMIN,
+    REMOVE_AREA_TO_ADMIN
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -525,18 +527,49 @@ export const additionalInfoChanged = (text) => {
 }
 
 export const ifNoPicWasUpdated = (uid) => async (dispatch) => {
-    await firebase.database().ref(`/users/${uid}`)
-        .on('value', async snapshot => {
-            const user = await snapshot.val()
-            if(user.imageUrl.length === 0){
-                await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
-                dispatch({
-                    type: SET_PIC_TO_NULL,
-                    payload: 'N/A'
-                })
-                NavigationService.navigate('mainAdminView')
-            } else {
-                NavigationService.navigate('mainAdminView')
-            }
-        })
+    console.log('entrou8')
+    // await firebase.database().ref(`/users/${uid}`)
+    //     .on('value', async snapshot => {
+    //         const user = await snapshot.val()
+    //         console.log('user', user)
+    //         if(user.imageUrl.length === 0){
+    //             await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
+    //             dispatch({
+    //                 type: SET_PIC_TO_NULL,
+    //                 payload: 'N/A'
+    //             })
+    //             console.log('user2', user)
+    //             if(user.role === 'admin'){
+    //                 console.log('user3', user)
+    //                 NavigationService.navigate('mainAdminScreen')
+    //             }else {
+    //                 console.log('user4', user)
+    //                 NavigationService.navigate('mainClientScreen')
+    //             }
+                
+    //         } else {
+    //             if(user.role === 'admin'){
+    //                 console.log('user5', user)
+                    NavigationService.navigate('mainAdminScreen')
+        //         }else {
+        //             console.log('user6', user)
+        //             NavigationService.navigate('mainClientScreen')
+        //         }
+        //     }
+        // })
+        
+}
+
+export const addAreaToAdmim = (item) => {
+    return {
+        type: ADD_AREA_TO_ADMIN,
+        payload: item
+    }
+}
+
+export const removeAreaToAdmim = (item) => {
+    return {
+        type: REMOVE_AREA_TO_ADMIN,
+        payload: item
+    }
 }

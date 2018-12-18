@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import SearchBarHeader from '../components/SearchBarHeader'
-import { loadAvailableBusinesses } from '../actions'
+import { loadAvailableBusinesses, authLoadingOffExport } from '../actions'
 import BusinessList from '../components/BusinessList'
 import { Spinner } from '../components/Spinner'
 
@@ -11,6 +11,10 @@ import { Spinner } from '../components/Spinner'
 class MainClientScreen extends Component {
     state = {
         isMounted: false
+    }
+
+    componentWillMount(){
+        this.props.authLoadingOffExport()
     }
 
     componentDidMount() {
@@ -56,4 +60,4 @@ const mapStateToProps = ({ servicesClient, auth }) => {
     return { businesses, user, loading }
 }
 
-export default connect(mapStateToProps, { loadAvailableBusinesses })(MainClientScreen);
+export default connect(mapStateToProps, { loadAvailableBusinesses, authLoadingOffExport })(MainClientScreen);

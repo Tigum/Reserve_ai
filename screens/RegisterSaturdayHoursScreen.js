@@ -41,6 +41,7 @@ class RegisterSaturdayHoursScreen extends Component {
             additionalInfo,
             cep,
             serviceAtHome,
+            areasSelected
         } = this.props
 
         if (saturdayHourStartSelected && saturdayHourEndSelected) {
@@ -81,7 +82,8 @@ class RegisterSaturdayHoursScreen extends Component {
             saturdayHourStartSelected,
             saturdayHourEndSelected,
             sundayHourStartSelected: null,
-            sundayHourEndSelected: null
+            sundayHourEndSelected: null,
+            areasSelected
         }
         this.props.registerAdminUser(userInfo)
         this.props.navigation.navigate('picForm')
@@ -222,7 +224,8 @@ const mapStateToProps = ({ registerAdmin }) => {
         additionalInfo,
         cep,
         serviceAtHome,
-        saturdayHourEndSelected 
+        saturdayHourEndSelected,
+        areasSelected 
     } = registerAdmin;
     return {
         name,
@@ -251,6 +254,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         additionalInfo,
         cep,
         serviceAtHome,
+        areasSelected
     }
 }
 

@@ -30,15 +30,6 @@ const BUTTONS_COLOR = '#9f9f9f'
 const BUTTONS_COLOR_SELECTED = '#3577e6'
 
 class RegisterAdminDaysScreen extends Component {
-    _isMounted = false;
-
-    componentDidMount() {
-        this._isMounted = true
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false
-    }
 
     state = {
         monday: false,
@@ -75,6 +66,7 @@ class RegisterAdminDaysScreen extends Component {
             additionalInfo,
             cep,
             serviceAtHome,
+            areasSelected
         } = this.props
 
         if (!monday && !tuesday && !wednesday && !thursday && !friday && !saturday && !sunday) return alert('É obrigatório escolher um dia de funcionamento no mínimo.')
@@ -113,7 +105,8 @@ class RegisterAdminDaysScreen extends Component {
             saturdayHourStartSelected: null,
             saturdayHourEndSelected: null,
             sundayHourStartSelected: null,
-            sundayHourEndSelected: null
+            sundayHourEndSelected: null,
+            areasSelected
         }
         this.props.registerAdminUser(userInfo)
         this.props.navigation.navigate('picForm')
@@ -233,8 +226,7 @@ class RegisterAdminDaysScreen extends Component {
 
 
     renderContent() {
-        console.log('DAY', this._isMounted)
-        if (this.props.loading || !this._isMounted) {
+        if (this.props.loading) {
             return <Spinner />
         }
         return (
@@ -360,6 +352,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         additionalInfo,
         cep,
         serviceAtHome,
+        areasSelected
     } = registerAdmin;
     return {
         name,
@@ -386,6 +379,7 @@ const mapStateToProps = ({ registerAdmin }) => {
         additionalInfo,
         cep,
         serviceAtHome,
+        areasSelected
     }
 }
 

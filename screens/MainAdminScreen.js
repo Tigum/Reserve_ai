@@ -5,9 +5,14 @@ import { Card, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 import Header from '../components/Header'
+import { authLoadingOffExport } from '../actions'
 
 class MainAdminScreen extends Component {
 
+    componentWillMount(){
+        this.props.authLoadingOffExport()
+    }
+    
     goToServicesScreen() {
         this.props.navigation.navigate('servicesAdmin')
     }
@@ -88,4 +93,4 @@ const mapStateToProps = ({ auth }) => {
     return { user }
 }
 
-export default connect(mapStateToProps, {})(MainAdminScreen);
+export default connect(mapStateToProps, {authLoadingOffExport})(MainAdminScreen);
