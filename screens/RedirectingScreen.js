@@ -7,7 +7,9 @@ import { loadLoggedInUser } from '../actions'
 class RedirectingScreen extends Component {
 
     componentDidMount() {
-        this.loadExistingUser()
+        if(!this.props.registering){
+            this.loadExistingUser()
+        }
     }
 
     loadExistingUser() {
@@ -30,4 +32,9 @@ class RedirectingScreen extends Component {
     }
 }
 
-export default connect(null, { loadLoggedInUser })(RedirectingScreen)
+const mapStateToProps = ({ auth }) => {
+    const { registering } = auth
+    return { registering }
+}
+
+export default connect(mapStateToProps, { loadLoggedInUser })(RedirectingScreen)

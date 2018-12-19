@@ -44,7 +44,7 @@ export default (state = INITIAL_STATE, action) => {
         case LOGIN_USER:
             return { ...state, loading: true, error: '' };
         case LOGIN_USER_SUCCESS:
-            return { ...state, ...INITIAL_STATE, user: action.payload };
+            return { ...state, ...INITIAL_STATE, currentUser: action.payload };
         case LOGIN_USER_FAIL:
             return { ...state, error: 'Login ou senha incorretos', loading: false };
         case USER_LOG_OUT_SUCCESS:
@@ -55,7 +55,7 @@ export default (state = INITIAL_STATE, action) => {
                 // token: action.payload.token,
                 // userName: action.payload.userName,
                 // routeName: action.payload.routeName,
-                user: action.payload.user
+                currentUser: action.payload.user
             };
         case FACEBOOK_LOGIN_FAIL:
             return { ...state, error: 'Não foi possível acessar o Facebook. Tente novamente', loading: false, token: action.payload };
