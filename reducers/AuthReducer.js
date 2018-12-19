@@ -68,7 +68,7 @@ export default (state = INITIAL_STATE, action) => {
         case LOAD_LOGGEDIN_USER:
             return { ...state, currentUser: action.payload };
         case ADMIN_USER_REGISTERED_SUCCESS:
-            return { ...state, user: action.payload };
+            return { ...state, currentUser: action.payload };
         case EMAIL_PASSWORD_INPUT_FOCUS:
             return { ...state, emailAndPasswordFocus: action.payload };
         case REDIRECT_EXISTING_USER:
