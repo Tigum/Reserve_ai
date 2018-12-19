@@ -267,7 +267,7 @@ export const loadLoggedInUser = () => async (dispatch) => {
         .on('value', async snapshot => {
             const user = await snapshot.val()
             try {
-                await dispatch({
+                dispatch({
                     type: LOAD_LOGGEDIN_USER,
                     payload: user
                 })

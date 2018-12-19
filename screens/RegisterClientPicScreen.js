@@ -57,8 +57,8 @@ class RegisterClientPicScreen extends Component {
                                 aspect: [4, 4],
                             });
                             if (!result.cancelled) {
-                                const uid = await this.props.user.uid
-                                const uri = result.uri
+                                const { uid } = this.props.currentUser
+                                const { uri } = result
                                 const successRouteName = 'mainAdminScreen'
                                 await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                             }
@@ -70,9 +70,9 @@ class RegisterClientPicScreen extends Component {
                                     allowsEditing: true,
                                     aspect: [4, 4],
                                 });
-                                const uid = await this.props.user.uid
+                                const { uid } = this.props.currentUser
                                 if (!result.cancelled) {
-                                    const uri = result.uri
+                                    const { uri } = result
                                     const successRouteName = 'mainAdminScreen'
                                     await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                                 }
@@ -92,8 +92,9 @@ class RegisterClientPicScreen extends Component {
                                 aspect: [4, 4],
                             });
                             if (!result.cancelled) {
-                                const uid = await this.props.user.uid
-                                const uri = result.uri
+                                
+                                const { uid } = this.props.currentUser
+                                const { uri } = result
                                 const successRouteName = 'mainAdminScreen'
                                 await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                             }
@@ -106,8 +107,8 @@ class RegisterClientPicScreen extends Component {
                                     aspect: [4, 4],
                                 });
                                 if (!result.cancelled) {
-                                    const uid = await this.props.user.uid
-                                    const uri = result.uri
+                                    const { uid } = this.props.currentUser
+                                    const { uri } = result
                                     const successRouteName = 'mainAdminScreen'
                                     await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
                                 }
@@ -153,6 +154,7 @@ class RegisterClientPicScreen extends Component {
     }
 
     render() {
+        console.log('this.props', this.props)
         return this.renderContent()
     }
 }
@@ -170,14 +172,14 @@ const styles = {
     },
 }
 
-const mapStateToProps = ({ registerClient }) => {
+const mapStateToProps = ({ registerClient, auth }) => {
+    const { currentUser } = auth
     const {
         name,
         email,
         phone,
         password,
         passwordConfirmation,
-        user,
         loading,
         image,
         role
@@ -188,10 +190,10 @@ const mapStateToProps = ({ registerClient }) => {
         phone,
         password,
         passwordConfirmation,
-        user,
         loading,
         image,
-        role
+        role,
+        currentUser
     }
 }
 

@@ -49,7 +49,8 @@ import {
     SET_PIC_TO_NULL,
     ADD_AREA_TO_ADMIN,
     REMOVE_AREA_TO_ADMIN,
-    REGISTERING_ON
+    REGISTERING_ON,
+    LOAD_LOGGEDIN_USER
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -314,16 +315,16 @@ export const registerAdminUser = (
         registerAdminLoadingOn(dispatch)
         await firebase.auth().createUserWithEmailAndPassword(email, password)
         const { currentUser } = await firebase.auth()
-        const user = currentUser
         await currentUser.updateProfile({ displayName: name })
         await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
         await firebase.auth().signInWithEmailAndPassword(email, password)
-        firebase.database().ref(`/users/${user.uid}`).on('value', async snapshot => {
-            const userData = snapshot.val()
-            adminUserRegisteredSuccess(dispatch, userData)
-            NavigationService.navigate('picForm')
-            registerAdminLoadingOff(dispatch)
+        dispatch({
+            type:LOAD_LOGGEDIN_USER,
+            payload: currentUser
         })
+        NavigationService.navigate('picForm')
+        registerAdminLoadingOff(dispatch)
+
     } catch (err) {
         registerAdminLoadingOn(dispatch)
         console.log(err)
@@ -400,6 +401,7 @@ export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => async 
             post["photo"] = response.body.postResponse.location
             firebase.database().ref(`users/${uid}`).update({ imageUrl: post.photo })
                 .then(() => {
+                    console.log('route_uploadphoto', successRouteName)
                     NavigationService.navigate(successRouteName, {});
                     registerAdminLoadingOff(dispatch)
                 })
@@ -535,37 +537,20 @@ export const additionalInfoChanged = (text) => {
 }
 
 export const ifNoPicWasUpdated = (uid) => async (dispatch) => {
-    console.log('entrou8')
-    // await firebase.database().ref(`/users/${uid}`)
-    //     .on('value', async snapshot => {
-    //         const user = await snapshot.val()
-    //         console.log('user', user)
-    //         if(user.imageUrl.length === 0){
-    //             await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
-    //             dispatch({
-    //                 type: SET_PIC_TO_NULL,
-    //                 payload: 'N/A'
-    //             })
-    //             console.log('user2', user)
-    //             if(user.role === 'admin'){
-    //                 console.log('user3', user)
-    //                 NavigationService.navigate('mainAdminScreen')
-    //             }else {
-    //                 console.log('user4', user)
-    //                 NavigationService.navigate('mainClientScreen')
-    //             }
-                
-    //         } else {
-    //             if(user.role === 'admin'){
-    //                 console.log('user5', user)
-                    NavigationService.navigate('mainAdminScreen')
-        //         }else {
-        //             console.log('user6', user)
-        //             NavigationService.navigate('mainClientScreen')
-        //         }
-        //     }
-        // })
-        
+    await firebase.database().ref(`/users/${uid}`)
+        .on('value', async snapshot => {
+            const user = await snapshot.val()
+            if(user.imageUrl.length === 0){
+                await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
+                dispatch({
+                    type: SET_PIC_TO_NULL,
+                    payload: 'N/A'
+                })
+                NavigationService.navigate('mainAdminView')
+            } else {
+                NavigationService.navigate('mainAdminView')
+            }
+        })
 }
 
 export const addAreaToAdmim = (item) => {

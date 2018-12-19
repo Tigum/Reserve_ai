@@ -223,7 +223,8 @@ const styles = {
     }
 }
 
-const mapStateToProps = ({ registerAdmin }) => {
+const mapStateToProps = ({ registerAdmin, auth }) => {
+    const { currentUser } = auth
     const {
         name,
         email,
@@ -231,7 +232,6 @@ const mapStateToProps = ({ registerAdmin }) => {
         phone,
         password,
         passwordConfirmation,
-        user,
         loading,
         startHour,
         endHour,
@@ -251,7 +251,6 @@ const mapStateToProps = ({ registerAdmin }) => {
         phone,
         password,
         passwordConfirmation,
-        user,
         loading,
         startHour,
         endHour,
@@ -262,7 +261,8 @@ const mapStateToProps = ({ registerAdmin }) => {
         friday,
         saturday,
         sunday,
-        image
+        image,
+        currentUser
     }
 }
 

@@ -11,7 +11,7 @@ class BusinessList extends Component {
             return (
                 data.map((item) => (
                     <BusinessItem
-                        key={item.uid}
+                        key={item.phone}
                         business={item}
                     />
                 ))

@@ -10,21 +10,24 @@ import { Spinner } from '../components/Spinner'
 
 class MainClientScreen extends Component {
 
-    state = {
-        userLoaded: false
-    }
+    // state = {
+    //     userLoaded: false
+    // }
 
-    componentWillMount() {
-        this.props.authLoadingOffExport()
-    }
+    // componentWillMount() {
+    //     this.props.authLoadingOffExport()
+    // }
 
-    componentDidMount() {
-        this.props.loadAvailableBusinesses()
-        this.props.registeringOff()
+    // componentDidMount() {
+    //     this.props.loadAvailableBusinesses()
+    //     this.props.registeringOff()
+    // }
+
+    componentWillUnmount() {
+        console.log('desmontou')
     }
 
     render() {
-        console.log('clientProps', this.props)
         if (this.props.loading) {
             return <Spinner fontSize={11} text='PROCURANDO SERVIÇOS DISPONÍVEIS...' />
         }

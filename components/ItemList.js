@@ -8,7 +8,7 @@ import { addAreaToAdmim, removeAreaToAdmim } from '../actions'
 class ItemList extends Component {
 
     addAreaToSelection() {
-        console.log('entrou')
+        // console.log('entrou')
         const { areasSelected, item } = this.props
         if(!areasSelected.includes(item)){
             this.props.addAreaToAdmim(item)
@@ -19,7 +19,7 @@ class ItemList extends Component {
 
     render() {
         const { item, areasSelected } = this.props
-        console.log('areasSelected', areasSelected)
+        // console.log('areasSelected', areasSelected)
         return (
             <View style={styles.mainView}>
             <CheckBox

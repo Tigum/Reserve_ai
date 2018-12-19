@@ -17,10 +17,8 @@ import NavigationServices from './NavigationServices';
 export const loadAvailableBusinesses = () => async (dispatch) => {
     loadingOn(dispatch)
     const usersRef = await firebase.database().ref().child('users')
-    await usersRef.orderByChild('role').equalTo('admin').on('child_added', async snapshot => {
-        const business = await snapshot.val()
-        business['uid'] = await snapshot.key
-        addBusinessToMainList(dispatch, business)
+    await usersRef.orderByChild('role').equalTo('admin').on('value', async snapshot => {
+        addBusinessToMainList(dispatch, _.values(snapshot.val()))
     })
     loadingOff(dispatch)
 }

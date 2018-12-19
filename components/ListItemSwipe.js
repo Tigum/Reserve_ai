@@ -19,7 +19,7 @@ class ListItemSwipe extends Component {
     }
 
     deleteButton(key) {
-        const { uid } = this.props.user
+        const { uid } = this.props.currentUser
         const employeeId = key
         this.props.deleteEmployee({uid, employeeId})
     }
@@ -74,12 +74,12 @@ const styles = {
         paddingLeft: '6%'
     }
 }
-const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
-    const { user } = mainAdmin
+const mapStateToProps = ({ auth, servicesAdmin }) => {
+    const { currentUser } = auth
     const { employeeId, employeesSelected } = servicesAdmin
 
     return {
-        user,
+        currentUser,
         employeeId,
         employeesSelected
     }

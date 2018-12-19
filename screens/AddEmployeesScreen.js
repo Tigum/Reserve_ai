@@ -8,7 +8,7 @@ import { sanFranciscoWeights } from 'react-native-typography';
 import { ListItem, FormLabel, FormInput } from 'react-native-elements';
 import { employeeNameChanged, employeePhotoChangedEdit, uploadEmployeePhotoToS3, addNewEmployee, editEmployee, employeeIdChanged } from '../actions'
 import { EvilIcons } from '@expo/vector-icons';
-import { bucket, region, accessKey, secretKey, successActionStatus} from '../s3'
+import { bucket, region, accessKey, secretKey, successActionStatus } from '../s3'
 import DefaultModal from '../components/DefaultModal'
 import random from 'random-id';
 
@@ -35,9 +35,9 @@ class AddEmployeesScreen extends Component {
             this.props.employeeNameChanged(params.name)
             this.props.employeePhotoChangedEdit(params.imageUrl)
             this.props.employeeIdChanged(params.key)
-            this.setState({ modalTitle: 'Editar funcionário', modalButtonActionText: 'Concluir', editEmployeeMode: true})
+            this.setState({ modalTitle: 'Editar funcionário', modalButtonActionText: 'Concluir', editEmployeeMode: true })
         } else {
-            this.setState({ modalTitle: null, modalButtonActionText: null, editEmployeeMode: false})
+            this.setState({ modalTitle: null, modalButtonActionText: null, editEmployeeMode: false })
         }
 
     }
@@ -66,7 +66,7 @@ class AddEmployeesScreen extends Component {
                             aspect: [4, 4],
                         });
                         if (!result.cancelled) {
-                            const uid = await this.props.user.uid
+                            const uid = await this.props.currentUser.uid
                             const uri = result.uri
                             await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                         }
@@ -78,7 +78,7 @@ class AddEmployeesScreen extends Component {
                                 allowsEditing: true,
                                 aspect: [4, 4],
                             });
-                            const uid = await this.props.user.uid
+                            const uid = await this.props.currentUser.uid
                             if (!result.cancelled) {
                                 const uri = result.uri
                                 await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
@@ -99,7 +99,7 @@ class AddEmployeesScreen extends Component {
                             aspect: [4, 4],
                         });
                         if (!result.cancelled) {
-                            const uid = await this.props.user.uid
+                            const uid = await this.props.currentUser.uid
                             const uri = result.uri
                             await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                         }
@@ -112,7 +112,7 @@ class AddEmployeesScreen extends Component {
                                 aspect: [4, 4],
                             });
                             if (!result.cancelled) {
-                                const uid = await this.props.user.uid
+                                const uid = await this.props.currentUser.uid
                                 const uri = result.uri
                                 await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                             }
@@ -159,7 +159,7 @@ class AddEmployeesScreen extends Component {
     }
 
     async addNewEmployee() {
-        const uid = this.props.user.uid
+        const { uid } = this.props.currentUser
         const key = await random(17, 'aA0');
         if (!this.props.employeeName) return alert('Informe o nome do funcionário')
         const employee = {
@@ -175,7 +175,7 @@ class AddEmployeesScreen extends Component {
     }
 
     async editEmployeeSelected() {
-        const uid = this.props.user.uid
+        const { uid } = this.props.currentUser
         const employee = {
             name: this.props.employeeName,
             imageUrl: this.props.employeePhoto || '',
@@ -229,12 +229,12 @@ const styles = {
     }
 }
 
-const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
-    const { user } = mainAdmin
+const mapStateToProps = ({ auth, servicesAdmin }) => {
+    const { currentUser } = auth
     const { serviceName, serviceDescription, servicePrice, serviceDuration, employeeName, employeePhoto, loading, employees, employeeId, mode } = servicesAdmin
 
     return {
-        user,
+        currentUser,
         serviceName,
         serviceDescription,
         servicePrice,
