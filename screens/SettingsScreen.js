@@ -14,7 +14,7 @@ class SettingsScreen extends Component {
     render() {
         return (
             <View>
-                <Header icon='logout' headerText='Configurações' iconAction={this.userLogOut.bind(this)}/>
+                <Header icon='logout' headerText='Configurações' iconAction={this.userLogOut.bind(this)} />
                 <Text>Settings</Text>
             </View>
         )

@@ -16,7 +16,7 @@ class RedirectingScreen extends Component {
         if(!this.props.currentUser){
             firebase.auth().onAuthStateChanged(async user => {
                 if (user) {
-                    await firebase.database().ref(`/users/${user.uid}`).on('value', async snapshot => {
+                    await firebase.database().ref(`/users/${user.uid}`).on('value', snapshot => {
                         const userData = snapshot.val()
                         this.props.loadLoggedInUser()
                         if (userData.role === 'admin') {

@@ -192,23 +192,20 @@ export const userLogOut = () => async (dispatch) => {
         [
             {
                 text: 'Sim', onPress: async () => {
-                    try {
-                        const token = await AsyncStorage.getItem('fb_token_reserve');
-                        const routeName = 'auth'
-                        if (token) {
-                            await firebase.auth().signOut()
-                            await AsyncStorage.setItem('fb_token_reserve', '');
-                            facebookLogoutSuccess(dispatch, routeName)
-                            resetApplicationToInitialState(dispatch)
-                            return NavigationServices.navigate(routeName)
-                        }
+
+                    try{
                         await firebase.auth().signOut()
-                        userLogoutSuccess(dispatch, routeName)
-                        resetApplicationToInitialState(dispatch)
-                        NavigationServices.navigate(routeName)
-                    } catch (err) {
-                        alert(err)
+                    } catch(err) {
+                        return alert(err)
                     }
+
+                    try{
+                        await AsyncStorage.setItem('fb_token_reserve', '')
+                    } catch(err) {
+                        return alert(err)
+                    }
+
+                    return NavigationServices.navigate('auth')
                 }
             },
             {
