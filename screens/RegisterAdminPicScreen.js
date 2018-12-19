@@ -23,7 +23,7 @@ const S3Options = {
     region,
     accessKey,
     secretKey,
-    successActionStatus
+    successActionStatus 
 }
 
 class RegisterAdminPicScreen extends Component {
@@ -102,7 +102,7 @@ class RegisterAdminPicScreen extends Component {
                             aspect: [4, 4],
                         });
                         if (!result.cancelled) {
-                            const uid = await this.props.user.uid
+                            const uid = await this.props.currentUser.uid
                             const uri = result.uri
                             const successRouteName = 'mainAdminScreen'
                             await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
@@ -115,7 +115,7 @@ class RegisterAdminPicScreen extends Component {
                                 allowsEditing: true,
                                 aspect: [4, 4],
                             });
-                            const uid = await this.props.user.uid
+                            const uid = await this.props.currentUser.uid
                             if (!result.cancelled) {
                                 const uri = result.uri
                                 const successRouteName = 'mainAdminScreen'
@@ -137,7 +137,7 @@ class RegisterAdminPicScreen extends Component {
                             aspect: [4, 4],
                         });
                         if (!result.cancelled) {
-                            const uid = await this.props.user.uid
+                            const uid = await this.props.currentUser.uid
                             const uri = result.uri
                             const successRouteName = 'mainAdminScreen'
                             await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
@@ -151,7 +151,7 @@ class RegisterAdminPicScreen extends Component {
                                 aspect: [4, 4],
                             });
                             if (!result.cancelled) {
-                                const uid = await this.props.user.uid
+                                const uid = await this.props.currentUser.uid
                                 const uri = result.uri
                                 const successRouteName = 'mainAdminScreen'
                                 await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })

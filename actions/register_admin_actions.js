@@ -48,7 +48,8 @@ import {
     REGISTERING_NEW_USER,
     SET_PIC_TO_NULL,
     ADD_AREA_TO_ADMIN,
-    REMOVE_AREA_TO_ADMIN
+    REMOVE_AREA_TO_ADMIN,
+    REGISTERING_ON
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -206,6 +207,7 @@ export const registerAdminUser = (
         saturdayHourEndSelected,
         sundayHourStartSelected,
         sundayHourEndSelected,
+        areasSelected
     }
 ) => async (dispatch) => {
 
@@ -223,7 +225,8 @@ export const registerAdminUser = (
         imageUrl: '',
         serviceAtHome,
         state,
-        city
+        city,
+        areasSelected
     }
 
     if(!serviceAtHome) {
@@ -232,7 +235,10 @@ export const registerAdminUser = (
         userInfo['additionalInfo'] = additionalInfo
         userInfo['cep'] = cep
     }
-
+    dispatch({
+        type: REGISTERING_ON,
+        payload: true
+    })
     const days = [
         {
             day: {

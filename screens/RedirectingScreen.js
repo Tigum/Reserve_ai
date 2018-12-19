@@ -28,7 +28,7 @@ class RedirectingScreen extends Component {
     }
 
     render() {
-        return <Spinner fontSize={11} text='CHECANDO USUÁRIO...' />
+        return <Spinner fontSize={11} text='PROCESSANDO...' />
     }
 }
 

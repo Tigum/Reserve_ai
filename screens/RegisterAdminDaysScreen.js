@@ -20,7 +20,6 @@ import {
     saturdayUnselected,
     sundayUnselected,
     registerAdminUser,
-    registeringOn
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
@@ -44,7 +43,6 @@ class RegisterAdminDaysScreen extends Component {
 
 
     onRegisterButtonPress() {
-        this.props.registeringOn()
         const {
             name,
             email,
@@ -402,5 +400,4 @@ export default connect(mapStateToProps, {
     saturdayUnselected,
     sundayUnselected,
     registerAdminUser,
-    registeringOn
 })(RegisterAdminDaysScreen);
