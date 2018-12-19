@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import { AntDesign } from '@expo/vector-icons';
 import { BOTTOM_NAV_BACKGROUND_COLOR, HEADER_BACKGROUND_COLOR } from './app_styles'
 
-import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterAdminFormScreen from './screens/RegisterAdminFormScreen'
 import RegisterAdminAddressScreen from './screens/RegisterAdminAddressScreen'
@@ -143,9 +142,7 @@ class AppNavigation extends Component {
                                 display: 'none'
                             }
                         })
-                    },
-                    welcome: WelcomeScreen,
-
+                    }
                 }),
                 navigationOptions: () => ({
                     header: null

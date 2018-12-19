@@ -49,32 +49,41 @@ export const passwordChanged = (text) => {
 }
 
 export const loginUser = ({ email, password }) => {
-    return (dispatch) => {
+    return async (dispatch) => {
+        console.log('entrou login')
         authLoadingOn(dispatch)
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => {
-                const { currentUser } = firebase.auth()
-                firebase.database().ref(`/users/${currentUser.uid}`)
-                    .on('value', async snapshot => {
-                        const user = await snapshot.val()
-                        try {
-                            await loginUserSuccess(dispatch, user)
-                            if (user.role === 'admin') {
-                                NavigationServices.navigate('mainAdminScreen', {});
-                                // authLoadingOff(dispatch)
-                            } else {
-                                NavigationServices.navigate('mainClientScreen', {});
-                                // authLoadingOff(dispatch)
-                            }
-                        } catch (err) {
-                            alert(err)
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password)
+        } catch (err) {
+            loginUserFail(dispatch)
+            alert(err)
+            return
+        }
+
+        try {
+            const { currentUser } = await firebase.auth()
+            if (currentUser) {
+                try {
+                    await firebase.database().ref(`/users/${currentUser.uid}`).on('value', snapshot => {
+                        const { role } = snapshot.val()
+                        loginUserSuccess(dispatch, snapshot.val())
+                        if (role === 'admin') {
+                            NavigationServices.navigate('mainAdminScreen', {});
+                        } else {
+                            NavigationServices.navigate('mainClientScreen', {});
                         }
                     })
-            })
-            .catch((error) => {
-                console.log(error)
-                loginUserFail(dispatch)
-            })
+                } catch (err) {
+                    alert(err)
+                    return
+                }
+            }
+
+        } catch (err) {
+            loginUserFail(dispatch)
+            alert(err)
+            return
+        }
     }
 }
 
@@ -259,18 +268,26 @@ export const registeringOff = () => {
 }
 
 export const loadLoggedInUser = () => async (dispatch) => {
-    const { currentUser } = await firebase.auth()
-    firebase.database().ref(`/users/${currentUser.uid}`)
-        .on('value', async snapshot => {
-            const user = await snapshot.val()
-            try {
+    try {
+        
+        const { currentUser } = await firebase.auth()
+        try {
+            await firebase.database().ref(`/users/${currentUser.uid}`).on('value', snapshot => {
+                const user = snapshot.val()
                 dispatch({
                     type: LOAD_LOGGEDIN_USER,
                     payload: user
                 })
-            } catch (err) {
-                alert(err)
-            }
+            })
+        } catch (err) {
+            alert(err)
+            return
+        }
 
-        })
+    } catch (err) {
+        alert(err)
+        return
+    }
+
+
 }
