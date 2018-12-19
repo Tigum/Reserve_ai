@@ -7,7 +7,10 @@ import {
     LOADING_CLIENT_SERVICES_OFF,
     LOAD_AVAILABLE_BUSINESSES,
     ADD_BUSINESS_TO_MAIN_LIST,
-    CLEAR_MAIN_BUSINESS_LIST
+    CLEAR_MAIN_BUSINESS_LIST,
+    LOAD_AVAILABLE_USER,
+    LOAD_LOGGEDIN_USER,
+    LOAD_REDIRECTED_USER
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -75,4 +78,3 @@ const addBusinessToMainList = (dispatch, business) => {
         payload: business
     })
 }
-

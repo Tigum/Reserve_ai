@@ -15,7 +15,7 @@ class RedirectingScreen extends Component {
             if (user) {
                 firebase.database().ref(`/users/${user.uid}`).on('value', async snapshot => {
                     const userData = snapshot.val()
-                    // this.props.loadLoggedInUser()
+                    this.props.loadLoggedInUser()
                     if (userData.role === 'admin') return this.props.navigation.navigate('mainAdminScreen')
                     if (userData.role === 'client') return this.props.navigation.navigate('mainClientScreen')
                 })
@@ -25,17 +25,9 @@ class RedirectingScreen extends Component {
         })
     }
 
-
-
-
     render() {
         return <Spinner fontSize={11} text='CHECANDO USUÁRIO...' />
     }
-}
-
-const mapStateToProps = ({ auth }) => {
-    const { user } = auth
-    return { user }
 }
 
 export default connect(null, { loadLoggedInUser })(RedirectingScreen)

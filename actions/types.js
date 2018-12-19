@@ -21,6 +21,7 @@ export const REDIRECT_EXISTING_USER = 'redirect_existing_user'
 export const REGISTERING_ON = 'registering_on'
 export const REGISTERING_OFF = 'registering_off'
 export const LOAD_REDIRECTED_USER = 'load_redirected_user'
+export const LOAD_AVAILABLE_USER = 'load_available_user'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 export const RESET_APPLICATION_TO_INITIAL_STATE = 'reset_application_to_initial_state'
@@ -67,6 +68,7 @@ export const SET_SATURDAY_HOUR_END = 'set_saturday_hour_end'
 export const SET_SUNDAY_HOUR_START = 'set_sunday_hour_start'
 export const SET_SUNDAY_HOUR_END = 'set_sunday_hour_end'
 export const CHECK_IF_USER_EXISTS_BY_EMAIL = 'check_if_user_exists_by_email'
+
 
 export const ADD_NEW_SERVICE = 'add_new_service'
 export const NEW_SERVICE_NAME_CHANGED = 'new_service_name_changed'

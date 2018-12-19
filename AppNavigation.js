@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import firebase from 'firebase';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import NavigationService from './actions/NavigationServices';
 import { connect } from 'react-redux'
 import { AntDesign } from '@expo/vector-icons';
 import { BOTTOM_NAV_BACKGROUND_COLOR, HEADER_BACKGROUND_COLOR } from './app_styles'
-import { authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff } from './actions'
 
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -30,7 +28,6 @@ import MainAdminScreen from './screens/MainAdminScreen'
 import ServicesAdminScreen from './screens/ServicesAdminScreen'
 import AddServicesScreen from './screens/AddServicesScreen'
 import AddEmployeesScreen from './screens/AddEmployeesScreen'
-import { Spinner } from './components/Spinner'
 import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 import RedirectingScreen from './screens/RedirectingScreen'
 
@@ -286,7 +283,6 @@ class AppNavigation extends Component {
                 headerMode: 'none',
             }
         );
-        console.log('propssss', this.props)
         return (
             <ActionSheetProvider>
                 <View style={styles.container}>
@@ -314,4 +310,4 @@ const mapStateToProps = ({ auth }) => {
     return { token, userName, routeName, user, loading, registering }
 }
 
-export default connect(mapStateToProps, { authLoadingOnExport, authLoadingOffExport, registeringOn, registeringOff })(AppNavigation);
+export default connect(mapStateToProps, {})(AppNavigation);

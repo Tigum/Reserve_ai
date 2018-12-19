@@ -20,7 +20,6 @@ class MainClientScreen extends Component {
 
     componentDidMount() {
         this.props.loadAvailableBusinesses()
-
     }
 
     render() {
@@ -50,8 +49,8 @@ const styles = {
 
 const mapStateToProps = ({ servicesClient, auth }) => {
     const { businesses, loading } = servicesClient
-    const { user } = auth
-    return { businesses, user, loading }
+    const { currentUser } = auth
+    return { businesses, loading, currentUser }
 }
 
 export default connect(mapStateToProps, { loadAvailableBusinesses, authLoadingOffExport })(MainClientScreen);
