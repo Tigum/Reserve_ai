@@ -7,18 +7,6 @@ import { Spinner } from './components/Spinner'
 
 
 export default class App extends React.Component {
-  
-  state = {
-    isMounted: false
-  }
-
-  componentDidMount() {
-    this.setState({ isMounted: true})
-  }
-
-  componentWillUnmount() {
-    this.setState({ isMounted: false})
-  }
 
   componentWillMount() {
     const config = {
@@ -33,9 +21,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    if (!this.state.isMounted) {
-      return <Spinner fontSize={11} text='CARREGANDO...' />
-  }
     return (
       <Provider store={store}>
         <AppNavigation />
