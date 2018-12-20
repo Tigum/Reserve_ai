@@ -3,7 +3,6 @@ import { Alert } from 'react-native'
 import _ from 'lodash';
 import { RNS3 } from 'react-native-aws3';
 import {
-    ADD_NEW_SERVICE,
     NEW_SERVICE_NAME_CHANGED,
     NEW_SERVICE_DESCRIPTION_CHANGED,
     NEW_SERVICE_PRICE_CHANGED,
@@ -15,16 +14,13 @@ import {
     NEW_EMPLOYEE_LOADING_OFF,
     NEW_EMPLOYEE_ADDED,
     CLEAR_EMPLOYEE_FORM,
-    EDIT_EMPLOYEE_SUCCESS,
     NEW_EMPLOYEE_ID_CHANGED,
     EMPLOYEE_ADDED_TO_SELECTION,
     EMPLOYEE_REMOVED_FROM_SELECTION,
     SELECTED_EMPLOYEE_ID,
-    NEW_SERVICE_ADDED_SUCCESS,
     LOAD_REGISTERED_SERVICES,
     FIND_EMPLOYEES_NAMES_BY_ID,
     CLEAR_SERVICE_FORM,
-    EDIT_SERVICE,
     START_EDIT_SERVICE,
     SERVICE_LOADING,
     SET_SERVICE_MODE
@@ -121,45 +117,59 @@ const employeePhotoChanged = (dispatch, text) => {
 }
 
 export const showCurrentEmployees = () => async (dispatch) => {
-    addEmployeeLoadingOn(dispatch)
-    const { currentUser } = await firebase.auth()
 
-    firebase.database().ref(`/users/${currentUser.uid}`)
-        .on('value', async snapshot => {
-            const hasEmployees = await snapshot.hasChild('employees')
-            const user = await snapshot.val()
-            if (hasEmployees) {
+    try {
+        addEmployeeLoadingOn(dispatch)
+        const { currentUser } = await firebase.auth()
 
-                const employees = user.employees
+        if (currentUser) {
 
-                let data = _.values(employees)
+            try {
+                await firebase.database().ref(`/users/${currentUser.uid}`).on('value', snapshot => {
+                    const hasEmployees = snapshot.hasChild('employees')
+                    const user = snapshot.val()
+                    if (hasEmployees) {
+                        const employees = user.employees
+                        let data = _.values(employees)
 
+                        const myself = {
+                            key: currentUser.uid,
+                            imageUrl: user.imageUrl,
+                            name: user.name,
+                            role: 'Você (Proprietário)'
+                        }
+                        data.unshift(myself)
 
-                const myself = {
-                    key: currentUser.uid,
-                    imageUrl: user.imageUrl,
-                    name: user.name,
-                    role: 'Você (Proprietário)'
-                }
-                data.unshift(myself)
+                        sendCurrentEmployess(dispatch, data)
+                        addEmployeeLoadingOff(dispatch)
+                    } else {
+                        let data = []
 
-                sendCurrentEmployess(dispatch, data)
+                        const myself = {
+                            key: currentUser.uid,
+                            imageUrl: user.imageUrl,
+                            name: user.name,
+                            role: 'Você (Proprietário)'
+                        }
+                        data.unshift(myself)
+
+                        sendCurrentEmployess(dispatch, data)
+                        addEmployeeLoadingOff(dispatch)
+                    }
+                })
+
+            } catch (err) {
                 addEmployeeLoadingOff(dispatch)
-            } else {
-                let data = []
-
-                const myself = {
-                    key: currentUser.uid,
-                    imageUrl: user.imageUrl,
-                    name: user.name,
-                    role: 'Você (Proprietário)'
-                }
-                data.unshift(myself)
-
-                sendCurrentEmployess(dispatch, data)
-                addEmployeeLoadingOff(dispatch)
+                alert(err)
+                return
             }
-        })
+
+        }
+    } catch (err) {
+        addEmployeeLoadingOff(dispatch)
+        alert(err)
+        return
+    }
 }
 
 
@@ -194,7 +204,6 @@ export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => (dispatch) =
 export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
     try {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).set(employee)
-        // await firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
         employeeAdded(dispatch, employee)
     } catch (err) {
         console.log(err)
@@ -213,6 +222,7 @@ export const deleteEmployee = ({ uid, employeeId }) => async () => {
                         await firebase.database().ref(`/users/${uid}/employees/${employeeId}`).remove()
                     } catch (err) {
                         console.log(err)
+                        return
                     }
                 }
             },
@@ -230,19 +240,13 @@ export const editEmployee = ({ uid, employee }) => async (dispatch) => {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).update(employee)
     } catch (err) {
         console.log(err)
+        return
     }
 }
 
 const employeeAdded = (dispatch, employee) => {
     dispatch({
         type: NEW_EMPLOYEE_ADDED,
-        payload: employee
-    })
-}
-
-const employeeEditedSuccess = (dispatch, employee) => {
-    dispatch({
-        type: EDIT_EMPLOYEE_SUCCESS,
         payload: employee
     })
 }
@@ -284,17 +288,27 @@ export const serviceLoadingOff = () => {
 
 
 export const addNewService = (serviceInfo) => async (dispatch) => {
-    setServiceMode(dispatch, 'add')
-    const { currentUser } = await firebase.auth()
-    const serviceId = await random(17, 'aA0');
-    serviceInfo['serviceId'] = serviceId
-    serviceInfo['isActive'] = true
+
     try {
-        await firebase.database().ref(`/services/${currentUser.uid}/${serviceId}`).set(serviceInfo)
-        NavigationServices.navigate('servicesAdmin')
-        clearServiceForm(dispatch)
+        setServiceMode(dispatch, 'add')
+        const { currentUser } = await firebase.auth()
+        const serviceId = random(17, 'aA0');
+        serviceInfo['serviceId'] = serviceId
+        serviceInfo['isActive'] = true
+
+        if (currentUser) {
+            try {
+                await firebase.database().ref(`/services/${currentUser.uid}/${serviceId}`).set(serviceInfo)
+            } catch (err) {
+                console.log(err)
+                return
+            }
+            NavigationServices.navigate('servicesAdmin')
+            clearServiceForm(dispatch)
+        }
     } catch (err) {
-        console.log(err)
+        alert(err)
+        return
     }
 }
 
@@ -305,65 +319,85 @@ const clearServiceForm = (dispatch) => {
 }
 
 export const loadRegisteredServices = () => async (dispatch) => {
-    addEmployeeLoadingOn(dispatch)
-    const { currentUser } = await firebase.auth()
+
     try {
-        await firebase.database().ref(`/services/${currentUser.uid}`)
-            .on('value', async snapshot => {
+        addEmployeeLoadingOn(dispatch)
+        const { currentUser } = await firebase.auth()
 
-                let data = []
-                const services = snapshot.val()
-                let servicesList = _.values(services)
+        if (currentUser) {
+            try {
+                await firebase.database().ref(`/services/${currentUser.uid}`)
+                    .on('value', snapshot => {
 
-                servicesList.map((item) => {
-                    const service = {
-                        employeesSelected: item.employeesSelected,
-                        ownerUid: item.ownerUid,
-                        serviceDescription: item.serviceDescription,
-                        serviceDuration: item.serviceDuration,
-                        serviceName: item.serviceName,
-                        servicePrice: item.servicePrice,
-                        serviceId: item.serviceId
-                    }
-                    data.push(service)
-                })
+                        let data = []
+                        const services = snapshot.val()
+                        let servicesList = _.values(services)
 
-                dispatch({
-                    type: LOAD_REGISTERED_SERVICES,
-                    payload: data
-                })
+                        servicesList.map((item) => {
+                            const service = {
+                                employeesSelected: item.employeesSelected,
+                                ownerUid: item.ownerUid,
+                                serviceDescription: item.serviceDescription,
+                                serviceDuration: item.serviceDuration,
+                                serviceName: item.serviceName,
+                                servicePrice: item.servicePrice,
+                                serviceId: item.serviceId
+                            }
+                            data.push(service)
+                        })
+
+                        dispatch({
+                            type: LOAD_REGISTERED_SERVICES,
+                            payload: data
+                        })
+                        addEmployeeLoadingOff(dispatch)
+                    })
+            } catch (err) {
                 addEmployeeLoadingOff(dispatch)
-            })
+                console.log(err)
+                return
+            }
+        }
     } catch (err) {
         addEmployeeLoadingOff(dispatch)
-        console.log(err)
+        alert(err)
+        return
     }
 }
 
 export const findEmployeesNamesById = (keys) => async (dispatch) => {
-    let list = []
-    const { currentUser } = await firebase.auth()
 
-    await keys.map(async (item) => {
-        try {
-            await firebase.database().ref(`/users/${currentUser.uid}/employees/${item}`)
-                .on('value', async snapshot => {
-                    const employee = await snapshot.val()
-                    if (!employee) {
-                        list.push('Você')
-                    } else {
-                        list.push(employee.name)
-                    }
-                })
-        } catch (err) {
-            console.log(err)
+    try {
+        let list = []
+        const { currentUser } = await firebase.auth()
+
+        if (currentUser) {
+            keys.map(async (item) => {
+                try {
+                    await firebase.database().ref(`/users/${currentUser.uid}/employees/${item}`)
+                        .on('value', snapshot => {
+                            const employee = snapshot.val()
+                            if (!employee) {
+                                list.push('Você')
+                            } else {
+                                list.push(employee.name)
+                            }
+                        })
+                } catch (err) {
+                    console.log(err)
+                    return
+                }
+            })
+            dispatch({
+                type: FIND_EMPLOYEES_NAMES_BY_ID,
+                payload: list
+            })
         }
-    })
-    console.log('list', list)
-    dispatch({
-        type: FIND_EMPLOYEES_NAMES_BY_ID,
-        payload: list
-    })
+
+    } catch (err) {
+        alert(err)
+        return
+    }
 }
 
 export const deactivateService = (serviceId) => () => {
@@ -373,11 +407,20 @@ export const deactivateService = (serviceId) => () => {
         [
             {
                 text: 'Sim, desativar!', onPress: async () => {
-                    const { currentUser } = await firebase.auth()
                     try {
-                        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update({ isActive: false })
+                        const { currentUser } = await firebase.auth()
+
+                        if (currentUser) {
+                            try {
+                                await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update({ isActive: false })
+                            } catch (err) {
+                                console.log(err)
+                                return
+                            }
+                        }
                     } catch (err) {
-                        console.log(err)
+                        alert(err)
+                        return
                     }
                 }
             },
@@ -394,11 +437,19 @@ export const activateService = (serviceId) => () => {
         [
             {
                 text: 'Sim, ativar!', onPress: async () => {
-                    const { currentUser } = await firebase.auth()
                     try {
-                        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update({ isActive: true })
+                        const { currentUser } = await firebase.auth()
+                        if (currentUser) {
+                            try {
+                                await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update({ isActive: true })
+                            } catch (err) {
+                                console.log(err)
+                                return
+                            }
+                        }
                     } catch (err) {
-                        console.log(err)
+                        alert(err)
+                        return
                     }
                 }
             },
@@ -415,11 +466,19 @@ export const deleteService = (serviceId) => () => {
         [
             {
                 text: 'Sim, deletar!', onPress: async () => {
-                    const { currentUser } = await firebase.auth()
                     try {
-                        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).remove()
+                        const { currentUser } = await firebase.auth()
+                        if (currentUser) {
+                            try {
+                                await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).remove()
+                            } catch (err) {
+                                console.log(err)
+                                return
+                            }
+                        }
                     } catch (err) {
-                        console.log(err)
+                        alert(err)
+                        return
                     }
                 }
             },
@@ -444,19 +503,28 @@ const startEditService = (dispatch, service) => {
 }
 
 export const completeServiceEdit = (service, serviceId) => async (dispatch) => {
-    serviceLoading(dispatch, true)
-    const { currentUser } = await firebase.auth()
-    console.log('serviceIdAction', serviceId)   
+
     try {
-        await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update(service)
-        editServiceSuccess(dispatch)
-        serviceLoading(dispatch, false)
-        setServiceMode(dispatch, '')
+        serviceLoading(dispatch, true)
+        const { currentUser } = await firebase.auth()
+
+        if (currentUser) {
+            try {
+                await firebase.database().ref(`services/${currentUser.uid}/${serviceId}`).update(service)
+            } catch (err) {
+                console.log(err)
+                serviceLoading(dispatch, false)
+                setServiceMode(dispatch, '')
+                return
+            }
+        }
     } catch (err) {
-        console.log(err)
-        serviceLoading(dispatch, false)
-        setServiceMode(dispatch, '')
+        alert(err)
+        return
     }
+    editServiceSuccess(dispatch)
+    serviceLoading(dispatch, false)
+    setServiceMode(dispatch, '')
     NavigationServices.navigate('servicesAdmin')
 }
 

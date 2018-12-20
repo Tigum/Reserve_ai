@@ -158,7 +158,7 @@ export const uploadPhotoClient = ({ uri, S3Options, uid, successRouteName }) => 
     });
 }
 
-export const continueRegisterClient = (userInfo) => (dispatch) =>{
+export const continueRegisterClient = (userInfo) => (dispatch) => {
     dispatch({
         type: REGISTERING_NEW_USER,
         payload: false
