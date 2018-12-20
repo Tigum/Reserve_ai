@@ -10,7 +10,7 @@ import {
     doFacebookLogin,
     emailAndPasswordInputFocus,
     authLoadingOnExport,
-    authLoadingOffExport
+    authLoadingOffExport,
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
@@ -211,7 +211,7 @@ class LoginScreen extends Component {
 
     render() {
         if (this.props.loading) {
-            return <Spinner text='CARREGANDO...' fontSize={11}/>
+            return <Spinner text='CARREGANDO...' fontSize={11} />
         }
         return (
             <KeyboardAvoidingView style={styles.mainView} behavior="padding">

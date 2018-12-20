@@ -50,7 +50,8 @@ import {
     ADD_AREA_TO_ADMIN,
     REMOVE_AREA_TO_ADMIN,
     REGISTERING_ON,
-    LOAD_LOGGEDIN_USER
+    LOAD_LOGGEDIN_USER,
+    REGISTERING_OFF
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -321,6 +322,10 @@ export const registerAdminUser = (
         dispatch({
             type:LOAD_LOGGEDIN_USER,
             payload: currentUser
+        })
+        dispatch({
+            type:REGISTERING_OFF,
+            payload: false
         })
         NavigationService.navigate('picForm')
         registerAdminLoadingOff(dispatch)

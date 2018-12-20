@@ -10,11 +10,8 @@ import { authLoadingOffExport, registeringOff } from '../actions'
 class MainAdminScreen extends Component {
 
     componentWillMount(){
-        this.props.authLoadingOffExport()
-    }
-
-    componentDidMount() {
         this.props.registeringOff()
+        this.props.authLoadingOffExport()
     }
 
     goToServicesScreen() {

@@ -15,12 +15,26 @@ import {
 import NavigationServices from './NavigationServices';
 
 export const loadAvailableBusinesses = () => async (dispatch) => {
-    loadingOn(dispatch)
-    const usersRef = await firebase.database().ref().child('users')
-    await usersRef.orderByChild('role').equalTo('admin').on('value', async snapshot => {
-        addBusinessToMainList(dispatch, _.values(snapshot.val()))
-    })
-    loadingOff(dispatch)
+    try {
+        loadingOn(dispatch)
+        const usersRef = await firebase.database().ref().child('users')
+        if (usersRef) {
+
+            try {
+                await usersRef.orderByChild('role').equalTo('admin').on('value', async snapshot => {
+                    addBusinessToMainList(dispatch, _.values(snapshot.val()))
+                    loadingOff(dispatch)
+                })
+            } catch (err) {
+                alert(err)
+                return
+            }
+
+        }
+    } catch (err) {
+        alert(err)
+        return
+    }
 }
 
 export const loadAvailableServices = (input) => async (dispatch) => {

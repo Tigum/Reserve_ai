@@ -13,6 +13,8 @@ import {
     EMAIL_PASSWORD_INPUT_FOCUS,
     REGISTERING_ON,
     REGISTERING_OFF,
+    USER_LOADED_TRUE,
+    USER_LOADED_FALSE,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -83,11 +85,17 @@ export const doFacebookLogin = () => {
                 permissions: ['public_profile'],
                 behavior: 'web'
             })
-            if (!result) return alert('Facebook login failed')
+            if (!result) {
+                authLoadingOff(dispatch)
+                return alert('Facebook login failed')
+            }
 
             const { type, token } = result
 
-            if (type !== 'success') return alert('Facebook login failed')
+            if (type !== 'success') {
+                authLoadingOff(dispatch)
+                return alert('Facebook login failed')
+            }
 
             try {
                 await AsyncStorage.setItem('fb_token_reserve', token);
@@ -243,6 +251,20 @@ export const registeringOff = () => {
     }
 }
 
+export const userLoadedTrue = () => {
+    return {
+        type: USER_LOADED_TRUE,
+        payload: true
+    }
+}
+
+export const userLoadedFalse = () => {
+    return {
+        type: USER_LOADED_FALSE,
+        payload: false
+    }
+}
+
 export const loadLoggedInUser = () => async (dispatch) => {
     try {
         const { currentUser } = await firebase.auth()
@@ -263,3 +285,34 @@ export const loadLoggedInUser = () => async (dispatch) => {
         return
     }
 }
+
+export const handleExistingUser = (user) => async (dispatch) => {
+    const { uid } = user
+    console.log('UID', uid)
+    try {
+        await firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
+            const userData = snapshot.val()
+            dispatch({
+                type: LOAD_LOGGEDIN_USER,
+                payload: userData
+            })
+
+            if (userData.role === 'admin') {
+                NavigationServices.navigate('mainAdminScreen')
+            }
+
+            if (userData.role === 'client') {
+                NavigationServices.navigate('mainClientScreen')
+            }
+
+            if (!userData.role) {
+                alert('Favor faça o cadastro novamente')
+                NavigationServices.navigate('auth')
+            }
+        })
+    } catch (err) {
+        alert(err)
+        return
+    }
+}
+

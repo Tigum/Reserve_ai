@@ -2,37 +2,34 @@ import React, { Component } from 'react';
 import firebase from 'firebase'
 import { connect } from 'react-redux';
 import { Spinner } from '../components/Spinner'
-import { loadLoggedInUser, loadAvailableBusinesses } from '../actions'
+import { loadLoggedInUser, loadAvailableBusinesses, handleExistingUser } from '../actions'
 
 class RedirectingScreen extends Component {
 
     componentDidMount() {
-        if(!this.props.registering){
-            this.loadExistingUser()
-        }
+        this.loadExistingUser()
     }
-
+    
     async loadExistingUser() {
-        if(!this.props.currentUser){
-            firebase.auth().onAuthStateChanged(async user => {
-                if (user) {
-                    await firebase.database().ref(`/users/${user.uid}`).on('value', snapshot => {
-                        const userData = snapshot.val()
-                        this.props.loadLoggedInUser()
-                        if (userData.role === 'admin') {
-                            return this.props.navigation.navigate('mainAdminScreen')
-                        }
-                        if (userData.role === 'client') {
-                            this.props.loadAvailableBusinesses()
-                            return this.props.navigation.navigate('mainClientScreen')
-                        }
-                    })
-                } else {
-                    this.props.navigation.navigate('auth')
-                }
-            })
+        if (!this.props.currentUser) {
+
+            try {
+                await firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        this.props.handleExistingUser(user)
+                        this.props.loadAvailableBusinesses()
+                    } else {
+                        this.props.navigation.navigate('auth')
+                    }
+                })
+
+            } catch (err) {
+                alert(err)
+                return
+            }
+
         }
-        
+
     }
 
     render() {
@@ -45,4 +42,4 @@ const mapStateToProps = ({ auth }) => {
     return { registering, currentUser }
 }
 
-export default connect(mapStateToProps, { loadLoggedInUser, loadAvailableBusinesses })(RedirectingScreen)
+export default connect(mapStateToProps, { loadLoggedInUser, loadAvailableBusinesses, handleExistingUser })(RedirectingScreen)

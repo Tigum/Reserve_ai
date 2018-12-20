@@ -32,21 +32,13 @@ import RedirectingScreen from './screens/RedirectingScreen'
 
 
 class AppNavigation extends Component {
- 
+
     render() {
 
         const authStack = createStackNavigator({
             auth: {
 
                 screen: createStackNavigator({
-                     redirect: {
-                        screen: RedirectingScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
                     auth: {
                         screen: LoginScreen,
                         navigationOptions: () => ({
@@ -256,9 +248,30 @@ class AppNavigation extends Component {
                 }
             });
 
+        const RedirectingScreenMain = createStackNavigator({
+            redirect: {
+                screen: createStackNavigator({
+                    redirect: {
+                        screen: RedirectingScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    },
+                }),
+                navigationOptions: () => ({
+                    header: null
+                })
+            }
+        });
+
 
         const RootStack = createStackNavigator(
-            {
+            {   
+                redirect: {
+                    screen: RedirectingScreenMain
+                },
                 auth: {
                     screen: authStack
                 },
@@ -266,7 +279,7 @@ class AppNavigation extends Component {
                     screen: MainNavigatorAdmin
                 },
                 Client: {
-                    screen:MainNavigatorClient
+                    screen: MainNavigatorClient
                 },
                 addService: {
                     screen: AddServicesScreen
@@ -303,7 +316,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-    const { token, userName, routeName, user, loading, registering} = auth
+    const { token, userName, routeName, user, loading, registering } = auth
     return { token, userName, routeName, user, loading, registering }
 }
 

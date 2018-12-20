@@ -17,7 +17,9 @@ import {
     REGISTERING_ON,
     REGISTERING_OFF,
     ADMIN_USER_REGISTERED_SUCCESS,
-    LOAD_REDIRECTED_USER
+    LOAD_REDIRECTED_USER,
+    USER_LOADED_TRUE,
+    USER_LOADED_FALSE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -31,7 +33,8 @@ const INITIAL_STATE = {
     routeName: '',
     emailAndPasswordFocus: false,
     registering: false,
-    currentUser: null
+    currentUser: null,
+    userLoaded: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -97,6 +100,12 @@ export default (state = INITIAL_STATE, action) => {
         case LOAD_REDIRECTED_USER:
             console.log('LOAD_REDIRECTED_USER')
             return { ...state, currentUser: action.payload };
+        case USER_LOADED_TRUE:
+            console.log('USER_LOADED_TRUE')
+            return { ...state, userLoaded: action.payload };
+        case USER_LOADED_FALSE:
+            console.log('USER_LOADED_FALSE')
+            return { ...state, userLoaded: action.payload };
         case RESET_APPLICATION_TO_INITIAL_STATE:
             console.log('RESET_APPLICATION_TO_INITIAL_STATE_AUTH')
             return { ...state, ...INITIAL_STATE }
