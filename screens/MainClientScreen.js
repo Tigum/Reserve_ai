@@ -5,7 +5,6 @@ import SearchBarHeader from '../components/SearchBarHeader'
 import { loadAvailableBusinesses } from '../actions'
 import BusinessList from '../components/BusinessList'
 
-
 class MainClientScreen extends Component {
 
     componentWillMount(){

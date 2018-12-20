@@ -25,6 +25,7 @@ export const LOAD_AVAILABLE_USER = 'load_available_user'
 export const USER_LOADED_TRUE = 'user_loaded_true'
 export const USER_LOADED_FALSE = 'user_loaded_false'
 export const LOAD_AVATAR = 'load_avatar'
+export const LOAD_AVATAR_NULL = 'load_avatar_null'
 
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'

@@ -20,7 +20,8 @@ import {
     LOAD_REDIRECTED_USER,
     USER_LOADED_TRUE,
     USER_LOADED_FALSE,
-    LOAD_AVATAR
+    LOAD_AVATAR,
+    LOAD_AVATAR_NULL
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -112,6 +113,9 @@ export default (state = INITIAL_STATE, action) => {
             // console.log('USER_LOADED_FALSE')
             return { ...state, userLoaded: action.payload };
         case LOAD_AVATAR:
+            // console.log('LOAD_AVATAR')
+            return { ...state, avatar: action.payload };
+        case LOAD_AVATAR_NULL:
             // console.log('LOAD_AVATAR')
             return { ...state, avatar: action.payload };
         case RESET_APPLICATION_TO_INITIAL_STATE:

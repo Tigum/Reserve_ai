@@ -16,6 +16,7 @@ import {
     USER_LOADED_TRUE,
     USER_LOADED_FALSE,
     LOAD_AVATAR,
+    LOAD_AVATAR_NULL,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -328,5 +329,12 @@ export const renderAvatar = () => async(dispatch) => {
     }catch(err){
         alert(err)
         return NavigationServices.navigate('auth')
+    }
+}
+
+export const renderAvatarNull = () => {
+    return {
+        type: LOAD_AVATAR_NULL,
+        payload: null
     }
 }
