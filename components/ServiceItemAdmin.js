@@ -16,49 +16,68 @@ class ServiceItemAdmin extends Component {
     }
 
     async componentWillMount() {
-        this.mounted = true;
-        const { currentUser } = await firebase.auth()
-        await this.props.service.employeesSelected.map(async (item) => {
-            try {
-                await firebase.database().ref(`/users/${currentUser.uid}/employees/${item}`)
-                    .on('value', async snapshot => {
-                        const employee = await snapshot.val()
-                        if (!employee) {
-                            let imageUrl
-                            await firebase.database().ref(`/users/${currentUser.uid}/imageUrl`).once('value', function (snapshot) {
-                                imageUrl = snapshot.val()
+        try {
+            const { currentUser } = await firebase.auth()
+            if (currentUser) {
+                this.props.service.employeesSelected.map(async (item) => {
+
+                    try {
+                        await firebase.database().ref(`/users/${currentUser.uid}/employees/${item}`)
+                            .on('value', async snapshot => {
+                                const employee = snapshot.val()
+                                if (!employee) {
+
+                                    try {
+                                        let imageUrl
+                                        await firebase.database().ref(`/users/${currentUser.uid}/imageUrl`).once('value', function (snapshot) {
+                                            imageUrl = snapshot.val()
+                                        })
+                                        const employeeToAdd = {
+                                            name: 'Você',
+                                            imageUrl
+                                        }
+                                        this.setState({
+                                            employeesNames: [...this.state.employeesNames, employeeToAdd.name],
+                                            employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                                        })
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
+                                } else {
+                                    const employeeToAdd = {
+                                        name: employee.name,
+                                        imageUrl: employee.imageUrl
+                                    }
+                                    this.setState({
+                                        employeesNames: [...this.state.employeesNames, employeeToAdd.name],
+                                        employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                                    })
+                                }
                             })
-                            const employeeToAdd = {
-                                name: 'Você',
-                                imageUrl
-                            }
-                            this.setState({
-                                employeesNames: [...this.state.employeesNames, employeeToAdd.name],
-                                employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                    } catch (err) {
+                        alert(err)
+                        return
+                    }
+
+                    try {
+                        await firebase.database().ref(`services/${currentUser.uid}/${this.props.service.serviceId}`)
+                            .on('value', snapshot => {
+                                const doc = snapshot.val()
+                                this.setState({ isActive: doc.isActive })
                             })
 
-                        } else {
-                            const employeeToAdd = {
-                                name: employee.name,
-                                imageUrl: employee.imageUrl
-                            }
-                            this.setState({
-                                employeesNames: [...this.state.employeesNames, employeeToAdd.name],
-                                employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
-                            })
-                        }
-                    })
-
-                await firebase.database().ref(`services/${currentUser.uid}/${this.props.service.serviceId}`)
-                    .on('value', async snapshot => {
-                        const doc = await snapshot.val()
-                        this.setState({ isActive: doc.isActive })
-                    })
-
-            } catch (err) {
-                console.log(err)
+                    } catch (err) {
+                        alert(err)
+                        return
+                    }
+                })
             }
-        })
+        } catch (err) {
+            alert(err)
+            return
+        }
     }
 
     renderEmployeeNameList() {
@@ -157,11 +176,11 @@ class ServiceItemAdmin extends Component {
                     <Divider style={styles.divider} />
 
                     <View style={styles.buttonsView}>
-                        <CardButton 
-                            text='Editar' 
-                            onAction={this.onEditService.bind(this)} 
-                            backgroundColor='white' 
-                            color='#3577e6' 
+                        <CardButton
+                            text='Editar'
+                            onAction={this.onEditService.bind(this)}
+                            backgroundColor='white'
+                            color='#3577e6'
                         />
                         <CardButton
                             text='Deletar'

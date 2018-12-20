@@ -49,7 +49,9 @@ import {
     REMOVE_AREA_TO_ADMIN,
     REGISTERING_ON,
     LOAD_LOGGEDIN_USER,
-    REGISTERING_OFF
+    REGISTERING_OFF,
+    AUTH_LOADING_ON,
+    AUTH_LOADING_OFF
 } from './types';
 import statesAndCities from '../states_and_cities.json'
 
@@ -210,6 +212,10 @@ export const registerAdminUser = (
         areasSelected
     }
 ) => async (dispatch) => {
+    dispatch({
+        type: AUTH_LOADING_ON,
+        payload: true
+    })
 
     let userInfo = {
         name,
@@ -345,6 +351,10 @@ export const registerAdminUser = (
                     return
                 }
                 dispatch({
+                    type: AUTH_LOADING_OFF,
+                    payload: false
+                })
+                dispatch({
                     type: LOAD_LOGGEDIN_USER,
                     payload: currentUser
                 })
@@ -361,6 +371,7 @@ export const registerAdminUser = (
         })
         NavigationService.navigate('picForm')
         registerAdminLoadingOff(dispatch)
+       
 
     } catch (err) {
         registerAdminLoadingOn(dispatch)

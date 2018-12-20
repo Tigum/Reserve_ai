@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 import ItemList from './ItemList';
 import EmptyListWarning from './EmptyListWarning'
 
@@ -14,7 +14,6 @@ class List extends Component {
                         key={item}
                         item={item}
                     />
-                    // <Text>item</Text>
                 ))
             )
         } else {

@@ -172,10 +172,12 @@ class LoginScreen extends Component {
     }
 
     onAdminRegisterPress() {
+        this.props.userLoadedTrue()
         this.props.navigation.navigate('adminTypeForm')
     }
 
     onClientRegisterPress() {
+        this.props.userLoadedTrue()
         this.props.navigation.navigate('clientForm')
     }
 

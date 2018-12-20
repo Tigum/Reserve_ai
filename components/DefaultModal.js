@@ -24,7 +24,6 @@ class DefaultModal extends Component {
 const styles = {
     mainView: {
         flex: 1,
-        // alignItems: 'center',
         justifyContent: 'space-between',
         width: SCREEN_WIDTH,
         backgroundColor: '#f3f3f3'

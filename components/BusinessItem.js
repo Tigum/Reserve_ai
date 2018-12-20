@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ActivityIndicator } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { iOSUIKit, sanFranciscoWeights } from 'react-native-typography'
 
 class BusinessItem extends Component {
@@ -8,7 +8,6 @@ class BusinessItem extends Component {
     }
 
     endLoadingImage() {
-        // console.log('OII', e)
         this.setState({imageLoading: false})
     }
 
