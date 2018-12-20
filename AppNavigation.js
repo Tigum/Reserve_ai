@@ -29,6 +29,7 @@ import AddServicesScreen from './screens/AddServicesScreen'
 import AddEmployeesScreen from './screens/AddEmployeesScreen'
 import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 import RedirectingScreen from './screens/RedirectingScreen'
+import SearchScreen from './screens/SearchScreen'
 
 
 class AppNavigation extends Component {
@@ -287,6 +288,9 @@ class AppNavigation extends Component {
                 addEmployee: {
                     screen: AddEmployeesScreen
                 },
+                searchScreen: {
+                    screen: SearchScreen
+                }
             },
             {
                 mode: 'modal',

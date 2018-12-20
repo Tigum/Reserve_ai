@@ -278,10 +278,10 @@ class SearchBarHeader extends Component {
         const { iconAction, icon, avatar } = this.props
         return (
             <View style={styles.viewStyle}>
-                <TouchableWithoutFeedback onPress={() => iconAction || this.props.navigation.goBack()}>
+                <TouchableWithoutFeedback onPress={iconAction || this.props.navigation.goBack()}>
                     <AntDesign style={styles.closeIconStyle} name={icon} size={25} color="black" />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => iconAction || this.props.navigation.goBack()}>
+                <TouchableWithoutFeedback onPress={iconAction || this.props.navigation.goBack()}>
                     <View style={styles.textView}>
                         <Text style={[styles.textStyle, sanFranciscoWeights.thin]}>Encontre serviços...</Text>
                     </View>

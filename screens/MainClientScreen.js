@@ -14,7 +14,7 @@ class MainClientScreen extends Component {
     render() {
         return (
             <View style={styles.mainView}>
-                <SearchBarHeader icon='search1' />
+                <SearchBarHeader icon='search1' iconAction={() => this.props.navigation.navigate('searchScreen')}/>
                 <ScrollView>
                     {this.props.loading ? <ActivityIndicator size='large' style={styles.spinner} /> : <BusinessList data={this.props.businesses} />}
                 </ScrollView>

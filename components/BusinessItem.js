@@ -11,6 +11,11 @@ class BusinessItem extends Component {
         this.setState({imageLoading: false})
     }
 
+    loadAreas() {
+        const { areasSelected } = this.props.business
+        return areasSelected.join(', ')
+    }
+
     loadImage() {
         return <Image style={styles.image} 
                 source={this.state.imageLoading ? require('../img/loading.gif') : { uri: this.props.business.imageUrl }} 
@@ -28,6 +33,7 @@ class BusinessItem extends Component {
                 <View style={styles.textView}>
                     <Text style={[iOSUIKit.largeTitleEmphasized, styles.title]}>{business.companyName}</Text>
                     <Text style={[sanFranciscoWeights.thin, styles.cityAndState]}>{business.city} - {business.state}</Text>
+                    <Text style={[sanFranciscoWeights.thin, styles.areas]}>{this.loadAreas()}</Text>
                 </View>
             </View>
         )
@@ -39,7 +45,7 @@ const styles = {
         flexDirection: 'row',
         flex: 1,
         backgroundColor: 'white', 
-        padding: 15
+        padding: 15,
     },
     image: {
         width: 70,
@@ -47,10 +53,17 @@ const styles = {
         borderRadius: 10
     },
     title: {
-        fontSize: 20
+        fontSize: 22,
+        marginTop: -8,
     },
     cityAndState: {
-        fontSize: 15
+        fontSize: 12,
+        padding: 2,
+        marginTop: -8
+    },
+    areas: {
+        fontSize: 17,
+        padding: 2
     },
     textView: {
         justifyContent: 'flex-start',
