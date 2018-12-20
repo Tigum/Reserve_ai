@@ -52,33 +52,69 @@ export const passwordConfirmationClientChanged = (text) => {
 
 export const checkIfClientEmailExistsAndRegister = ({ email, errorMessage, errorRouteName, successRouteName, userInfo }) => async (dispatch) => {
     registerClientLoadingOn(dispatch)
-    const result = await firebase.auth().fetchSignInMethodsForEmail(email)
-    if (result.length > 0) {
-        clearForm(dispatch)
-        registerClientLoadingOff(dispatch)
-        alert(errorMessage)
-        return NavigationService.navigate(errorRouteName, {})
+
+    try {
+        const result = await firebase.auth().fetchSignInMethodsForEmail(email)
+        if (result) {
+            if (result.length > 0) {
+                clearForm(dispatch)
+                registerClientLoadingOff(dispatch)
+                alert(errorMessage)
+                return NavigationService.navigate(errorRouteName, {})
+            }
+        }
+    } catch (err) {
+        alert(err)
+        return
     }
 
     const { name, password } = userInfo
 
     try {
         await firebase.auth().createUserWithEmailAndPassword(email, password)
-        const { currentUser } = await firebase.auth()
-        const user = currentUser
-        await currentUser.updateProfile({ displayName: name })
-        await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
-        await firebase.auth().signInWithEmailAndPassword(email, password)
-        await clientUserRegisteredSuccess(dispatch, user)
-        NavigationService.navigate(successRouteName, {})
-        registerClientLoadingOff(dispatch)
-
     } catch (err) {
-        console.log(err)
-        await dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
         registerClientLoadingOff(dispatch)
+        alert(err)
+        return
     }
+
+    try {
+        const { currentUser } = await firebase.auth()
+
+        if (currentUser) {
+            try {
+                await currentUser.updateProfile({ displayName: name })
+            } catch (err) {
+                alert(err)
+                return
+            }
+
+            try {
+                await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
+            } catch (err) {
+                alert(err)
+                return
+            }
+        }
+    } catch (err) {
+        registerClientLoadingOff(dispatch)
+        alert(err)
+        return
+    }
+
+    try {
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+    } catch (err) {
+        registerClientLoadingOff(dispatch)
+        alert(err)
+        return
+    }
+
+    clientUserRegisteredSuccess(dispatch, user)
+    NavigationService.navigate(successRouteName, {})
+    registerClientLoadingOff(dispatch)
 }
+
 
 export const uploadPhotoClient = ({ uri, S3Options, uid, successRouteName }) => async (dispatch) => {
     registerClientLoadingOn(dispatch)

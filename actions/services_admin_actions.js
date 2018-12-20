@@ -163,7 +163,7 @@ export const showCurrentEmployees = () => async (dispatch) => {
 }
 
 
-export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => async (dispatch) => {
+export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => (dispatch) => {
     addEmployeeLoadingOn(dispatch)
     let post = {}
     post["id"] = firebase.database.ServerValue.TIMESTAMP
@@ -187,6 +187,7 @@ export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => async (dispa
         console.log('imageError', err)
         alert('Erro ao carregar a foto. Tente novamente.')
         addEmployeeLoadingOff(dispatch)
+        return
     });
 }
 
@@ -197,6 +198,7 @@ export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
         employeeAdded(dispatch, employee)
     } catch (err) {
         console.log(err)
+        return
     }
 }
 
