@@ -23,22 +23,12 @@ const S3Options = {
 }
 
 class RegisterClientPicScreen extends Component {
-    _isMounted = false;
-
-    componentDidMount() {
-        this._isMounted = true
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false
-    }
 
     onRegisterButtonPress() {
         this.props.navigation.navigate('mainAdminScreen')
     }
 
     onOpenActionSheet = async () => {
-        if (this._isMounted) {
             let options = ['Camera', 'Biblioteca', 'Cancel'];
             // let destructiveButtonIndex = 0;
             let cancelButtonIndex = 2;
@@ -269,7 +259,6 @@ class RegisterClientPicScreen extends Component {
                         }
                     }
                 });
-        }
 
     }
 
