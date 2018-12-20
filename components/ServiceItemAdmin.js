@@ -9,13 +9,20 @@ import { findEmployeesNamesById, deactivateService, activateService, deleteServi
 import CardButton from './CardButton'
 
 class ServiceItemAdmin extends Component {
+    _isMounted = true
+
     state = {
         employeesNames: [],
         employeesPics: [],
         isActive: ''
     }
 
-    async componentWillMount() {
+
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+
+    async componentDidMount() {
         try {
             const { currentUser } = await firebase.auth()
             if (currentUser) {
@@ -32,14 +39,19 @@ class ServiceItemAdmin extends Component {
                                         await firebase.database().ref(`/users/${currentUser.uid}/imageUrl`).once('value', function (snapshot) {
                                             imageUrl = snapshot.val()
                                         })
-                                        const employeeToAdd = {
-                                            name: 'Você',
-                                            imageUrl
+                                        if (imageUrl) {
+                                            const employeeToAdd = {
+                                                name: 'Você',
+                                                imageUrl
+                                            }
+                                            if (this._isMounted) {
+                                                this.setState({
+                                                    employeesNames: [...this.state.employeesNames, employeeToAdd.name],
+                                                    employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                                                })
+                                            }
+
                                         }
-                                        this.setState({
-                                            employeesNames: [...this.state.employeesNames, employeeToAdd.name],
-                                            employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
-                                        })
                                     } catch (err) {
                                         alert(err)
                                         return
@@ -50,10 +62,12 @@ class ServiceItemAdmin extends Component {
                                         name: employee.name,
                                         imageUrl: employee.imageUrl
                                     }
-                                    this.setState({
-                                        employeesNames: [...this.state.employeesNames, employeeToAdd.name],
-                                        employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
-                                    })
+                                    if (this._isMounted) {
+                                        this.setState({
+                                            employeesNames: [...this.state.employeesNames, employeeToAdd.name],
+                                            employeesPics: [...this.state.employeesPics, employeeToAdd.imageUrl],
+                                        })
+                                    }
                                 }
                             })
                     } catch (err) {
@@ -65,7 +79,9 @@ class ServiceItemAdmin extends Component {
                         await firebase.database().ref(`services/${currentUser.uid}/${this.props.service.serviceId}`)
                             .on('value', snapshot => {
                                 const doc = snapshot.val()
-                                this.setState({ isActive: doc.isActive })
+                                if (this._isMounted) {
+                                    this.setState({ isActive: doc.isActive })
+                                }
                             })
 
                     } catch (err) {
