@@ -136,3 +136,4 @@ export const CLEAR_MAIN_BUSINESS_LIST = 'clear_main_business_list'
 
 export const AUTO_FOCUS_SEARCH = 'auto_focus_search'
 export const SEARCH_TEXT = 'search_text'
+export const CLEAR_SEARCH_TEXT = 'clear_search_text'

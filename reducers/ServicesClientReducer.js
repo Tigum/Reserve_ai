@@ -8,7 +8,8 @@ import {
     RESET_APPLICATION_TO_INITIAL_STATE,
     LOAD_AVAILABLE_USER,
     AUTO_FOCUS_SEARCH,
-    SEARCH_TEXT
+    SEARCH_TEXT,
+    CLEAR_SEARCH_TEXT
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -46,6 +47,9 @@ export default (state = INITIAL_STATE, action) => {
             // console.log('AUTO_FOCUS_SEARCH')
             return { ...state, autoFocusSearch: action.payload }
         case SEARCH_TEXT:
+            // console.log('SEARCH_TEXT')
+            return { ...state, searchText: action.payload }
+        case CLEAR_SEARCH_TEXT:
             // console.log('SEARCH_TEXT')
             return { ...state, searchText: action.payload }
         case RESET_APPLICATION_TO_INITIAL_STATE:

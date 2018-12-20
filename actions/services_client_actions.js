@@ -7,7 +7,8 @@ import {
     LOAD_AVAILABLE_BUSINESSES,
     ADD_BUSINESS_TO_MAIN_LIST,
     AUTO_FOCUS_SEARCH,
-    SEARCH_TEXT
+    SEARCH_TEXT,
+    CLEAR_SEARCH_TEXT
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -104,5 +105,12 @@ export const searchTextOutput = (text) => {
     return ({
         type: SEARCH_TEXT,
         payload: text
+    })
+}
+
+export const searchTextOutputClear = () => {
+    return ({
+        type: CLEAR_SEARCH_TEXT,
+        payload: ''
     })
 }

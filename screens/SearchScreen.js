@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Dimensions } from 'react-native';
 import SearchInput from '../components/SearchInput'
-import { autoFocus } from '../actions'
+import { autoFocus, searchTextOutputClear } from '../actions'
 import { connect } from 'react-redux';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
@@ -10,6 +10,7 @@ class SearchScreen extends Component {
 
     iconAction() {
         this.props.autoFocus(false)
+        this.props.searchTextOutputClear()
         this.props.navigation.goBack()
     }
 
@@ -35,4 +36,4 @@ const mapStateToProps = ({ servicesClient }) => {
     return { searchText }
 }
 
-export default connect(mapStateToProps, { autoFocus })(SearchScreen)
+export default connect(mapStateToProps, { autoFocus, searchTextOutputClear })(SearchScreen)
