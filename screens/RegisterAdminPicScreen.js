@@ -23,16 +23,16 @@ const S3Options = {
     region,
     accessKey,
     secretKey,
-    successActionStatus 
+    successActionStatus
 }
 
 class RegisterAdminPicScreen extends Component {
-    state ={
+    state = {
         imageLoading: true
     }
 
     endLoadingImage() {
-        this.setState({ imageLoading: false})
+        this.setState({ imageLoading: false })
     }
 
     onRegisterButtonPress() {
@@ -95,71 +95,222 @@ class RegisterAdminPicScreen extends Component {
             async (buttonIndex) => {
 
                 if (buttonIndex === 0) {
-                    const { status } = await Permissions.getAsync(Permissions.CAMERA);
-                    if (status === 'granted') {
-                        let result = await ImagePicker.launchCameraAsync({
-                            allowsEditing: true,
-                            aspect: [4, 4],
-                        });
-                        if (!result.cancelled) {
-                            const uid = await this.props.currentUser.uid
-                            const uri = result.uri
-                            const successRouteName = 'mainAdminScreen'
-                            await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
-                        }
-                    } else {
-                        await Permissions.askAsync(Permissions.CAMERA)
+
+                    try {
+
                         const { status } = await Permissions.getAsync(Permissions.CAMERA);
-                        if (status === 'granted') {
-                            let result = await ImagePicker.launchCameraAsync({
-                                allowsEditing: true,
-                                aspect: [4, 4],
-                            });
-                            const uid = await this.props.currentUser.uid
-                            if (!result.cancelled) {
-                                const uri = result.uri
-                                const successRouteName = 'mainAdminScreen'
-                                await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                        if (status) {
+
+                            if (status === 'granted') {
+
+                                try {
+                                    let result = await ImagePicker.launchCameraAsync({
+                                        allowsEditing: true,
+                                        aspect: [4, 4],
+                                    });
+                                    if (result) {
+                                        if (!result.cancelled) {
+
+                                            try {
+                                                const { currentUser } = await firebase.auth()
+
+                                                if (currentUser) {
+                                                    const { uid } = currentUser
+                                                    const uri = result.uri
+                                                    const successRouteName = 'mainAdminScreen'
+                                                    console.log('THIS>PROPS1', this.props)
+                                                    await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                }
+
+                                            } catch (err) {
+                                                alert(err)
+                                                return
+                                            }
+                                        }
+                                    }
+
+                                } catch (err) {
+                                    alert(err)
+                                    return
+                                }
+
+                            } else {
+
+                                try {
+                                    await Permissions.askAsync(Permissions.CAMERA)
+                                } catch (err) {
+                                    alert(err)
+                                    return
+                                }
+
+                                try {
+                                    const { status } = await Permissions.getAsync(Permissions.CAMERA);
+                                    if (status) {
+
+
+                                        if (status === 'granted') {
+
+
+                                            try {
+                                                let result = await ImagePicker.launchCameraAsync({
+                                                    allowsEditing: true,
+                                                    aspect: [4, 4],
+                                                });
+
+                                                if (result) {
+
+
+                                                    try {
+                                                        const { currentUser } = await firebase.auth()
+
+                                                        if (currentUser) {
+
+                                                            if (!result.cancelled) {
+                                                                const { uid } = currentUser
+                                                                const uri = result.uri
+                                                                const successRouteName = 'mainAdminScreen'
+                                                                console.log('THIS>PROPS2', this.props)
+                                                                await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                            }
+
+                                                        }
+
+                                                    } catch (err) {
+                                                        alert(err)
+                                                        return
+                                                    }
+
+                                                }
+                                            } catch (err) {
+                                                alert(err)
+                                                return
+                                            }
+
+                                        } else {
+                                            alert('Permissão para acessar camera negada')
+                                            throw new Error('Permissão para acessar camera negada');
+                                        }
+
+
+                                    }
+                                } catch (err) {
+                                    alert(err)
+                                    return
+                                }
                             }
-                        } else {
-                            alert('Permissão para acessar camera negada')
-                            throw new Error('Permissão para acessar camera negada');
+
                         }
+
+                    } catch (err) {
+                        alert(err)
+                        return
                     }
+
                 }
 
                 if (buttonIndex === 1) {
-                    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
 
-                    if (status === 'granted') {
-                        let result = await ImagePicker.launchImageLibraryAsync({
-                            allowsEditing: true,
-                            aspect: [4, 4],
-                        });
-                        if (!result.cancelled) {
-                            const uid = await this.props.currentUser.uid
-                            const uri = result.uri
-                            const successRouteName = 'mainAdminScreen'
-                            await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
-                        }
-                    } else {
-                        await Permissions.askAsync(Permissions.CAMERA_ROLL)
+                    try {
                         const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
-                        if (status === 'granted') {
-                            let result = await ImagePicker.launchImageLibraryAsync({
-                                allowsEditing: true,
-                                aspect: [4, 4],
-                            });
-                            if (!result.cancelled) {
-                                const uid = await this.props.currentUser.uid
-                                const uri = result.uri
-                                const successRouteName = 'mainAdminScreen'
-                                await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+
+                        if (status) {
+
+                            if (status === 'granted') {
+
+                                try {
+                                    let result = await ImagePicker.launchImageLibraryAsync({
+                                        allowsEditing: true,
+                                        aspect: [4, 4],
+                                    });
+
+                                    if (result) {
+                                        if (!result.cancelled) {
+
+
+                                            try {
+                                                const { currentUser } = await firebase.auth()
+                                                if (currentUser) {
+                                                    const { uid } = currentUser
+                                                    const uri = result.uri
+                                                    const successRouteName = 'mainAdminScreen'
+                                                    console.log('UIDDD', uid)
+                                                    this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                }
+                                            } catch (err) {
+                                                alert(err)
+                                                return
+                                            }
+
+
+                                        }
+
+                                    }
+                                } catch (err) {
+                                    alert(err)
+                                    return
+                                }
+
+                            } else {
+
+                                try {
+                                    await Permissions.askAsync(Permissions.CAMERA_ROLL)
+                                } catch (err) {
+                                    alert(err)
+                                    return
+                                }
+                                try {
+                                    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+
+                                    if (status) {
+
+                                        if (status === 'granted') {
+
+                                            try {
+                                                let result = await ImagePicker.launchImageLibraryAsync({
+                                                    allowsEditing: true,
+                                                    aspect: [4, 4],
+                                                });
+                                                if (result) {
+                                                    if (!result.cancelled) {
+
+                                                        try {
+                                                            const { currentUser } = await firebase.auth()
+                                                            if (currentUser) {
+                                                                const { uid } = currentUser
+                                                                const uri = result.uri
+                                                                const successRouteName = 'mainAdminScreen'
+                                                                console.log('THIS>PROPS4', this.props)
+                                                                this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                            }
+                                                        } catch (err) {
+                                                            alert(err)
+                                                            return
+                                                        }
+
+                                                    }
+                                                }
+                                            } catch (err) {
+                                                alert(err)
+                                                return
+                                            }
+
+                                        } else {
+                                            alert('Permissão para acessar a biblioteca negada')
+                                            throw new Error('Permissão para acessar a biblioteca negada');
+                                        }
+                                    }
+
+                                } catch (err) {
+                                    alert(err)
+                                    return
+                                }
                             }
-                        } else {
-                            alert('Permissão para acessar a biblioteca negada')
-                            throw new Error('Permissão para acessar a biblioteca negada');
+
                         }
+
+                    } catch (err) {
+                        alert(err)
+                        return
                     }
                 }
             });
@@ -213,7 +364,7 @@ const styles = {
         paddingBottom: 35
     },
     image: {
-        width:100,
+        width: 100,
         height: 100,
         borderRadius: 10
     },

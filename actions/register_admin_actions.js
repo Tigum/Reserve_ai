@@ -330,6 +330,9 @@ export const registerAdminUser = (
             const { currentUser } = await firebase.auth()
 
             if (currentUser) {
+
+                const { uid } = currentUser
+
                 try {
                     await currentUser.updateProfile({ displayName: name })
                 } catch (err) {
@@ -338,7 +341,7 @@ export const registerAdminUser = (
                 }
 
                 try {
-                    await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
+                    await firebase.database().ref(`/users/${uid}`).set(userInfo)
                 } catch (err) {
                     alert(err)
                     return
@@ -354,10 +357,18 @@ export const registerAdminUser = (
                     type: AUTH_LOADING_OFF,
                     payload: false
                 })
-                dispatch({
-                    type: LOAD_LOGGEDIN_USER,
-                    payload: currentUser
-                })
+
+                try{
+                    await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
+                        dispatch({
+                            type: LOAD_LOGGEDIN_USER,
+                            payload: snapshot.val()
+                        })
+                    })
+                }catch(err){
+                    alert(err)
+                    return
+                }
             }
 
         } catch (err) {
@@ -449,7 +460,6 @@ export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => (dispa
             post["photo"] = response.body.postResponse.location
             firebase.database().ref(`users/${uid}`).update({ imageUrl: post.photo })
                 .then(() => {
-                    console.log('route_uploadphoto', successRouteName)
                     NavigationService.navigate(successRouteName, {});
                     registerAdminLoadingOff(dispatch)
                 })

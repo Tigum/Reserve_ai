@@ -19,7 +19,8 @@ import {
     ADMIN_USER_REGISTERED_SUCCESS,
     LOAD_REDIRECTED_USER,
     USER_LOADED_TRUE,
-    USER_LOADED_FALSE
+    USER_LOADED_FALSE,
+    LOAD_AVATAR
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -34,7 +35,8 @@ const INITIAL_STATE = {
     emailAndPasswordFocus: false,
     registering: false,
     currentUser: null,
-    userLoaded: false
+    userLoaded: false,
+    avatar: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -106,6 +108,12 @@ export default (state = INITIAL_STATE, action) => {
         case USER_LOADED_FALSE:
             // console.log('USER_LOADED_FALSE')
             return { ...state, userLoaded: action.payload };
+        case USER_LOADED_FALSE:
+            // console.log('USER_LOADED_FALSE')
+            return { ...state, userLoaded: action.payload };
+        case LOAD_AVATAR:
+            // console.log('LOAD_AVATAR')
+            return { ...state, avatar: action.payload };
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_AUTH')
             return { ...state, ...INITIAL_STATE }

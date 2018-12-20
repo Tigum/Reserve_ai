@@ -15,6 +15,7 @@ import {
     REGISTERING_OFF,
     USER_LOADED_TRUE,
     USER_LOADED_FALSE,
+    LOAD_AVATAR,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -302,3 +303,30 @@ export const handleExistingUser = (user) => async (dispatch) => {
     }
 }
 
+export const renderAvatar = () => async(dispatch) => {
+    try{
+        const { currentUser } = await firebase.auth()
+
+        if(currentUser) {
+            const { uid } = currentUser
+
+            try{
+                await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
+                    const { imageUrl } = snapshot.val()
+                    console.log('snap', snapshot.val())
+                    dispatch({
+                        type: LOAD_AVATAR,
+                        payload: imageUrl
+                    })
+                })
+            }catch(err){
+                alert(err)
+                return
+            }
+        }
+
+    }catch(err){
+        alert(err)
+        return NavigationServices.navigate('auth')
+    }
+}

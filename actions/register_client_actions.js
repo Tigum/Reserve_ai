@@ -12,7 +12,8 @@ import {
     CLEAR_FORM,
     CLIENT_USER_REGISTERED_SUCCESS,
     CONTINUE_CLIENT_REGISTRATION,
-    REGISTERING_NEW_USER
+    REGISTERING_NEW_USER,
+    LOAD_LOGGEDIN_USER
 } from './types';
 
 export const nameClientChanged = (text) => {
@@ -79,9 +80,29 @@ export const checkIfClientEmailExistsAndRegister = ({ email, errorMessage, error
     }
 
     try {
-        const { currentUser } = await firebase.auth()
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+    } catch (err) {
+        alert(err)
+        return
+    }
 
+    try {
+        const { currentUser } = await firebase.auth()
         if (currentUser) {
+            const{ uid } = currentUser
+
+            try{
+                await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
+                    dispatch({
+                        type: LOAD_LOGGEDIN_USER,
+                        payload: snapshot.val()
+                    })
+                })
+            }catch(err){
+                alert(err)
+                return
+            }
+
             try {
                 await currentUser.updateProfile({ displayName: name })
             } catch (err) {
@@ -90,7 +111,7 @@ export const checkIfClientEmailExistsAndRegister = ({ email, errorMessage, error
             }
 
             try {
-                await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
+                await firebase.database().ref(`/users/${uid}`).set(userInfo)
             } catch (err) {
                 alert(err)
                 return
@@ -110,7 +131,6 @@ export const checkIfClientEmailExistsAndRegister = ({ email, errorMessage, error
         return
     }
 
-    clientUserRegisteredSuccess(dispatch, user)
     NavigationService.navigate(successRouteName, {})
     registerClientLoadingOff(dispatch)
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'firebase'
 import { View } from 'react-native';
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
@@ -50,72 +51,221 @@ class RegisterClientPicScreen extends Component {
                 async (buttonIndex) => {
 
                     if (buttonIndex === 0) {
-                        const { status } = await Permissions.getAsync(Permissions.CAMERA);
-                        if (status === 'granted') {
-                            let result = await ImagePicker.launchCameraAsync({
-                                allowsEditing: true,
-                                aspect: [4, 4],
-                            });
-                            if (!result.cancelled) {
-                                const { uid } = this.props.currentUser
-                                const { uri } = result
-                                const successRouteName = 'mainAdminScreen'
-                                await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
-                            }
-                        } else {
-                            await Permissions.askAsync(Permissions.CAMERA)
+
+                        try {
                             const { status } = await Permissions.getAsync(Permissions.CAMERA);
-                            if (status === 'granted') {
-                                let result = await ImagePicker.launchCameraAsync({
-                                    allowsEditing: true,
-                                    aspect: [4, 4],
-                                });
-                                const { uid } = this.props.currentUser
-                                if (!result.cancelled) {
-                                    const { uri } = result
-                                    const successRouteName = 'mainAdminScreen'
-                                    await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
+
+                            if (status) {
+
+                                if (status === 'granted') {
+
+                                    try {
+                                        let result = await ImagePicker.launchCameraAsync({
+                                            allowsEditing: true,
+                                            aspect: [4, 4],
+                                        });
+
+                                        if (result) {
+                                            if (!result.cancelled) {
+
+                                                try {
+                                                    const { currentUser } = firebase.auth()
+
+                                                    if (currentUser) {
+                                                        const { uid } = currentUser
+                                                        const { uri } = result
+                                                        const successRouteName = 'mainClientScreen'
+                                                        this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
+                                                    }
+
+                                                } catch (err) {
+                                                    alert(err)
+                                                    return
+                                                }
+                                            }
+                                        }
+
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
+
+                                } else {
+
+                                    try {
+                                        await Permissions.askAsync(Permissions.CAMERA)
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
+
+                                    try {
+                                        const { status } = await Permissions.getAsync(Permissions.CAMERA);
+
+                                        if (status) {
+                                            if (status === 'granted') {
+
+                                                try {
+                                                    let result = await ImagePicker.launchCameraAsync({
+                                                        allowsEditing: true,
+                                                        aspect: [4, 4],
+                                                    });
+
+                                                    if (result) {
+
+                                                        try {
+                                                            const { currentUser } = firebase.auth()
+
+                                                            if (currentUser) {
+
+                                                                if (!result.cancelled) {
+                                                                    const { uid } = currentUser
+                                                                    const { uri } = result
+                                                                    const successRouteName = 'mainClientScreen'
+                                                                    this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
+                                                                }
+                                                            }
+
+                                                        } catch (err) {
+                                                            alert(err)
+                                                            return
+                                                        }
+
+                                                    }
+                                                } catch (err) {
+                                                    alert(err)
+                                                    return
+                                                }
+
+                                            } else {
+                                                alert('Permissão para acessar camera negada')
+                                                throw new Error('Permissão para acessar camera negada');
+                                            }
+                                        }
+
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
                                 }
-                            } else {
-                                alert('Permissão para acessar camera negada')
-                                throw new Error('Permissão para acessar camera negada');
+
                             }
+
+                        } catch (err) {
+                            alert(err)
+                            return
                         }
+
                     }
 
                     if (buttonIndex === 1) {
-                        const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
 
-                        if (status === 'granted') {
-                            let result = await ImagePicker.launchImageLibraryAsync({
-                                allowsEditing: true,
-                                aspect: [4, 4],
-                            });
-                            if (!result.cancelled) {
-                                
-                                const { uid } = this.props.currentUser
-                                const { uri } = result
-                                const successRouteName = 'mainAdminScreen'
-                                await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
-                            }
-                        } else {
-                            await Permissions.askAsync(Permissions.CAMERA_ROLL)
+
+                        try {
+
                             const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
-                            if (status === 'granted') {
-                                let result = await ImagePicker.launchImageLibraryAsync({
-                                    allowsEditing: true,
-                                    aspect: [4, 4],
-                                });
-                                if (!result.cancelled) {
-                                    const { uid } = this.props.currentUser
-                                    const { uri } = result
-                                    const successRouteName = 'mainAdminScreen'
-                                    await this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
+
+                            if (status) {
+
+                                if (status === 'granted') {
+
+                                    try {
+                                        let result = await ImagePicker.launchImageLibraryAsync({
+                                            allowsEditing: true,
+                                            aspect: [4, 4],
+                                        });
+
+                                        if (result) {
+                                            if (!result.cancelled) {
+
+                                                try {
+                                                    const { currentUser } = firebase.auth()
+
+                                                    if (currentUser) {
+                                                        const { uid } = currentUser
+                                                        const { uri } = result
+                                                        const successRouteName = 'mainClientScreen'
+                                                        this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
+                                                    }
+
+                                                } catch (err) {
+                                                    alert(err)
+                                                    return
+                                                }
+
+                                            }
+                                        }
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
+                                } else {
+
+                                    try {
+                                        await Permissions.askAsync(Permissions.CAMERA_ROLL)
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
+                                    try {
+                                        const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+
+                                        if (status) {
+                                            if (status === 'granted') {
+
+                                                try {
+                                                    let result = await ImagePicker.launchImageLibraryAsync({
+                                                        allowsEditing: true,
+                                                        aspect: [4, 4],
+                                                    });
+
+                                                    if (result) {
+                                                        if (!result.cancelled) {
+
+                                                            try {
+                                                                const { currentUser } = firebase.auth()
+
+                                                                if (currentUser) {
+                                                                    const { uid } = currentUser
+                                                                    const { uri } = result
+                                                                    const successRouteName = 'mainAdminScreen'
+                                                                    this.props.uploadPhotoClient({ uri, S3Options, uid, successRouteName })
+                                                                }
+
+                                                            } catch (err) {
+                                                                alert(err)
+                                                                return
+                                                            }
+
+
+                                                        }
+                                                    }
+                                                } catch (err) {
+                                                    alert(err)
+                                                    return
+                                                }
+
+                                            } else {
+                                                alert('Permissão para acessar a biblioteca negada')
+                                                throw new Error('Permissão para acessar a biblioteca negada');
+                                            }
+                                        }
+                                    } catch (err) {
+                                        alert(err)
+                                        return
+                                    }
+
                                 }
-                            } else {
-                                alert('Permissão para acessar a biblioteca negada')
-                                throw new Error('Permissão para acessar a biblioteca negada');
                             }
+
+                        } catch (err) {
+                            alert(err)
+                            return
                         }
                     }
                 });
