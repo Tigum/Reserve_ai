@@ -1,27 +1,23 @@
 import firebase from 'firebase';
-import { Alert } from 'react-native'
 import _ from 'lodash';
 import {
     LOAD_AVAILABLE_SERVICES,
     LOADING_CLIENT_SERVICES_ON,
     LOADING_CLIENT_SERVICES_OFF,
     LOAD_AVAILABLE_BUSINESSES,
-    ADD_BUSINESS_TO_MAIN_LIST,
-    CLEAR_MAIN_BUSINESS_LIST,
-    LOAD_AVAILABLE_USER,
-    LOAD_LOGGEDIN_USER,
-    LOAD_REDIRECTED_USER
+    ADD_BUSINESS_TO_MAIN_LIST
 } from './types';
 import NavigationServices from './NavigationServices';
 
 export const loadAvailableBusinesses = () => async (dispatch) => {
+
     try {
         loadingOn(dispatch)
         const usersRef = await firebase.database().ref().child('users')
-        if (usersRef) {
 
+        if (usersRef) {
             try {
-                await usersRef.orderByChild('role').equalTo('admin').on('value', async snapshot => {
+                await usersRef.orderByChild('role').equalTo('admin').on('value', snapshot => {
                     addBusinessToMainList(dispatch, _.values(snapshot.val()))
                     loadingOff(dispatch)
                 })
@@ -29,20 +25,20 @@ export const loadAvailableBusinesses = () => async (dispatch) => {
                 alert(err)
                 return
             }
-
         }
     } catch (err) {
         alert(err)
         return
     }
+
 }
 
 export const loadAvailableServices = (input) => async (dispatch) => {
-    const { currentUser } = await firebase.auth()
-    loadingOn(dispatch)
-    firebase.database().ref(`/services`)
-        .on('value', async snapshot => {
-            const servicesJson = await snapshot.val()
+
+    try {
+        loadingOn(dispatch)
+        await firebase.database().ref(`/services`).on('value', snapshot => {
+            const servicesJson = snapshot.val()
             const list = _.values(servicesJson)
             const services = []
             list.map((item) => {
@@ -54,6 +50,10 @@ export const loadAvailableServices = (input) => async (dispatch) => {
             loadServices(dispatch, services)
             loadingOff(dispatch)
         })
+    } catch (err) {
+        alert(err)
+        return
+    }
 }
 
 const loadingOn = (dispatch) => {
