@@ -7,24 +7,12 @@ import {
     PASSWORD_CHANGED,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
-    LOGIN_USER,
-    FACEBOOK_LOGIN_FAIL,
-    FACEBOOK_LOGIN_SUCCESS,
-    FACEBOOK_LOGOUT_SUCCESS,
     AUTH_LOADING_ON,
     AUTH_LOADING_OFF,
-    CLEAR_FORM,
     LOAD_LOGGEDIN_USER,
     EMAIL_PASSWORD_INPUT_FOCUS,
-    USER_LOG_OUT_SUCCESS,
-    CLEAR_MAIN_BUSINESS_LIST,
-    RESET_APPLICATION_TO_INITIAL_STATE,
-    ADD_AREA_TO_ADMIN,
-    REMOVE_AREA_TO_ADMIN,
-    REDIRECT_EXISTING_USER,
     REGISTERING_ON,
     REGISTERING_OFF,
-    LOAD_REDIRECTED_USER,
 } from './types';
 
 export const emailAndPasswordInputFocus = (input) => {
@@ -50,7 +38,6 @@ export const passwordChanged = (text) => {
 
 export const loginUser = ({ email, password }) => {
     return async (dispatch) => {
-        console.log('entrou login')
         authLoadingOn(dispatch)
         try {
             await firebase.auth().signInWithEmailAndPassword(email, password)
@@ -87,79 +74,86 @@ export const loginUser = ({ email, password }) => {
     }
 }
 
-export const facebookLogout = () => async (dispatch) => {
-    const token = await AsyncStorage.getItem('fb_token_reserve');
-    if (token) {
-        await firebase.auth().signOut()
-        const routeName = 'auth'
-        await AsyncStorage.setItem('fb_token_reserve', '');
-        facebookLogoutSuccess(dispatch, routeName)
-    }
-};
-
 
 export const doFacebookLogin = () => {
-    return (dispatch) => {
+    return async (dispatch) => {
         authLoadingOn(dispatch)
-        Facebook.logInWithReadPermissionsAsync('361785537896831', {
-            permissions: ['public_profile'],
-            behavior: 'web'
-        }).then((result) => {
-            console.log('result', result)
-            if (result.type === 'cancel') {
-                return dispatch({ type: FACEBOOK_LOGIN_FAIL, payload: '' })
+        try {
+            const result = await Facebook.logInWithReadPermissionsAsync('361785537896831', {
+                permissions: ['public_profile'],
+                behavior: 'web'
+            })
+            if (!result) return alert('Facebook login failed')
+
+            const { type, token } = result
+
+            if (type !== 'success') return alert('Facebook login failed')
+
+            try {
+                await AsyncStorage.setItem('fb_token_reserve', token);
+            } catch (err) {
+                alert(err)
+                return
             }
-            facebookLoginSuccess(dispatch, result.token)
-        }).catch((err) => {
+
+            try {
+                const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
+
+                if (provider) {
+                    try {
+                        const output = await firebase.auth().signInAndRetrieveDataWithCredential(provider)
+
+                        if (output) {
+                            const { user } = output
+
+                            try {
+                                await firebase.database().ref(`/users/${user.uid}`).set({
+                                    name: user.displayName,
+                                    facebookRegistration: true,
+                                    role: 'client'
+                                })
+                            } catch (err) {
+                                alert(err)
+                                return
+                            }
+
+                            try {
+                                await firebase.database().ref(`/users/${user.uid}`).on('value', snapshot => {
+                                    dispatch({
+                                        type: LOAD_LOGGEDIN_USER,
+                                        payload: snapshot.val()
+                                    })
+                                })
+
+
+                            } catch (err) {
+                                alert(err)
+                                return
+                            }
+                            authLoadingOff(dispatch)
+                            NavigationServices.navigate('mainClientScreen')
+
+                        }
+                    } catch (err) {
+                        alert(err)
+                        return
+                    }
+                }
+
+            } catch (err) {
+                alert(err)
+                return
+            }
+
+
+        } catch (err) {
             authLoadingOff(dispatch)
             alert('Facebook authentication failed' + ' - ' + err)
+            return
         }
-        );
     }
-}   
-
-const facebookLoginSuccess = async (dispatch, token) => {
-    if (!token) {
-        authLoadingOff(dispatch)
-        return alert('Facebook authentication failed')
-    }
-    try {
-        await AsyncStorage.setItem('fb_token_reserve', token);
-        const provider = await new firebase.auth.FacebookAuthProvider.credential(token)
-        await firebase.auth().signInAndRetrieveDataWithCredential(provider).then(function (result) {
-            console.log('result', result)
-            const user = result.user;
-            const name = user.displayName
-            firebase.database().ref(`/users/${user.uid}`).set({ name, facebookRegistration: true, role: 'client' })
-        })
-    } catch (err) {
-        alert(err)
-    }
-    const { currentUser } = await firebase.auth()
-    firebase.database().ref(`/users/${currentUser.uid}`).on('value', snapshot => {
-        const user = snapshot.val()
-        console.log('userrr', user)
-        authLoadingOff(dispatch)
-        dispatch({
-            type: FACEBOOK_LOGIN_SUCCESS,
-            payload: { token, user }
-        })
-    })
 }
 
-const facebookLogoutSuccess = (dispatch, routeName) => {
-    dispatch({
-        type: FACEBOOK_LOGOUT_SUCCESS,
-        payload: routeName
-    })
-}
-
-const userLogoutSuccess = (dispatch, routeName) => {
-    dispatch({
-        type: USER_LOG_OUT_SUCCESS,
-        payload: routeName
-    })
-}
 
 const loginUserFail = (dispatch) => {
     dispatch({
@@ -188,13 +182,7 @@ const authLoadingOff = (dispatch) => {
     })
 }
 
-const clearForm = (dispatch) => {
-    dispatch({
-        type: CLEAR_FORM,
-    })
-}
-
-export const userLogOut = () => async (dispatch) => {
+export const userLogOut = () => async () => {
     Alert.alert(
         'Log out',
         'Tem certeza que deseja sair de sua conta?',
@@ -202,15 +190,15 @@ export const userLogOut = () => async (dispatch) => {
             {
                 text: 'Sim', onPress: async () => {
 
-                    try{
+                    try {
                         await firebase.auth().signOut()
-                    } catch(err) {
+                    } catch (err) {
                         return alert(err)
                     }
 
-                    try{
+                    try {
                         await AsyncStorage.setItem('fb_token_reserve', '')
-                    } catch(err) {
+                    } catch (err) {
                         return alert(err)
                     }
 
@@ -226,11 +214,6 @@ export const userLogOut = () => async (dispatch) => {
     )
 }
 
-const resetApplicationToInitialState = (dispatch) => {
-    dispatch({
-        type: RESET_APPLICATION_TO_INITIAL_STATE,
-    })
-}
 
 export const authLoadingOnExport = () => {
     return {
@@ -244,13 +227,6 @@ export const authLoadingOffExport = () => {
         type: AUTH_LOADING_ON,
         payload: false
     }
-}
-
-const loadedRedictedUserSuccess = (dispatch, user) => {
-    dispatch({
-        type: LOAD_REDIRECTED_USER,
-        payload: user
-    })
 }
 
 export const registeringOn = () => {
@@ -269,7 +245,6 @@ export const registeringOff = () => {
 
 export const loadLoggedInUser = () => async (dispatch) => {
     try {
-        
         const { currentUser } = await firebase.auth()
         try {
             await firebase.database().ref(`/users/${currentUser.uid}`).on('value', snapshot => {
@@ -283,11 +258,8 @@ export const loadLoggedInUser = () => async (dispatch) => {
             alert(err)
             return
         }
-
     } catch (err) {
         alert(err)
         return
     }
-
-
 }
