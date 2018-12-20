@@ -3,14 +3,19 @@ import { View, TextInput, TouchableWithoutFeedback, Dimensions } from 'react-nat
 import { sanFranciscoWeights } from 'react-native-typography';
 import { AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { searchTextOutput } from '../actions'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
 class SearchInput extends Component {
 
+    inputText(text) {
+        this.props.searchTextOutput(text)
+    }
+
     render() {
-        const { iconAction, autoFocusSearch } = this.props
-        console.log('autoFocusSearch', autoFocusSearch)
+        const { iconAction, autoFocusSearch, searchText } = this.props
+        console.log('searchText', searchText)
         return (
             <View style={styles.mainView}>
                 <View style={styles.textInputView}>
@@ -19,6 +24,8 @@ class SearchInput extends Component {
                         placeholder='Pesquise por loja, cidade, ou setor...'
                         placeholderTextColor='black'
                         autoFocus={autoFocusSearch}
+                        onChangeText={this.inputText.bind(this)}
+                        value={this.props.searchText}
                     />
                 </View>
                 <TouchableWithoutFeedback onPress={iconAction}>
@@ -57,8 +64,8 @@ const styles = {
 }
 
 const mapStateToProps = ({ servicesClient }) => {
-    const { autoFocusSearch } = servicesClient
-    return{ autoFocusSearch }
+    const { autoFocusSearch, searchText } = servicesClient
+    return { autoFocusSearch, searchText }
 }
 
-export default connect(mapStateToProps, {})(SearchInput);
+export default connect(mapStateToProps, { searchTextOutput })(SearchInput);

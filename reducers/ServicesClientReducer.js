@@ -7,7 +7,8 @@ import {
     CLEAR_MAIN_BUSINESS_LIST,
     RESET_APPLICATION_TO_INITIAL_STATE,
     LOAD_AVAILABLE_USER,
-    AUTO_FOCUS_SEARCH
+    AUTO_FOCUS_SEARCH,
+    SEARCH_TEXT
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -16,7 +17,8 @@ const INITIAL_STATE = {
     loading: false,
     businesses: [],
     currentUser: {},
-    autoFocusSearch: false
+    autoFocusSearch: false,
+    searchText: ''
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -43,6 +45,9 @@ export default (state = INITIAL_STATE, action) => {
         case AUTO_FOCUS_SEARCH:
             // console.log('AUTO_FOCUS_SEARCH')
             return { ...state, autoFocusSearch: action.payload }
+        case SEARCH_TEXT:
+            // console.log('SEARCH_TEXT')
+            return { ...state, searchText: action.payload }
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_SERVICE_CLIENT')
             return { ...state, ...INITIAL_STATE, businesses: [] }

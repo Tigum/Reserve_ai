@@ -14,9 +14,10 @@ class SearchScreen extends Component {
     }
 
     render() {
+        const { searchText } = this.props
         return (
             <View style={styles.mainView}>
-                <SearchInput iconAction={this.iconAction.bind(this)}/>
+                <SearchInput iconAction={this.iconAction.bind(this)} textInput={searchText}/>
             </View>
         )
     }
@@ -25,10 +26,13 @@ class SearchScreen extends Component {
 const styles= {
     mainView: {
         width: SCREEN_WIDTH,
-        // flexDirection: 'column',
-        // flex: 1,
         backgroundColor: 'white'
     }
 }
 
-export default connect(null, { autoFocus })(SearchScreen)
+const mapStateToProps = ({ servicesClient }) => {
+    const { searchText } = servicesClient
+    return { searchText }
+}
+
+export default connect(mapStateToProps, { autoFocus })(SearchScreen)

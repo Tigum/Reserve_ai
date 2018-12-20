@@ -6,7 +6,8 @@ import {
     LOADING_CLIENT_SERVICES_OFF,
     LOAD_AVAILABLE_BUSINESSES,
     ADD_BUSINESS_TO_MAIN_LIST,
-    AUTO_FOCUS_SEARCH
+    AUTO_FOCUS_SEARCH,
+    SEARCH_TEXT
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -96,5 +97,12 @@ export const autoFocus = (input) => {
     return ({
         type: AUTO_FOCUS_SEARCH,
         payload: input
+    })
+}
+
+export const searchTextOutput = (text) => {
+    return ({
+        type: SEARCH_TEXT,
+        payload: text
     })
 }
