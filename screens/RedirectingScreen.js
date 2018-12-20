@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase'
 import { connect } from 'react-redux';
 import { Spinner } from '../components/Spinner'
-import { loadLoggedInUser, loadAvailableBusinesses, handleExistingUser } from '../actions'
+import { loadLoggedInUser, handleExistingUser } from '../actions'
 
 class RedirectingScreen extends Component {
 
@@ -17,7 +17,6 @@ class RedirectingScreen extends Component {
                 await firebase.auth().onAuthStateChanged(user => {
                     if (user) {
                         this.props.handleExistingUser(user)
-                        this.props.loadAvailableBusinesses()
                     } else {
                         this.props.navigation.navigate('auth')
                     }
@@ -42,4 +41,4 @@ const mapStateToProps = ({ auth }) => {
     return { registering, currentUser }
 }
 
-export default connect(mapStateToProps, { loadLoggedInUser, loadAvailableBusinesses, handleExistingUser })(RedirectingScreen)
+export default connect(mapStateToProps, { loadLoggedInUser, handleExistingUser })(RedirectingScreen)

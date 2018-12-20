@@ -10,6 +10,10 @@ import { Spinner } from '../components/Spinner'
 
 class MainClientScreen extends Component {
 
+    componentWillMount(){
+        this.props.loadAvailableBusinesses()
+    }
+
     render() {
         return (
             <View style={styles.mainView}>
