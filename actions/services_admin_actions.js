@@ -23,7 +23,8 @@ import {
     CLEAR_SERVICE_FORM,
     START_EDIT_SERVICE,
     SERVICE_LOADING,
-    SET_SERVICE_MODE
+    SET_SERVICE_MODE,
+    START_ADD_SERVICE
 } from './types';
 import NavigationServices from './NavigationServices';
 import random from 'random-id';
@@ -558,5 +559,12 @@ export const setServiceModeExport = (mode) => {
 export const clearServiceFormExport = () => {
     return {
         type: CLEAR_SERVICE_FORM,
+    }
+}
+
+export const startAddService = () => {
+    return {
+        type: START_ADD_SERVICE,
+        payload: 'add'
     }
 }

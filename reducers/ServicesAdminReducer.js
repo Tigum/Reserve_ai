@@ -24,6 +24,7 @@ import {
     SERVICE_LOADING,
     SET_SERVICE_MODE,
     RESET_APPLICATION_TO_INITIAL_STATE,
+    START_ADD_SERVICE,
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -112,6 +113,17 @@ export default (state = INITIAL_STATE, action) => {
                 serviceName: action.payload.serviceName,
                 servicePrice: action.payload.servicePrice,
                 mode: 'edit'
+            }
+        case START_ADD_SERVICE:
+            return {
+                ...state,
+                employeesSelected: '',
+                serviceDescription: '',
+                serviceDuration: '',
+                serviceId: '',
+                serviceName: '',
+                servicePrice: '',
+                mode: 'add'
             }
         case SET_SERVICE_MODE:
             return { ...state, mode: action.payload }

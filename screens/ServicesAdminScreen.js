@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearServiceFormExport } from '../actions'
+import { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearServiceFormExport, startAddService } from '../actions'
 import ServicesListAdmin from '../components/ServicesListAdmin'
 import { HEADER_BACKGROUND_COLOR, HEADER_TEXT_COLOR, HEADER_TEXT_FONT_WEIGHT } from '../app_styles'
 import { Spinner } from '../components/Spinner'
@@ -50,6 +50,7 @@ class ServicesAdminScreen extends Component {
     };
 
     addService() {
+        this.props.startAddService()
         this.props.navigation.navigate('addService')
     }
 
@@ -75,4 +76,4 @@ const mapStateToProps = ({ mainAdmin, servicesAdmin }) => {
     return { user, registeredServices, loading }
 }
 
-export default connect(mapStateToProps, { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearServiceFormExport })(ServicesAdminScreen);
+export default connect(mapStateToProps, { getAdminUserInfo, loadRegisteredServices, setServiceModeExport, clearServiceFormExport, startAddService })(ServicesAdminScreen);
