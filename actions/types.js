@@ -132,3 +132,6 @@ export const LOADING_CLIENT_SERVICES_OFF = 'loading_client_services_off'
 export const LOAD_AVAILABLE_BUSINESSES = 'load_available_businesses'
 export const ADD_BUSINESS_TO_MAIN_LIST = 'add_business_to_main_list'
 export const CLEAR_MAIN_BUSINESS_LIST = 'clear_main_business_list'
+
+
+export const AUTO_FOCUS_SEARCH = 'auto_focus_search'

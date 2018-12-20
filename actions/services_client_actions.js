@@ -5,7 +5,8 @@ import {
     LOADING_CLIENT_SERVICES_ON,
     LOADING_CLIENT_SERVICES_OFF,
     LOAD_AVAILABLE_BUSINESSES,
-    ADD_BUSINESS_TO_MAIN_LIST
+    ADD_BUSINESS_TO_MAIN_LIST,
+    AUTO_FOCUS_SEARCH
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -88,5 +89,12 @@ const addBusinessToMainList = (dispatch, business) => {
     dispatch({
         type: ADD_BUSINESS_TO_MAIN_LIST,
         payload: business
+    })
+}
+
+export const autoFocus = (input) => {
+    return ({
+        type: AUTO_FOCUS_SEARCH,
+        payload: input
     })
 }

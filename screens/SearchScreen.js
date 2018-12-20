@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
 import { View, Dimensions } from 'react-native';
 import SearchInput from '../components/SearchInput'
+import { autoFocus } from '../actions'
+import { connect } from 'react-redux';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
 class SearchScreen extends Component {
+
+    iconAction() {
+        this.props.autoFocus(false)
+        this.props.navigation.goBack()
+    }
+
     render() {
         return (
             <View style={styles.mainView}>
-                <SearchInput iconAction={() => this.props.navigation.goBack()}/>
+                <SearchInput iconAction={this.iconAction.bind(this)}/>
             </View>
         )
     }
@@ -23,4 +31,4 @@ const styles= {
     }
 }
 
-export default SearchScreen
+export default connect(null, { autoFocus })(SearchScreen)
