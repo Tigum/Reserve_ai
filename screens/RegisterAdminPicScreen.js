@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import firebase from 'firebase'
 import Header from '../components/Header'
 import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
-import { EvilIcons } from '@expo/vector-icons';
 import {
     continueRegisterAdmin,
     uploadPhoto,
     checkIfClientEmailExistsAndRegister,
-    ifNoPicWasUpdated
+    setAvatarDefault
 } from '../actions'
 import Button from '../components/Button'
 import { bucket, region, accessKey, secretKey, successActionStatus } from '../s3'
 import { Spinner } from '../components/Spinner'
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 import { ImagePicker, Permissions } from 'expo'
-import { sanFranciscoWeights } from 'react-native-typography';
 
 const S3Options = {
     bucket,
@@ -36,50 +34,8 @@ class RegisterAdminPicScreen extends Component {
     }
 
     onRegisterButtonPress() {
-        console.log('entrouuuuuuuuu', this.props)
+        this.props.setAvatarDefault()
         this.props.navigation.navigate('mainAdminScreen')
-        // const { currentUser } = await firebase.auth()
-        // console.log('currentUser', currentUser)
-        // if (currentUser) {
-        //     this.props.ifNoPicWasUpdated(currentUser.uid)
-        // } else {
-        //     alert('Você não está logado. Faça o login e tente novamente')
-        // }
-    }
-
-    renderPhoto() {
-        // const { currentUser } = firebase.auth()
-        console.log('currentUser')
-        // if(!currentUser) return
-        // firebase.database().ref(`/users/${currentUser.uid}`).on('value', async snapshot => {
-        //     const user = await snapshot.val()
-        //     console.log('user5', user)
-        //     if (user.imageUrl && user.imageUrl.length > 0) {
-        //         if (user.role === 'admin') {
-        //             return (
-        //                 <View>
-        //                     <EvilIcons name='camera' size={30} />
-        //                     <Text style={[sanFranciscoWeights.thin, styles.text]}>Adicione seu logo</Text>
-        //                 </View>
-        //             )
-        //         }
-        //         return (
-        //             <View>
-        //                 <EvilIcons name='camera' size={30} />
-        //                 <Text style={[sanFranciscoWeights.thin, styles.text]}>Adicione foto do perfil</Text>
-        //             </View>
-        //         )
-        //     }
-
-        //     if (user.imageUrl) {
-        //         return (
-        //             <Image style={styles.image}
-        //                 source={this.state.imageLoading ? require('../img/loading.gif') : { uri: user.imageUrl }}
-        //                 onLoadEnd={this.endLoadingImage.bind(this)}
-        //             />
-        //         )
-        //     }
-        // })
     }
 
     onOpenActionSheet = async () => {
@@ -328,10 +284,6 @@ class RegisterAdminPicScreen extends Component {
             >
                 <Header headerText='Foto da loja ou Logo' icon='leftcircleo' />
                 <View>
-                    {/* <Image 
-                        source={{uri:''}}
-                    /> */}
-                    {this.renderPhoto()}
                     <Button
                         buttonText='Subir foto'
                         // buttonBackgroundColor={this.sundayColor()}
@@ -421,5 +373,5 @@ export default connect(mapStateToProps, {
     continueRegisterAdmin,
     uploadPhoto,
     checkIfClientEmailExistsAndRegister,
-    ifNoPicWasUpdated
+    setAvatarDefault
 })(connectActionSheet(RegisterAdminPicScreen));

@@ -597,36 +597,6 @@ export const additionalInfoChanged = (text) => {
     }
 }
 
-export const ifNoPicWasUpdated = (uid) => async (dispatch) => {
-    try {
-        await firebase.database().ref(`/users/${uid}`)
-            .on('value', async snapshot => {
-                const user = snapshot.val()
-                if (user.imageUrl.length === 0) {
-
-                    try {
-                        await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
-                    } catch (err) {
-                        alert(err)
-                        return
-                    }
-
-                    dispatch({
-                        type: SET_PIC_TO_NULL,
-                        payload: 'N/A'
-                    })
-                    NavigationService.navigate('mainAdminView')
-                } else {
-                    NavigationService.navigate('mainAdminView')
-                }
-            })
-
-    } catch (err) {
-        alert(err)
-        return
-    }
-}
-
 export const addAreaToAdmim = (item) => {
     return {
         type: ADD_AREA_TO_ADMIN,

@@ -26,6 +26,16 @@ class SearchBarHeader extends Component {
         this.props.renderAvatar()
     }
 
+    handleAvatar() {
+        if(avatar === null) {
+            return avatar ? { uri: avatar } : require('../img/loading.gif')
+        }
+
+        if(avatar === 'N/A'){
+            return require('../img/default-avatar.png')
+        }
+    }
+
     onOpenActionSheet = async () => {
         let options = ['Camera', 'Biblioteca', 'Cancel'];
         // let destructiveButtonIndex = 0;
@@ -280,7 +290,7 @@ class SearchBarHeader extends Component {
                     <Avatar
                         size="small"
                         rounded
-                        source={avatar ? { uri: avatar } : require('../img/loading.gif')}
+                        source={avatar ? { uri: avatar === 'N/A' ? require('../img/default-avatar.png') : avatar } : require('../img/loading.gif')}
                         onPress={this.onOpenActionSheet.bind(this)}
                         activeOpacity={0.7}
 

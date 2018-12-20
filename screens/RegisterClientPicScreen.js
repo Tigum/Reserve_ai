@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import {
     continueRegisterClient,
     uploadPhotoClient,
+    setAvatarDefault
 } from '../actions'
 import Button from '../components/Button'
 import { bucket, region, accessKey, secretKey, successActionStatus } from '../s3'
@@ -25,7 +26,8 @@ const S3Options = {
 class RegisterClientPicScreen extends Component {
 
     onRegisterButtonPress() {
-        this.props.navigation.navigate('mainAdminScreen')
+        this.props.setAvatarDefault()
+        this.props.navigation.navigate('mainClientScreen')
     }
 
     onOpenActionSheet = async () => {
@@ -339,4 +341,5 @@ const mapStateToProps = ({ registerClient, auth }) => {
 export default connect(mapStateToProps, {
     continueRegisterClient,
     uploadPhotoClient,
+    setAvatarDefault
 })(connectActionSheet(RegisterClientPicScreen));

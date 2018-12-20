@@ -17,7 +17,10 @@ import {
     USER_LOADED_FALSE,
     LOAD_AVATAR,
     LOAD_AVATAR_NULL,
+    LOAD_AVATAR_DEFAULT,
 } from './types';
+
+const defaultAvatar = 'https://tigum.s3.amazonaws.com/1545314260.png'
 
 export const emailAndPasswordInputFocus = (input) => {
     return {
@@ -315,6 +318,7 @@ export const renderAvatar = () => async(dispatch) => {
                 await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
                     const { imageUrl } = snapshot.val()
                     console.log('snap', snapshot.val())
+
                     dispatch({
                         type: LOAD_AVATAR,
                         payload: imageUrl
@@ -336,5 +340,27 @@ export const renderAvatarNull = () => {
     return {
         type: LOAD_AVATAR_NULL,
         payload: null
+    }
+}
+
+
+export const setAvatarDefault = () => async() => {
+    try{
+        const { currentUser } = await firebase.auth()
+
+        if(currentUser) {
+            const { uid } = currentUser
+
+            try{
+                await firebase.database().ref(`/users/${uid}`).update({ imageUrl: defaultAvatar})
+            }catch(err){
+                alert(err)
+                return
+            }
+        }
+
+    }catch(err){
+        alert(err)
+        return NavigationServices.navigate('auth')
     }
 }

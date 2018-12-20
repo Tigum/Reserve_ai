@@ -26,7 +26,7 @@ export const USER_LOADED_TRUE = 'user_loaded_true'
 export const USER_LOADED_FALSE = 'user_loaded_false'
 export const LOAD_AVATAR = 'load_avatar'
 export const LOAD_AVATAR_NULL = 'load_avatar_null'
-
+export const LOAD_AVATAR_DEFAULT = 'load_avatar_default'
 
 export const FACEBOOK_LOGOUT_SUCCESS = 'facebook_logout_success'
 export const RESET_APPLICATION_TO_INITIAL_STATE = 'reset_application_to_initial_state'

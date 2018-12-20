@@ -21,7 +21,8 @@ import {
     USER_LOADED_TRUE,
     USER_LOADED_FALSE,
     LOAD_AVATAR,
-    LOAD_AVATAR_NULL
+    LOAD_AVATAR_NULL,
+    LOAD_AVATAR_DEFAULT
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -117,6 +118,9 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, avatar: action.payload };
         case LOAD_AVATAR_NULL:
             // console.log('LOAD_AVATAR')
+            return { ...state, avatar: action.payload };
+        case LOAD_AVATAR_DEFAULT:
+            // console.log('LOAD_AVATAR_DEFAULT')
             return { ...state, avatar: action.payload };
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_AUTH')
