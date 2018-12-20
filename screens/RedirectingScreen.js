@@ -2,13 +2,35 @@ import React, { Component } from 'react';
 import firebase from 'firebase'
 import { connect } from 'react-redux';
 import { Spinner } from '../components/Spinner'
-import { loadLoggedInUser, handleExistingUser } from '../actions'
+import { handleExistingUser } from '../actions'
 
 class RedirectingScreen extends Component {
 
     componentDidMount() {
+        console.log('entrou no componentDidMount')
         this.loadExistingUser()
     }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.userLoaded) return
+
+        if(this.props.currentUser !== nextProps.currentUser){
+            const { role } = nextProps.currentUser
+            if(role === 'admin'){
+                this.props.navigation.navigate('mainAdminScreen')
+            }
+
+            if(role === 'client'){
+                this.props.navigation.navigate('mainClientScreen')
+            }
+
+            if(!role){
+                alert('Favor faça o cadastro novamente')
+                this.props.navigation.navigate('auth')
+            }
+        }
+    }
+
     
     async loadExistingUser() {
         if (!this.props.currentUser) {
@@ -37,8 +59,8 @@ class RedirectingScreen extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { registering, currentUser } = auth
-    return { registering, currentUser }
+    const { currentUser, userLoaded } = auth
+    return { currentUser, userLoaded }
 }
 
-export default connect(mapStateToProps, { loadLoggedInUser, handleExistingUser })(RedirectingScreen)
+export default connect(mapStateToProps, { handleExistingUser })(RedirectingScreen)

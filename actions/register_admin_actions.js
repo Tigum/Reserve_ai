@@ -231,7 +231,7 @@ export const registerAdminUser = (
         areasSelected
     }
 
-    if(!serviceAtHome) {
+    if (!serviceAtHome) {
         userInfo['streetName'] = streetName
         userInfo['number'] = number
         userInfo['additionalInfo'] = additionalInfo
@@ -300,7 +300,7 @@ export const registerAdminUser = (
         }
     ]
 
-    await days.map((element) => {
+    days.map((element) => {
         if (element.day.selected) {
             const dayName = element.day.day
             const dayInfo = {
@@ -314,17 +314,51 @@ export const registerAdminUser = (
 
     try {
         registerAdminLoadingOn(dispatch)
-        await firebase.auth().createUserWithEmailAndPassword(email, password)
-        const { currentUser } = await firebase.auth()
-        await currentUser.updateProfile({ displayName: name })
-        await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
-        await firebase.auth().signInWithEmailAndPassword(email, password)
+
+        try {
+            await firebase.auth().createUserWithEmailAndPassword(email, password)
+        } catch (err) {
+            alert(err)
+            return
+        }
+
+        try {
+            const { currentUser } = await firebase.auth()
+
+            if (currentUser) {
+                try {
+                    await currentUser.updateProfile({ displayName: name })
+                } catch (err) {
+                    alert(err)
+                    return
+                }
+
+                try {
+                    await firebase.database().ref(`/users/${currentUser.uid}`).set(userInfo)
+                } catch (err) {
+                    alert(err)
+                    return
+                }
+
+                try {
+                    await firebase.auth().signInWithEmailAndPassword(email, password)
+                } catch (err) {
+                    alert(err)
+                    return
+                }
+                dispatch({
+                    type: LOAD_LOGGEDIN_USER,
+                    payload: currentUser
+                })
+            }
+
+        } catch (err) {
+            alert(err)
+            return
+        }
+
         dispatch({
-            type:LOAD_LOGGEDIN_USER,
-            payload: currentUser
-        })
-        dispatch({
-            type:REGISTERING_OFF,
+            type: REGISTERING_OFF,
             payload: false
         })
         NavigationService.navigate('picForm')
@@ -332,11 +366,11 @@ export const registerAdminUser = (
 
     } catch (err) {
         registerAdminLoadingOn(dispatch)
-        console.log(err)
-        await dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
+        dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
         registerAdminLoadingOff(dispatch)
+        alert(err)
+        return
     }
-
 };
 
 export const continueRegisterAdmin = (userInfo) => {
@@ -388,7 +422,7 @@ export const sundayHourEnd = (hour) => {
     }
 }
 
-export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => async (dispatch) => {
+export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => (dispatch) => {
     registerAdminLoadingOn(dispatch)
     let post = {}
     post["id"] = firebase.database.ServerValue.TIMESTAMP
@@ -425,23 +459,26 @@ export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => async 
 
 export const checkIfEmailExists = ({ email, errorMessage, errorRouteName, successRouteName }) => async (dispatch) => {
     registerAdminLoadingOn(dispatch)
-    const result = await firebase.auth().fetchSignInMethodsForEmail(email)
-    if (result.length > 0) {
-        clearForm(dispatch)
-        registerAdminLoadingOff(dispatch)
-        alert(errorMessage)
-        return NavigationService.navigate(errorRouteName, {})
+    try{
+        const result = await firebase.auth().fetchSignInMethodsForEmail(email)
+        
+        if(result){
+            if (result.length > 0) {
+                clearForm(dispatch)
+                registerAdminLoadingOff(dispatch)
+                alert(errorMessage)
+                return NavigationService.navigate(errorRouteName, {})
+            }
+        }
+    }catch(err){
+        alert(err)
+        return
     }
+    
     NavigationService.navigate(successRouteName, {})
     registerAdminLoadingOff(dispatch)
 }
 
-const adminUserRegisteredSuccess = (dispatch, user) => {
-    dispatch({
-        type: ADMIN_USER_REGISTERED_SUCCESS,
-        payload: user
-    })
-}
 
 const registerAdminLoadingOn = (dispatch) => {
     dispatch({
@@ -463,7 +500,7 @@ const clearForm = (dispatch) => {
     })
 }
 
-export const loadStates = () => async (dispatch) => {
+export const loadStates = () => (dispatch) => {
     let states = []
     const list = statesAndCities.estados
     list.map((item) => {
@@ -475,7 +512,7 @@ export const loadStates = () => async (dispatch) => {
     })
 }
 
-export const selectState = (state) => async (dispatch) => {
+export const selectState = (state) => (dispatch) => {
     dispatch({
         type: STATE_ADMIN_REGISTER_CHANGED,
         payload: state
@@ -485,7 +522,7 @@ export const selectState = (state) => async (dispatch) => {
     })
 }
 
-export const loadCities = (state) => async (dispatch) => {
+export const loadCities = (state) => (dispatch) => {
     let cities = []
     const list = statesAndCities.estados
     list.map((item) => {
@@ -542,20 +579,33 @@ export const additionalInfoChanged = (text) => {
 }
 
 export const ifNoPicWasUpdated = (uid) => async (dispatch) => {
-    await firebase.database().ref(`/users/${uid}`)
-        .on('value', async snapshot => {
-            const user = await snapshot.val()
-            if(user.imageUrl.length === 0){
-                await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
-                dispatch({
-                    type: SET_PIC_TO_NULL,
-                    payload: 'N/A'
-                })
-                NavigationService.navigate('mainAdminView')
-            } else {
-                NavigationService.navigate('mainAdminView')
-            }
-        })
+    try {
+        await firebase.database().ref(`/users/${uid}`)
+            .on('value', async snapshot => {
+                const user = snapshot.val()
+                if (user.imageUrl.length === 0) {
+
+                    try {
+                        await firebase.database().ref(`users/${uid}`).update({ imageUrl: 'N/A' })
+                    } catch (err) {
+                        alert(err)
+                        return
+                    }
+
+                    dispatch({
+                        type: SET_PIC_TO_NULL,
+                        payload: 'N/A'
+                    })
+                    NavigationService.navigate('mainAdminView')
+                } else {
+                    NavigationService.navigate('mainAdminView')
+                }
+            })
+
+    } catch (err) {
+        alert(err)
+        return
+    }
 }
 
 export const addAreaToAdmim = (item) => {

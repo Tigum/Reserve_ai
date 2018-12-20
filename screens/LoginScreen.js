@@ -11,6 +11,7 @@ import {
     emailAndPasswordInputFocus,
     authLoadingOnExport,
     authLoadingOffExport,
+    userLoadedTrue
 } from '../actions'
 import { Spinner } from '../components/Spinner'
 import Button from '../components/Button'
@@ -65,6 +66,7 @@ class LoginScreen extends Component {
     }
 
     onFacebookButtonPress() {
+        this.props.userLoadedTrue()
         this.props.doFacebookLogin()
     }
 
@@ -293,5 +295,6 @@ export default connect(mapStateToProps, {
     doFacebookLogin,
     emailAndPasswordInputFocus,
     authLoadingOnExport,
-    authLoadingOffExport
+    authLoadingOffExport,
+    userLoadedTrue
 })(LoginScreen);

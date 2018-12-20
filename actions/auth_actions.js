@@ -288,7 +288,6 @@ export const loadLoggedInUser = () => async (dispatch) => {
 
 export const handleExistingUser = (user) => async (dispatch) => {
     const { uid } = user
-    console.log('UID', uid)
     try {
         await firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
             const userData = snapshot.val()
@@ -296,19 +295,6 @@ export const handleExistingUser = (user) => async (dispatch) => {
                 type: LOAD_LOGGEDIN_USER,
                 payload: userData
             })
-
-            if (userData.role === 'admin') {
-                NavigationServices.navigate('mainAdminScreen')
-            }
-
-            if (userData.role === 'client') {
-                NavigationServices.navigate('mainClientScreen')
-            }
-
-            if (!userData.role) {
-                alert('Favor faça o cadastro novamente')
-                NavigationServices.navigate('auth')
-            }
         })
     } catch (err) {
         alert(err)

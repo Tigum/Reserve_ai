@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { View, ScrollView, ActivityIndicator } from 'react-native';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import SearchBarHeader from '../components/SearchBarHeader'
-import { loadAvailableBusinesses, authLoadingOffExport, registeringOff } from '../actions'
+import { loadAvailableBusinesses } from '../actions'
 import BusinessList from '../components/BusinessList'
-import { Spinner } from '../components/Spinner'
 
 
 class MainClientScreen extends Component {
@@ -43,4 +41,4 @@ const mapStateToProps = ({ servicesClient, auth }) => {
     return { businesses, loading, currentUser }
 }
 
-export default connect(mapStateToProps, { loadAvailableBusinesses, authLoadingOffExport, registeringOff })(MainClientScreen);
+export default connect(mapStateToProps, { loadAvailableBusinesses })(MainClientScreen);
