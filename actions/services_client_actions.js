@@ -8,9 +8,10 @@ import {
     ADD_BUSINESS_TO_MAIN_LIST,
     AUTO_FOCUS_SEARCH,
     SEARCH_TEXT,
-    CLEAR_SEARCH_TEXT
+    CLEAR_SEARCH_TEXT,
+    SEARCH_RESULT_CITIES,
+    SEARCH_RESULT_NAMES
 } from './types';
-import NavigationServices from './NavigationServices';
 
 export const loadAvailableBusinesses = () => async (dispatch) => {
 
@@ -113,4 +114,50 @@ export const searchTextOutputClear = () => {
         type: CLEAR_SEARCH_TEXT,
         payload: ''
     })
+}
+
+export const loadSearchResults = (text) => async (dispatch) => {
+    let textUpperCase = text.toString().toUpperCase()
+    let textLowerCase = text.toString().toLowerCase()
+
+    console.log('textUpperCase', textUpperCase)
+    console.log('textLowerCase', textLowerCase)
+
+    if(text.length < 1) {
+        dispatch({
+            type: SEARCH_RESULT_CITIES,
+            payload: []
+        })
+        dispatch({
+            type: SEARCH_RESULT_NAMES,
+            payload: []
+        })
+        return
+    }
+
+    try {
+        await firebase.database().ref(`/users`).orderByChild('city').startAt(textUpperCase).endAt(textLowerCase +"\uf8ff").on('value', async snapshot => {
+            dispatch({
+                type: SEARCH_RESULT_CITIES,
+                payload: _.values(snapshot.val())
+            })
+        })
+    } catch (err) {
+        alert(err)
+        return
+    }
+
+
+
+    // try{
+    //     await firebase.database().ref(`/users`).orderByChild('companyName').startAt(textUpperCase).endAt(textLowerCase+"\uf8ff").on('value', snapshot => {
+    //         dispatch({
+    //             type: SEARCH_RESULT_NAMES,
+    //             payload: _.values(snapshot.val())
+    //         })
+    //     })
+    // }catch(err){
+    //     alert(err)
+    //     return
+    // }
 }

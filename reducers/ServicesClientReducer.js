@@ -9,7 +9,9 @@ import {
     LOAD_AVAILABLE_USER,
     AUTO_FOCUS_SEARCH,
     SEARCH_TEXT,
-    CLEAR_SEARCH_TEXT
+    CLEAR_SEARCH_TEXT,
+    SEARCH_RESULT_CITIES,
+    SEARCH_RESULT_NAMES
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -19,7 +21,9 @@ const INITIAL_STATE = {
     businesses: [],
     currentUser: {},
     autoFocusSearch: false,
-    searchText: ''
+    searchText: '',
+    searchResultCities: [],
+    searchResultNames: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -52,6 +56,12 @@ export default (state = INITIAL_STATE, action) => {
         case CLEAR_SEARCH_TEXT:
             // console.log('SEARCH_TEXT')
             return { ...state, searchText: action.payload }
+        case SEARCH_RESULT_CITIES:
+            // console.log('SEARCH_RESULT')
+            return { ...state, searchResultCities: action.payload }
+        case SEARCH_RESULT_NAMES:
+            // console.log('SEARCH_RESULT_NAMES')
+            return { ...state, searchResultNames: action.payload }
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_SERVICE_CLIENT')
             return { ...state, ...INITIAL_STATE, businesses: [] }

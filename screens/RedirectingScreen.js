@@ -7,7 +7,6 @@ import { handleExistingUser } from '../actions'
 class RedirectingScreen extends Component {
 
     componentDidMount() {
-        console.log('entrou no componentDidMount')
         this.loadExistingUser()
     }
 
