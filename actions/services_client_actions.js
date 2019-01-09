@@ -10,8 +10,11 @@ import {
     SEARCH_TEXT,
     CLEAR_SEARCH_TEXT,
     SEARCH_RESULT_CITIES,
-    SEARCH_RESULT_NAMES
+    SEARCH_RESULT_NAMES,
+    SELECT_STORE,
+    LOADING_STORE
 } from './types';
+import NavigationServices from './NavigationServices';
 
 export const loadAvailableBusinesses = () => async (dispatch) => {
 
@@ -118,13 +121,9 @@ export const searchTextOutputClear = () => {
 
 export const loadSearchResults = (text) => async (dispatch) => {
     const Users = firebase.database().ref(`/users`)
-    let textUpperCase = text.toString().toUpperCase()
     let textLowerCase = text.toString().toLowerCase()
 
-    console.log('textUpperCase', textUpperCase)
-    console.log('textLowerCase', textLowerCase)
-
-    if(text.length < 1) {
+    if (text.length < 1) {
         dispatch({
             type: SEARCH_RESULT_CITIES,
             payload: []
@@ -137,7 +136,7 @@ export const loadSearchResults = (text) => async (dispatch) => {
     }
 
     try {
-        await Users.orderByChild('citySearch').startAt(textLowerCase).endAt(textLowerCase +"\uf8ff").on('value', async snapshot => {
+        await Users.orderByChild('citySearch').startAt(textLowerCase).endAt(textLowerCase + "\uf8ff").on('value', snapshot => {
             dispatch({
                 type: SEARCH_RESULT_CITIES,
                 payload: _.values(snapshot.val())
@@ -149,7 +148,7 @@ export const loadSearchResults = (text) => async (dispatch) => {
     }
 
     try {
-        await Users.orderByChild('nameSearch').startAt(textLowerCase).endAt(textLowerCase +"\uf8ff").on('value', async snapshot => {
+        await Users.orderByChild('nameSearch').startAt(textLowerCase).endAt(textLowerCase + "\uf8ff").on('value', snapshot => {
             dispatch({
                 type: SEARCH_RESULT_NAMES,
                 payload: _.values(snapshot.val())
@@ -159,17 +158,32 @@ export const loadSearchResults = (text) => async (dispatch) => {
         alert(err)
         return
     }
+}
 
-
-    // try{
-    //     await firebase.database().ref(`/users`).orderByChild('companyName').startAt(textUpperCase).endAt(textLowerCase+"\uf8ff").on('value', snapshot => {
-    //         dispatch({
-    //             type: SEARCH_RESULT_NAMES,
-    //             payload: _.values(snapshot.val())
-    //         })
-    //     })
-    // }catch(err){
-    //     alert(err)
-    //     return
-    // }
+export const goToStoreScreen = (email) => async (dispatch) => {
+    dispatch({
+        type: LOADING_STORE,
+        payload: true
+    })
+    NavigationServices.navigate('storeServicesScreen')
+    const Users = firebase.database().ref('/users')
+    try {
+        await Users.orderByChild('email').equalTo(email).on('value', snapshot => {
+            dispatch({
+                type: SELECT_STORE,
+                payload: _.values(snapshot.val())
+            })
+        })
+    } catch (err) {
+        dispatch({
+            type: LOADING_STORE,
+            payload: false
+        })
+        alert(err)
+        return
+    }
+    dispatch({
+        type: LOADING_STORE,
+        payload: false
+    })
 }

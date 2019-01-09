@@ -9,14 +9,14 @@ class SearchListItem extends Component {
         if (type === 'name') {
             return (
                 <View style={styles.iconView}>
-                    <EvilIcons style={styles.icon} name='user' size={35} color="grey" />
+                    <EvilIcons name='user' size={35} color="grey" />
                 </View>
             )
         }
         if (type === 'city') {
             return (
                 <View style={styles.iconView}>
-                    <EvilIcons style={styles.icon} name='location' size={35} color="grey" />
+                    <EvilIcons name='location' size={35} color="grey" />
                 </View>
             )
         }
@@ -47,9 +47,6 @@ const styles = {
         padding: 20,
         fontSize: 20,
         color: 'grey'
-    },
-    icon: {
-        // paddingTop: 15
     },
     iconView: {
         marginTop: 15,

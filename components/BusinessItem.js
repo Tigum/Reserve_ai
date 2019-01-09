@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
-import { iOSUIKit, sanFranciscoWeights } from 'react-native-typography'
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { iOSUIKit, sanFranciscoWeights } from 'react-native-typography';
+import { connect } from 'react-redux'
+import { goToStoreScreen } from '../actions'
 
 class BusinessItem extends Component {
     state = {
@@ -8,7 +10,7 @@ class BusinessItem extends Component {
     }
 
     endLoadingImage() {
-        this.setState({imageLoading: false})
+        this.setState({ imageLoading: false })
     }
 
     loadAreas() {
@@ -17,25 +19,27 @@ class BusinessItem extends Component {
     }
 
     loadImage() {
-        return <Image style={styles.image} 
-                source={this.state.imageLoading ? require('../img/loading.gif') : { uri: this.props.business.imageUrl }} 
-                onLoadEnd={this.endLoadingImage.bind(this)}
-            />
+        return <Image style={styles.image}
+            source={this.state.imageLoading ? require('../img/loading.gif') : { uri: this.props.business.imageUrl }}
+            onLoadEnd={this.endLoadingImage.bind(this)}
+        />
     }
+    
     render() {
-        const { business } = this.props
+        const { companyName, state, city, email } = this.props.business
         return (
-            <View style={styles.mainView}>
-                <View>
-                    {this.loadImage()}
-                    
+            <TouchableWithoutFeedback onPress={() => this.props.goToStoreScreen(email)}>
+                <View style={styles.mainView}>
+                    <View>
+                        {this.loadImage()}
+                    </View>
+                    <View style={styles.textView}>
+                        <Text style={[iOSUIKit.largeTitleEmphasized, styles.title]}>{companyName}</Text>
+                        <Text style={[sanFranciscoWeights.thin, styles.cityAndState]}>{city} - {state}</Text>
+                        <Text style={[sanFranciscoWeights.thin, styles.areas]}>{this.loadAreas()}</Text>
+                    </View>
                 </View>
-                <View style={styles.textView}>
-                    <Text style={[iOSUIKit.largeTitleEmphasized, styles.title]}>{business.companyName}</Text>
-                    <Text style={[sanFranciscoWeights.thin, styles.cityAndState]}>{business.city} - {business.state}</Text>
-                    <Text style={[sanFranciscoWeights.thin, styles.areas]}>{this.loadAreas()}</Text>
-                </View>
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
@@ -44,7 +48,7 @@ const styles = {
     mainView: {
         flexDirection: 'row',
         flex: 1,
-        backgroundColor: 'white', 
+        backgroundColor: 'white',
         padding: 15,
     },
     image: {
@@ -73,4 +77,4 @@ const styles = {
     }
 }
 
-export default BusinessItem
+export default connect(null, { goToStoreScreen })(BusinessItem)

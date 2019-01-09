@@ -30,6 +30,7 @@ import AddEmployeesScreen from './screens/AddEmployeesScreen'
 import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 import RedirectingScreen from './screens/RedirectingScreen'
 import SearchScreen from './screens/SearchScreen'
+import StoreServicesScreen from './screens/StoreServicesScreen'
 
 
 class AppNavigation extends Component {
@@ -207,6 +208,14 @@ class AppNavigation extends Component {
                 screen: createStackNavigator({
                     mainClientScreen: {
                         screen: MainClientScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    },
+                    storeServicesScreen: {
+                        screen: StoreServicesScreen,
                         navigationOptions: () => ({
                             headerStyle: {
                                 display: 'none'
