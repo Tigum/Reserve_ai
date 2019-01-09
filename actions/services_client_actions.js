@@ -38,10 +38,10 @@ export const loadAvailableBusinesses = () => async (dispatch) => {
 }
 
 export const loadAvailableServices = (input) => async (dispatch) => {
-
+    const Services = firebase.database().ref(`/services`)
     try {
         loadingOn(dispatch)
-        await firebase.database().ref(`/services`).on('value', snapshot => {
+        await Services.on('value', snapshot => {
             const servicesJson = snapshot.val()
             const list = _.values(servicesJson)
             const services = []
@@ -117,6 +117,7 @@ export const searchTextOutputClear = () => {
 }
 
 export const loadSearchResults = (text) => async (dispatch) => {
+    const Users = firebase.database().ref(`/users`)
     let textUpperCase = text.toString().toUpperCase()
     let textLowerCase = text.toString().toLowerCase()
 
@@ -136,7 +137,7 @@ export const loadSearchResults = (text) => async (dispatch) => {
     }
 
     try {
-        await firebase.database().ref(`/users`).orderByChild('city').startAt(textUpperCase).endAt(textLowerCase +"\uf8ff").on('value', async snapshot => {
+        await Users.orderByChild('citySearch').startAt(textLowerCase).endAt(textLowerCase +"\uf8ff").on('value', async snapshot => {
             dispatch({
                 type: SEARCH_RESULT_CITIES,
                 payload: _.values(snapshot.val())
@@ -147,6 +148,17 @@ export const loadSearchResults = (text) => async (dispatch) => {
         return
     }
 
+    try {
+        await Users.orderByChild('nameSearch').startAt(textLowerCase).endAt(textLowerCase +"\uf8ff").on('value', async snapshot => {
+            dispatch({
+                type: SEARCH_RESULT_NAMES,
+                payload: _.values(snapshot.val())
+            })
+        })
+    } catch (err) {
+        alert(err)
+        return
+    }
 
 
     // try{

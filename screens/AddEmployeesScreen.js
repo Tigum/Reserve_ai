@@ -11,6 +11,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { bucket, region, accessKey, secretKey, successActionStatus } from '../s3'
 import DefaultModal from '../components/DefaultModal'
 import random from 'random-id';
+import firebase from 'firebase'
 
 const S3Options = {
     bucket,
@@ -159,33 +160,53 @@ class AddEmployeesScreen extends Component {
     }
 
     async addNewEmployee() {
-        const { uid } = this.props.currentUser
-        const key = await random(17, 'aA0');
-        if (!this.props.employeeName) return alert('Informe o nome do funcionário')
-        const employee = {
-            name: this.props.employeeName,
-            imageUrl: this.props.employeePhoto || '',
-            key,
-            role: 'Funcionário',
-            ownerUid: uid,
-        }
+        try {
+            const { currentUser } = await firebase.auth()
 
-        await this.props.addNewEmployee({ uid, employee })
-        this.props.navigation.goBack()
+            if (currentUser) {
+                const { uid } = currentUser
+                const key = random(17, 'aA0');
+                if (!this.props.employeeName) return alert('Informe o nome do funcionário')
+                const employee = {
+                    name: this.props.employeeName,
+                    imageUrl: this.props.employeePhoto || '',
+                    key,
+                    role: 'Funcionário',
+                    ownerUid: uid,
+                }
+
+                this.props.addNewEmployee({ uid, employee })
+                this.props.navigation.goBack()
+            }
+
+        } catch (err) {
+            alert(err)
+            return
+        }
     }
 
     async editEmployeeSelected() {
-        const { uid } = this.props.currentUser
-        const employee = {
-            name: this.props.employeeName,
-            imageUrl: this.props.employeePhoto || '',
-            key: this.props.employeeId,
-            role: 'Funcionário',
-            ownerUid: uid,
-        }
+        try {
+            const { currentUser } = await firebase.auth()
 
-        await this.props.editEmployee({ uid, employee })
-        this.props.navigation.goBack()
+            if (currentUser) {
+                const { uid } = currentUser
+                const employee = {
+                    name: this.props.employeeName,
+                    imageUrl: this.props.employeePhoto || '',
+                    key: this.props.employeeId,
+                    role: 'Funcionário',
+                    ownerUid: uid,
+                }
+
+                this.props.editEmployee({ uid, employee })
+                this.props.navigation.goBack()
+            }
+
+        } catch (err) {
+            alert(err)
+            return
+        }
     }
 
     render() {

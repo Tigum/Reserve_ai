@@ -21,7 +21,7 @@ class SearchInput extends Component {
                 <View style={styles.textInputView}>
                     <TextInput
                         style={[sanFranciscoWeights.thin, styles.text]}
-                        placeholder='Pesquise por loja, cidade, ou setor...'
+                        placeholder='Pesquise por loja ou cidade...'
                         placeholderTextColor='black'
                         autoFocus={autoFocusSearch}
                         onChangeText={this.inputText.bind(this)}

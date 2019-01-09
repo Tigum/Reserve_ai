@@ -203,6 +203,8 @@ export const uploadEmployeePhotoToS3 = ({ uri, S3Options, uid }) => (dispatch) =
 }
 
 export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
+    console.log('uid', uid)
+    console.log('employee', employee)
     try {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).set(employee)
         employeeAdded(dispatch, employee)

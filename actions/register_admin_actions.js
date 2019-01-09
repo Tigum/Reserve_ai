@@ -232,7 +232,9 @@ export const registerAdminUser = (
         serviceAtHome,
         state,
         city,
-        areasSelected
+        areasSelected,
+        nameSearch: companyName.toLowerCase(),
+        citySearch: city.toLowerCase(),
     }
 
     if (!serviceAtHome) {
