@@ -12,7 +12,8 @@ import {
     SEARCH_RESULT_CITIES,
     SEARCH_RESULT_NAMES,
     SELECT_STORE,
-    LOADING_STORE
+    LOADING_STORE,
+    LOAD_STORE_SERVICES
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -165,14 +166,17 @@ export const goToStoreScreen = (email) => async (dispatch) => {
         type: LOADING_STORE,
         payload: true
     })
-    NavigationServices.navigate('storeServicesScreen')
     const Users = firebase.database().ref('/users')
     try {
         await Users.orderByChild('email').equalTo(email).on('value', snapshot => {
+            const info = _.values(snapshot.val())
+            let infoObject = info[0]
+            infoObject['storeId'] = Object.keys(snapshot.val())[0]
             dispatch({
                 type: SELECT_STORE,
-                payload: _.values(snapshot.val())
+                payload: infoObject
             })
+            NavigationServices.navigate('storeServicesScreen')
         })
     } catch (err) {
         dispatch({
@@ -186,4 +190,20 @@ export const goToStoreScreen = (email) => async (dispatch) => {
         type: LOADING_STORE,
         payload: false
     })
+}
+
+export const loadSelecetedStoreServices = (storeId) => async (dispatch) => {
+    const Services = firebase.database().ref('/services')
+    try {
+        await Services.orderByKey().equalTo(storeId).on('value', snapshot => {
+            const info = _.values(snapshot.val())
+            dispatch({
+                type: LOAD_STORE_SERVICES,
+                payload: _.values(info[0])
+            })
+        })
+    } catch (err) {
+        alert(err)
+        return
+    }
 }

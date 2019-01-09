@@ -278,7 +278,7 @@ class AppNavigation extends Component {
 
 
         const RootStack = createStackNavigator(
-            {   
+            {
                 redirect: {
                     screen: RedirectingScreenMain
                 },
@@ -304,6 +304,9 @@ class AppNavigation extends Component {
             {
                 mode: 'modal',
                 headerMode: 'none',
+                navigationOptions: {
+                    gesturesEnabled: false,
+                },
             }
         );
         return (

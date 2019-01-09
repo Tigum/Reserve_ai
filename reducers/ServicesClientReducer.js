@@ -13,7 +13,8 @@ import {
     SEARCH_RESULT_CITIES,
     SEARCH_RESULT_NAMES,
     SELECT_STORE,
-    LOADING_STORE
+    LOADING_STORE,
+    LOAD_STORE_SERVICES
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -26,7 +27,8 @@ const INITIAL_STATE = {
     searchText: '',
     searchResultCities: [],
     searchResultNames: [],
-    selectedStore: null
+    selectedStore: null,
+    storeServices: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -71,6 +73,9 @@ export default (state = INITIAL_STATE, action) => {
         case LOADING_STORE:
             // console.log('LOADING_STORE', action.payload)
             return { ...state, loading: action.payload }
+        case LOAD_STORE_SERVICES:
+            // console.log('LOAD_STORE_SERVICES', action.payload)
+            return { ...state, storeServices: action.payload }
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_SERVICE_CLIENT')
             return { ...state, ...INITIAL_STATE, businesses: [] }
