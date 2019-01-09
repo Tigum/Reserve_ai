@@ -3,6 +3,7 @@ import { View, Dimensions, Text } from 'react-native';
 import SearchInput from '../components/SearchInput'
 import { autoFocus, searchTextOutputClear, loadSearchResults } from '../actions'
 import { connect } from 'react-redux';
+import SearchListItem from '../components/SearchListItem'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 
@@ -22,14 +23,15 @@ class SearchScreen extends Component {
 
     renderResultsCities() {
         const { searchResultCities } = this.props
+        
         if (searchResultCities.length > 0) {
             return (
                 searchResultCities.map((item) => (
-                    <Text
-                        key={item.email}
-                    >
-                    {item.city}
-                    </Text>
+                    <SearchListItem 
+                        key={item.email+'city'}
+                        result={item.city}
+                        type='city'
+                    />
                 ))
             )
         } 
@@ -40,11 +42,11 @@ class SearchScreen extends Component {
         if (searchResultNames.length > 0) {
             return (
                 searchResultNames.map((item) => (
-                    <Text
-                        key={item.email}
-                    >
-                    {item.companyName}
-                    </Text>
+                    <SearchListItem 
+                        key={item.email+'name'}
+                        result={item.companyName}
+                        type='name'
+                    />
                 ))
             )
         } 
@@ -55,8 +57,8 @@ class SearchScreen extends Component {
         return (
             <View style={styles.mainView}>
                 <SearchInput iconAction={this.iconAction.bind(this)} textInput={searchText}/>
-                {this.renderResultsCities()}
                 {this.renderResultsNames()}
+                {this.renderResultsCities()}
             </View>
         )
     }
@@ -65,7 +67,9 @@ class SearchScreen extends Component {
 const styles= {
     mainView: {
         width: SCREEN_WIDTH,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        flexDirection: 'column',
+        flex: 1
     }
 }
 
