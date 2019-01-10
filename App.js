@@ -1,4 +1,5 @@
 import React from 'react';
+import { YellowBox } from 'react-native';
 import { Provider } from 'react-redux'
 import firebase from 'firebase';
 import store from './store';
@@ -18,6 +19,7 @@ export default class App extends React.Component {
       messagingSenderId: "157063787516"
     };
     firebase.initializeApp(config);
+    YellowBox.ignoreWarnings(['Remote debugger']);
   }
 
   render() {

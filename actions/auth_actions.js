@@ -317,7 +317,6 @@ export const renderAvatar = () => async(dispatch) => {
             try{
                 await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
                     const { imageUrl } = snapshot.val()
-                    console.log('snap', snapshot.val())
 
                     dispatch({
                         type: LOAD_AVATAR,

@@ -136,7 +136,8 @@ const styles = {
     },
     serviceTitleView: {
         paddingLeft: 15,
-        marginTop: -10
+        marginTop: -10,
+        paddingBottom: 15
     }
 }
 
