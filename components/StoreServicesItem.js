@@ -44,7 +44,7 @@ const styles = {
     price: {
         padding: 15,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     descriptionText: {
         fontSize: 15,
