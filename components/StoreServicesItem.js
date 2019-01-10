@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableWithoutFeedback } from 'react-native';
 import { iOSUIKit, sanFranciscoWeights } from 'react-native-typography';
+import { connect } from 'react-redux'
+import { selectService } from '../actions'
 
 class StoreServicesItem extends Component {
     render() {
-        const { serviceName, servicePrice, serviceDescription } = this.props.service
+        const { serviceName, servicePrice, serviceDescription, serviceId, ownerUid } = this.props.service
         return (
-            <View style={styles.mainView}>
-                <View style={styles.serviceDescription}>
-                    <Text style={[iOSUIKit.footnoteEmphasized, styles.nameText]}>
-                        {serviceName}
-                    </Text>
-                    <Text style={[styles.descriptionText, sanFranciscoWeights.light]}>
-                        {serviceDescription}
-                    </Text>
+            <TouchableWithoutFeedback onPress={() => this.props.selectService(ownerUid, serviceId)}>
+                <View style={styles.mainView}>
+                    <View style={styles.serviceDescription}>
+                        <Text style={[iOSUIKit.footnoteEmphasized, styles.nameText]}>
+                            {serviceName}
+                        </Text>
+                        <Text style={[styles.descriptionText, sanFranciscoWeights.light]}>
+                            {serviceDescription}
+                        </Text>
+                    </View>
+                    <View style={styles.price}>
+                        <Text style={[iOSUIKit.footnoteEmphasized, styles.priceText]}>
+                            R${servicePrice}
+                        </Text>
+                    </View>
                 </View>
-                <View style={styles.price}>
-                    <Text style={[iOSUIKit.footnoteEmphasized, styles.priceText]}>
-                        R${servicePrice}
-                    </Text>
-                </View>
-
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
@@ -58,4 +61,4 @@ const styles = {
     }
 }
 
-export default StoreServicesItem;
+export default connect(null, { selectService })(StoreServicesItem);

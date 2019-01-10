@@ -13,7 +13,8 @@ import {
     SEARCH_RESULT_NAMES,
     SELECT_STORE,
     LOADING_STORE,
-    LOAD_STORE_SERVICES
+    LOAD_STORE_SERVICES,
+    SELECT_SERVICE
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -201,6 +202,22 @@ export const loadSelecetedStoreServices = (storeId) => async (dispatch) => {
                 type: LOAD_STORE_SERVICES,
                 payload: _.values(info[0])
             })
+        })
+    } catch (err) {
+        alert(err)
+        return
+    }
+}
+
+export const selectService = (storeId, serviceId) => async (dispatch) => {
+    const Services = firebase.database().ref(`/services/${storeId}`)
+    try{
+        await Services.orderByChild('serviceId').equalTo(serviceId).on('value', snapshot => {
+            dispatch({
+                type: SELECT_SERVICE,
+                payload: _.values(snapshot.val())[0]
+            })
+            NavigationServices.navigate('selectEmployeeScreen')
         })
     } catch (err) {
         alert(err)

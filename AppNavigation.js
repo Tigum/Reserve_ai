@@ -31,6 +31,7 @@ import RegisterAdminTypeScreen from './screens/RegisterAdminTypeScreen';
 import RedirectingScreen from './screens/RedirectingScreen'
 import SearchScreen from './screens/SearchScreen'
 import StoreServicesScreen from './screens/StoreServicesScreen'
+import EmployeeClientSelectScreen from './screens/EmployeeClientSelectScreen'
 
 
 class AppNavigation extends Component {
@@ -216,6 +217,14 @@ class AppNavigation extends Component {
                     },
                     storeServicesScreen: {
                         screen: StoreServicesScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    },
+                    selectEmployeeScreen: {
+                        screen: EmployeeClientSelectScreen,
                         navigationOptions: () => ({
                             headerStyle: {
                                 display: 'none'
