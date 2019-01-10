@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import Header from '../components/Header'
 import { connect } from 'react-redux'
 import EmployeeClientList from '../components/EmployeeClientList'

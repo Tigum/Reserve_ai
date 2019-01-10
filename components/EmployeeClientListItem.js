@@ -3,6 +3,7 @@ import { iOSUIKit, sanFranciscoWeights } from 'react-native-typography';
 import firebase from 'firebase'
 import { connect } from 'react-redux'
 import { ListItem } from 'react-native-elements';
+import { selectEmployee } from '../actions'
 import _ from 'lodash'
 
 class EmployeeClientListItem extends Component {
@@ -60,8 +61,12 @@ class EmployeeClientListItem extends Component {
         }
     }
 
+    onSelectEmployee() {
+        this.props.selectEmployee({ ...this.state })
+    }
+
     render() {
-        const { employeeName, employeeImage, employeeRole} = this.state
+        const { employeeName, employeeImage, employeeRole } = this.state
         return (
             <ListItem
                 key={employeeImage}
@@ -71,15 +76,16 @@ class EmployeeClientListItem extends Component {
                 containerStyle={styles.containerStyle}
                 titleStyle={[styles.titleStyle, iOSUIKit.title3Emphasized]}
                 subtitleStyle={[styles.subtitleStyle, sanFranciscoWeights.light]}
+                onPress={this.onSelectEmployee.bind(this)}
             />
         )
     }
 }
 
-const styles={
+const styles = {
     containerStyle: {
         backgroundColor: 'white',
-        borderBottomStyle: 'solid',
+        // borderBottomStyle: 'solid',
         borderBottomWidth: 0.5,
         borderColor: '#e8e8e8',
     },
@@ -99,4 +105,4 @@ const mapStateToProps = ({ servicesClient }) => {
     return { selectedService }
 }
 
-export default connect(mapStateToProps, {})(EmployeeClientListItem);
+export default connect(mapStateToProps, {selectEmployee})(EmployeeClientListItem);
