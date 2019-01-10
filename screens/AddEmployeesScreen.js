@@ -67,22 +67,21 @@ class AddEmployeesScreen extends Component {
                             aspect: [4, 4],
                         });
                         if (!result.cancelled) {
-                            const uid = await this.props.currentUser.uid
-                            const uri = result.uri
-                            await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
+                            const { uid } = this.props.currentUser
+                            const { uri } = result
+                            this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                         }
                     } else {
-                        await Permissions.askAsync(Permissions.CAMERA)
                         const { status } = await Permissions.getAsync(Permissions.CAMERA);
                         if (status === 'granted') {
                             let result = await ImagePicker.launchCameraAsync({
                                 allowsEditing: true,
                                 aspect: [4, 4],
                             });
-                            const uid = await this.props.currentUser.uid
+                            const uid = this.props.currentUser.uid
                             if (!result.cancelled) {
-                                const uri = result.uri
-                                await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
+                                const { uri } = result
+                                this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                             }
                         } else {
                             alert('Permissão para acessar camera negada')
@@ -100,12 +99,11 @@ class AddEmployeesScreen extends Component {
                             aspect: [4, 4],
                         });
                         if (!result.cancelled) {
-                            const uid = await this.props.currentUser.uid
-                            const uri = result.uri
-                            await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
+                            const { uid } = this.props.currentUser
+                            const { uri } = result
+                            this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                         }
                     } else {
-                        await Permissions.askAsync(Permissions.CAMERA_ROLL)
                         const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
                         if (status === 'granted') {
                             let result = await ImagePicker.launchImageLibraryAsync({
@@ -113,9 +111,9 @@ class AddEmployeesScreen extends Component {
                                 aspect: [4, 4],
                             });
                             if (!result.cancelled) {
-                                const uid = await this.props.currentUser.uid
-                                const uri = result.uri
-                                await this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
+                                const { uid } = this.props.currentUser
+                                const { uri } = result
+                                this.props.uploadEmployeePhotoToS3({ uri, S3Options, uid })
                             }
                         } else {
                             alert('Permissão para acessar a biblioteca negada')
@@ -176,7 +174,6 @@ class AddEmployeesScreen extends Component {
                 }
 
                 this.props.addNewEmployee({ uid, employee })
-                this.props.navigation.goBack()
             }
 
         } catch (err) {
@@ -200,7 +197,6 @@ class AddEmployeesScreen extends Component {
                 }
 
                 this.props.editEmployee({ uid, employee })
-                this.props.navigation.goBack()
             }
 
         } catch (err) {

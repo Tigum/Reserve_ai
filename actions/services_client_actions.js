@@ -14,7 +14,8 @@ import {
     SELECT_STORE,
     LOADING_STORE,
     LOAD_STORE_SERVICES,
-    SELECT_SERVICE
+    SELECT_SERVICE,
+    SELECT_EMPLOYEE
 } from './types';
 import NavigationServices from './NavigationServices';
 
@@ -223,4 +224,12 @@ export const selectService = (storeId, serviceId) => async (dispatch) => {
         alert(err)
         return
     }
+}
+
+export const selectEmployee = (employee) => (dispatch) => {
+    dispatch({
+        type: SELECT_EMPLOYEE,
+        payload: employee
+    })
+    // NavigationServices.navigate('')
 }

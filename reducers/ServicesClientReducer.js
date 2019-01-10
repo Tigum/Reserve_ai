@@ -15,7 +15,8 @@ import {
     SELECT_STORE,
     LOADING_STORE,
     LOAD_STORE_SERVICES,
-    SELECT_SERVICE
+    SELECT_SERVICE,
+    SELECT_EMPLOYEE
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -30,7 +31,8 @@ const INITIAL_STATE = {
     searchResultNames: [],
     selectedStore: null,
     storeServices: [],
-    selectedService: null
+    selectedService: null,
+    selectedEmployee: null
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -81,6 +83,9 @@ export default (state = INITIAL_STATE, action) => {
         case SELECT_SERVICE:
             // console.log('SELECT_SERVICE', action.payload)
             return { ...state, selectedService: action.payload }
+        case SELECT_EMPLOYEE:
+            // console.log('SELECT_EMPLOYEE', action.payload)
+            return { ...state, selectedEmployee: action.payload }
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_SERVICE_CLIENT')
             return { ...state, ...INITIAL_STATE, businesses: [] }

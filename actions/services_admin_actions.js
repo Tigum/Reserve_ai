@@ -208,8 +208,9 @@ export const addNewEmployee = ({ uid, employee }) => async (dispatch) => {
     try {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).set(employee)
         employeeAdded(dispatch, employee)
+        NavigationServices.navigate('servicesAdmin')
     } catch (err) {
-        console.log(err)
+        alert(err)
         return
     }
 }
@@ -241,8 +242,9 @@ export const deleteEmployee = ({ uid, employeeId }) => async () => {
 export const editEmployee = ({ uid, employee }) => async (dispatch) => {
     try {
         await firebase.database().ref(`/users/${uid}/employees/${employee.key}`).update(employee)
+        NavigationServices.navigate('servicesAdmin')
     } catch (err) {
-        console.log(err)
+        alert(err)
         return
     }
 }

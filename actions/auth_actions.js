@@ -205,6 +205,7 @@ export const userLogOut = () => async () => {
 
                     try {
                         await firebase.auth().signOut()
+                        NavigationServices.navigate('auth')
                     } catch (err) {
                         return alert(err)
                     }
@@ -215,7 +216,6 @@ export const userLogOut = () => async () => {
                         return alert(err)
                     }
 
-                    return NavigationServices.navigate('auth')
                 }
             },
             {
