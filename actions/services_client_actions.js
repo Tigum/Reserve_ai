@@ -15,9 +15,12 @@ import {
     LOADING_STORE,
     LOAD_STORE_SERVICES,
     SELECT_SERVICE,
-    SELECT_EMPLOYEE
+    SELECT_EMPLOYEE,
+    SELECT_DATE,
+    SHOW_AVAILABLE_SCHEDULES_TO_CLIENT
 } from './types';
 import NavigationServices from './NavigationServices';
+import moment from 'moment'
 
 export const loadAvailableBusinesses = () => async (dispatch) => {
 
@@ -212,7 +215,7 @@ export const loadSelecetedStoreServices = (storeId) => async (dispatch) => {
 
 export const selectService = (storeId, serviceId) => async (dispatch) => {
     const Services = firebase.database().ref(`/services/${storeId}`)
-    try{
+    try {
         await Services.orderByChild('serviceId').equalTo(serviceId).on('value', snapshot => {
             dispatch({
                 type: SELECT_SERVICE,
@@ -231,5 +234,63 @@ export const selectEmployee = (employee) => (dispatch) => {
         type: SELECT_EMPLOYEE,
         payload: employee
     })
-    // NavigationServices.navigate('')
+    dispatch({
+        type: SELECT_DATE,
+        payload: moment().format()
+    })
+    NavigationServices.navigate('clientCalendarScreen')
+}
+
+export const loadAvailableScheduleToClient = (storeId, service, date, employee) => async (dispatch) => {
+    const { serviceId } = service
+    const { employeeId } = employee
+    const dayOfTheWeek = moment(date).format('dddd')
+    const Agenda = firebase.database().ref(`/agenda/${storeId}/${employeeId}/${moment(date).format('L')}`)
+    const User = firebase.database().ref(`/users/${storeId}`)
+
+    try {
+        await Agenda.on('value', async snapshot => {
+            if (!snapshot.val()) {
+
+                try {
+                    await User.on('value', snapshot => {
+                        
+                        let availableHours = []
+                        if (dayOfTheWeek == 'Sábado') {
+
+                        }   
+
+                        if (dayOfTheWeek == 'Domingo') {
+
+                        }
+
+                        const { startHour, endHour } = snapshot.val()
+                        for (let i = parseFloat(startHour.substring(0,2)); i <= parseFloat(endHour.substring(0,2)); i++) {
+                            const hour = i < 10 ? '0'+i.toString()+':00' : i.toString()+':00'
+                            const hourPlusHalf = i < 10 ? '0'+i.toString()+':30' : i.toString()+':30'
+                            availableHours.push(hour)
+                            availableHours.push(hourPlusHalf)
+                        }
+                        availableHours.pop()
+                        
+                        dispatch({
+                            type: SHOW_AVAILABLE_SCHEDULES_TO_CLIENT,
+                            payload: availableHours
+                        })
+
+
+
+                    })
+                } catch (err) {
+                    alert(err)
+                    return
+                }
+
+
+            }
+        })
+    } catch (err) {
+        alert(err)
+        return
+    }
 }

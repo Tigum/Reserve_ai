@@ -32,6 +32,7 @@ import RedirectingScreen from './screens/RedirectingScreen'
 import SearchScreen from './screens/SearchScreen'
 import StoreServicesScreen from './screens/StoreServicesScreen'
 import EmployeeClientSelectScreen from './screens/EmployeeClientSelectScreen'
+import ClienCalendarScreen from './screens/ClienCalendarScreen'
 
 
 class AppNavigation extends Component {
@@ -231,6 +232,14 @@ class AppNavigation extends Component {
                             }
                         })
                     },
+                    clientCalendarScreen: {
+                        screen: ClienCalendarScreen,
+                        navigationOptions: () => ({
+                            headerStyle: {
+                                display: 'none'
+                            }
+                        })
+                    }
                 }),
                 navigationOptions: () => ({
                     tabBarLabel: ({ tintColor }) => <AntDesign name="home" style={{ paddingBottom: 7 }} size={25} color={tintColor} />,

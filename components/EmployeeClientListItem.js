@@ -11,7 +11,8 @@ class EmployeeClientListItem extends Component {
     state = {
         employeeName: null,
         employeeImage: null,
-        employeeRole: null
+        employeeRole: null,
+        employeeId: null
     }
 
 
@@ -30,7 +31,8 @@ class EmployeeClientListItem extends Component {
                         this.setState({
                             employeeName: name,
                             employeeImage: imageUrl,
-                            employeeRole: 'Proprietário(a)'
+                            employeeRole: 'Proprietário(a)',
+                            employeeId: employeeId
                         })
                     }
                 })
@@ -45,13 +47,13 @@ class EmployeeClientListItem extends Component {
         try {
             await Employees.orderByChild('key').equalTo(employeeId).on('value', snapshot => {
                 const employee = _.values(snapshot.val())[0]
-                console.log('employee', employee)
                 if (employee) {
                     const { name, imageUrl } = employee
                     this.setState({
                         employeeName: name,
                         employeeImage: imageUrl,
-                        employeeRole: 'Funcionário(a)'
+                        employeeRole: 'Funcionário(a)',
+                        employeeId: employeeId
                     })
                 }
             })

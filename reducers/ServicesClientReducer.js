@@ -16,7 +16,9 @@ import {
     LOADING_STORE,
     LOAD_STORE_SERVICES,
     SELECT_SERVICE,
-    SELECT_EMPLOYEE
+    SELECT_EMPLOYEE,
+    SELECT_DATE,
+    SHOW_AVAILABLE_SCHEDULES_TO_CLIENT
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -32,7 +34,9 @@ const INITIAL_STATE = {
     selectedStore: null,
     storeServices: [],
     selectedService: null,
-    selectedEmployee: null
+    selectedEmployee: null,
+    selectedDate: null,
+    availableSchedules: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -86,6 +90,12 @@ export default (state = INITIAL_STATE, action) => {
         case SELECT_EMPLOYEE:
             // console.log('SELECT_EMPLOYEE', action.payload)
             return { ...state, selectedEmployee: action.payload }
+        case SELECT_DATE:
+            // console.log('SELECT_DATE', action.payload)
+            return { ...state, selectedDate: action.payload }
+        case SHOW_AVAILABLE_SCHEDULES_TO_CLIENT:
+            // console.log('SHOW_AVAILABLE_SCHEDULES_TO_CLIENT', action.payload)
+            return { ...state, availableSchedules: action.payload }
         case RESET_APPLICATION_TO_INITIAL_STATE:
             // console.log('RESET_APPLICATION_TO_INITIAL_STATE_SERVICE_CLIENT')
             return { ...state, ...INITIAL_STATE, businesses: [] }
