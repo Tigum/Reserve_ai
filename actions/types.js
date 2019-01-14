@@ -146,3 +146,13 @@ export const SELECT_SERVICE = 'select_service'
 export const SELECT_EMPLOYEE = 'select_employee'
 export const SELECT_DATE = 'select_date'
 export const SHOW_AVAILABLE_SCHEDULES_TO_CLIENT = 'show_available_schedules_to_client'
+
+export const SET_TOKEN = 'set_token'
+export const AUTH_LOADING = 'auth_loading'
+
+
+
+
+
+////URI
+export const URI = 'http://localhost:3090'

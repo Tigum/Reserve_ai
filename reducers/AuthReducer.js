@@ -22,7 +22,9 @@ import {
     USER_LOADED_FALSE,
     LOAD_AVATAR,
     LOAD_AVATAR_NULL,
-    LOAD_AVATAR_DEFAULT
+    LOAD_AVATAR_DEFAULT,
+    SET_TOKEN,
+    AUTH_LOADING
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -44,6 +46,12 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     // console.log('teste', action)
     switch (action.type) {
+        case AUTH_LOADING:
+            // console.log('AUTH_LOADING', action.payload)
+            return { ...state, loading: action.payload };
+        case SET_TOKEN:
+            // console.log('SET_TOKEN', action.payload)
+            return { ...state, token: action.payload };
         case EMAIL_CHANGED:
             // console.log('EMAIL_CHANGED')
             return { ...state, email: action.payload };
@@ -55,7 +63,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading: true, error: '' };
         case LOGIN_USER_SUCCESS:
             // console.log('LOGIN_USER_SUCCESS')
-            return { ...state, ...INITIAL_STATE, currentUser: action.payload };
+            return { ...state, ...INITIAL_STATE, currentUser: action.payload, token: action.payload.token };
         case LOGIN_USER_FAIL:
             // console.log('LOGIN_USER_FAIL')
             return { ...state, error: 'Login ou senha incorretos', loading: false };

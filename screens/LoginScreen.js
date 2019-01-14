@@ -66,7 +66,7 @@ class LoginScreen extends Component {
     }
 
     onFacebookButtonPress() {
-        this.props.userLoadedTrue()
+        // this.props.userLoadedTrue()
         this.props.doFacebookLogin()
     }
 

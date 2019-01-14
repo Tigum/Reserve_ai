@@ -1,55 +1,26 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'react-native'
 import firebase from 'firebase'
 import { connect } from 'react-redux';
 import { Spinner } from '../components/Spinner'
-import { handleExistingUser } from '../actions'
+import { handleExistingUser, setToken } from '../actions'
 
 class RedirectingScreen extends Component {
 
-    componentDidMount() {
-        this.loadExistingUser()
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(this.props.userLoaded) return
-
-        if(this.props.currentUser !== nextProps.currentUser){
-            const { role } = nextProps.currentUser
-            if(role === 'admin'){
-                this.props.navigation.navigate('mainAdminScreen')
+    async componentDidMount() {
+        try{
+            const token = await AsyncStorage.getItem('reserve_ai_token')
+            if(token){
+                this.props.setToken(token)
+                this.props.handleExistingUser(token)
+            } else {
+                this.props.handleExistingUser(null)
             }
-
-            if(role === 'client'){
-                this.props.navigation.navigate('mainClientScreen')
-            }
-
-            if(!role){
-                alert('Favor faça o cadastro novamente')
-                this.props.navigation.navigate('auth')
-            }
+        }catch(err){
+            alert(err)
+            this.props.navigation.navigate('auth')
+            return
         }
-    }
-
-    
-    async loadExistingUser() {
-        if (!this.props.currentUser) {
-
-            try {
-                await firebase.auth().onAuthStateChanged(user => {
-                    if (user) {
-                        this.props.handleExistingUser(user)
-                    } else {
-                        this.props.navigation.navigate('auth')
-                    }
-                })
-
-            } catch (err) {
-                alert(err)
-                return
-            }
-
-        }
-
     }
 
     render() {
@@ -58,8 +29,8 @@ class RedirectingScreen extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { currentUser, userLoaded } = auth
-    return { currentUser, userLoaded }
+    const { currentUser, userLoaded, token } = auth
+    return { currentUser, userLoaded, token }
 }
 
-export default connect(mapStateToProps, { handleExistingUser })(RedirectingScreen)
+export default connect(mapStateToProps, { handleExistingUser, setToken })(RedirectingScreen)

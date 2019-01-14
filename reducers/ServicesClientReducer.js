@@ -46,7 +46,7 @@ export default (state = INITIAL_STATE, action) => {
             // console.log('LOADING_CLIENT_SERVICES_ON')
             return { ...state, loading: action.payload };
         case LOADING_CLIENT_SERVICES_OFF:
-            // console.log('LOADING_CLIENT_SERVICES_OFF')
+            // console.log('LOADING_CLIENT_SERVICES_OFF', action.payload)
             return { ...state, loading: action.payload };
         case LOAD_AVAILABLE_SERVICES:
             // console.log('LOAD_AVAILABLE_SERVICES')

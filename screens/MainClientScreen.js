@@ -17,6 +17,7 @@ class MainClientScreen extends Component {
     }
 
     render() {
+        console.log('CURRENT PROPS', this.props)
         return (
             <View style={styles.mainView}>
                 <SearchBarHeader icon='search1' iconAction={this.iconAction.bind(this)}/>
