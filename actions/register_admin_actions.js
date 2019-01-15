@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { AsyncStorage } from 'react-native'
 import _ from 'lodash';
 import { RNS3 } from 'react-native-aws3';
 import NavigationService from './NavigationServices';
@@ -51,9 +52,12 @@ import {
     LOAD_LOGGEDIN_USER,
     REGISTERING_OFF,
     AUTH_LOADING_ON,
-    AUTH_LOADING_OFF
+    AUTH_LOADING_OFF,
+    URI,
+    LOGIN_USER_SUCCESS
 } from './types';
 import statesAndCities from '../states_and_cities.json'
+import axios from 'axios'
 
 export const mondaySelected = () => {
     return {
@@ -384,7 +388,7 @@ export const phoneAdminChanged = (text) => {
 //         })
 //         NavigationService.navigate('picForm')
 //         registerAdminLoadingOff(dispatch)
-       
+
 
 //     } catch (err) {
 //         registerAdminLoadingOn(dispatch)
@@ -480,10 +484,10 @@ export const uploadPhoto = ({ uri, S3Options, uid, successRouteName }) => (dispa
 
 export const checkIfEmailExists = ({ email, errorMessage, errorRouteName, successRouteName }) => async (dispatch) => {
     registerAdminLoadingOn(dispatch)
-    try{
+    try {
         const result = await firebase.auth().fetchSignInMethodsForEmail(email)
-        
-        if(result){
+
+        if (result) {
             if (result.length > 0) {
                 clearForm(dispatch)
                 registerAdminLoadingOff(dispatch)
@@ -491,11 +495,11 @@ export const checkIfEmailExists = ({ email, errorMessage, errorRouteName, succes
                 return NavigationService.navigate(errorRouteName, {})
             }
         }
-    }catch(err){
+    } catch (err) {
         alert(err)
         return
     }
-    
+
     NavigationService.navigate(successRouteName, {})
     registerAdminLoadingOff(dispatch)
 }
@@ -659,18 +663,13 @@ export const registerAdminUser = (
         companyName,
         phone,
         password,
-        passwordConfirmation,
         startHour,
         endHour,
-        seenWelcomePage: false,
         role: 'admin',
-        imageUrl: '',
         serviceAtHome,
         state,
         city,
         areasSelected,
-        nameSearch: companyName.toLowerCase(),
-        citySearch: city.toLowerCase(),
     }
 
     if (!serviceAtHome) {
@@ -679,6 +678,7 @@ export const registerAdminUser = (
         userInfo['additionalInfo'] = additionalInfo
         userInfo['cep'] = cep
     }
+
     dispatch({
         type: REGISTERING_ON,
         payload: true
@@ -757,17 +757,28 @@ export const registerAdminUser = (
     try {
         registerAdminLoadingOn(dispatch)
 
-      
-      
-  
-
+        const newAdminUser = await axios.post(`${URI}/admSignup`, userInfo)
+        console.log('newAdminUser', newAdminUser)
         dispatch({
             type: REGISTERING_OFF,
             payload: false
         })
-        NavigationService.navigate('picForm')
+
+        dispatch({
+            type: LOGIN_USER_SUCCESS,
+            payload: { ...newAdminUser.data.user, token: newAdminUser.data.token }
+        })
+
+        try {
+            await AsyncStorage.setItem('reserve_ai_token', newAdminUser.data.token)
+        } catch (err) {
+            alert(err)
+            return
+        }
+
+
         registerAdminLoadingOff(dispatch)
-       
+        return NavigationService.navigate('picForm')
 
     } catch (err) {
         dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
