@@ -570,7 +570,6 @@ export const doFacebookLogin = () => {
                             email: user.email
                         }
                     })
-
                     if (facebookExistingUser.data) {
 
                         try {
@@ -583,7 +582,7 @@ export const doFacebookLogin = () => {
                                 type: LOAD_LOGGEDIN_USER,
                                 payload: facebookExistingUserInfo.data
                             })
-                            
+
                             try {
                                 await AsyncStorage.setItem('reserve_ai_token', facebookExistingUserInfo.data.token)
                             } catch (err) {
@@ -599,10 +598,11 @@ export const doFacebookLogin = () => {
 
                     }
                 } catch (err) {
-                    alert(err)
+                    if(err){
+                        console.log(err)
+                    }
                     return
                 }
-
 
                 if (user) {
                     try {

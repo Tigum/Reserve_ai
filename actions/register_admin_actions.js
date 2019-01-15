@@ -181,219 +181,219 @@ export const phoneAdminChanged = (text) => {
     }
 }
 
-export const registerAdminUser = (
-    {
-        name,
-        email,
-        companyName,
-        phone,
-        password,
-        passwordConfirmation,
-        startHour,
-        endHour,
-        monday,
-        tuesday,
-        wednesday,
-        thursday,
-        friday,
-        saturday,
-        sunday,
-        state,
-        city,
-        streetName,
-        number,
-        additionalInfo,
-        cep,
-        serviceAtHome,
-        saturdayHourStartSelected,
-        saturdayHourEndSelected,
-        sundayHourStartSelected,
-        sundayHourEndSelected,
-        areasSelected
-    }
-) => async (dispatch) => {
-    dispatch({
-        type: AUTH_LOADING_ON,
-        payload: true
-    })
+// export const registerAdminUser = (
+//     {
+//         name,
+//         email,
+//         companyName,
+//         phone,
+//         password,
+//         passwordConfirmation,
+//         startHour,
+//         endHour,
+//         monday,
+//         tuesday,
+//         wednesday,
+//         thursday,
+//         friday,
+//         saturday,
+//         sunday,
+//         state,
+//         city,
+//         streetName,
+//         number,
+//         additionalInfo,
+//         cep,
+//         serviceAtHome,
+//         saturdayHourStartSelected,
+//         saturdayHourEndSelected,
+//         sundayHourStartSelected,
+//         sundayHourEndSelected,
+//         areasSelected
+//     }
+// ) => async (dispatch) => {
+//     dispatch({
+//         type: AUTH_LOADING_ON,
+//         payload: true
+//     })
 
-    let userInfo = {
-        name,
-        email,
-        companyName,
-        phone,
-        password,
-        passwordConfirmation,
-        startHour,
-        endHour,
-        seenWelcomePage: false,
-        role: 'admin',
-        imageUrl: '',
-        serviceAtHome,
-        state,
-        city,
-        areasSelected,
-        nameSearch: companyName.toLowerCase(),
-        citySearch: city.toLowerCase(),
-    }
+//     let userInfo = {
+//         name,
+//         email,
+//         companyName,
+//         phone,
+//         password,
+//         passwordConfirmation,
+//         startHour,
+//         endHour,
+//         seenWelcomePage: false,
+//         role: 'admin',
+//         imageUrl: '',
+//         serviceAtHome,
+//         state,
+//         city,
+//         areasSelected,
+//         nameSearch: companyName.toLowerCase(),
+//         citySearch: city.toLowerCase(),
+//     }
 
-    if (!serviceAtHome) {
-        userInfo['streetName'] = streetName
-        userInfo['number'] = number
-        userInfo['additionalInfo'] = additionalInfo
-        userInfo['cep'] = cep
-    }
-    dispatch({
-        type: REGISTERING_ON,
-        payload: true
-    })
-    const days = [
-        {
-            day: {
-                selected: monday,
-                day: 'monday',
-                startHour,
-                endHour
-            }
-        },
-        {
-            day: {
-                selected: tuesday,
-                day: 'tuesday',
-                startHour,
-                endHour
-            }
-        },
-        {
-            day: {
-                selected: wednesday,
-                day: 'wednesday',
-                startHour,
-                endHour
-            }
-        },
-        {
-            day: {
-                selected: thursday,
-                day: 'thursday',
-                startHour,
-                endHour
-            }
-        },
-        {
-            day: {
-                selected: friday,
-                day: 'friday',
-                startHour,
-                endHour
-            }
-        },
-        {
-            day: {
-                selected: saturday,
-                day: 'saturday',
-                startHour: saturdayHourStartSelected,
-                endHour: saturdayHourEndSelected
-            }
-        },
-        {
-            day: {
-                selected: sunday,
-                day: 'sunday',
-                startHour: sundayHourStartSelected,
-                endHour: sundayHourEndSelected
-            }
-        }
-    ]
+//     if (!serviceAtHome) {
+//         userInfo['streetName'] = streetName
+//         userInfo['number'] = number
+//         userInfo['additionalInfo'] = additionalInfo
+//         userInfo['cep'] = cep
+//     }
+//     dispatch({
+//         type: REGISTERING_ON,
+//         payload: true
+//     })
+//     const days = [
+//         {
+//             day: {
+//                 selected: monday,
+//                 day: 'monday',
+//                 startHour,
+//                 endHour
+//             }
+//         },
+//         {
+//             day: {
+//                 selected: tuesday,
+//                 day: 'tuesday',
+//                 startHour,
+//                 endHour
+//             }
+//         },
+//         {
+//             day: {
+//                 selected: wednesday,
+//                 day: 'wednesday',
+//                 startHour,
+//                 endHour
+//             }
+//         },
+//         {
+//             day: {
+//                 selected: thursday,
+//                 day: 'thursday',
+//                 startHour,
+//                 endHour
+//             }
+//         },
+//         {
+//             day: {
+//                 selected: friday,
+//                 day: 'friday',
+//                 startHour,
+//                 endHour
+//             }
+//         },
+//         {
+//             day: {
+//                 selected: saturday,
+//                 day: 'saturday',
+//                 startHour: saturdayHourStartSelected,
+//                 endHour: saturdayHourEndSelected
+//             }
+//         },
+//         {
+//             day: {
+//                 selected: sunday,
+//                 day: 'sunday',
+//                 startHour: sundayHourStartSelected,
+//                 endHour: sundayHourEndSelected
+//             }
+//         }
+//     ]
 
-    days.map((element) => {
-        if (element.day.selected) {
-            const dayName = element.day.day
-            const dayInfo = {
-                day: dayName,
-                start: element.day.startHour,
-                end: element.day.endHour
-            }
-            userInfo[dayName] = dayInfo
-        }
-    })
+//     days.map((element) => {
+//         if (element.day.selected) {
+//             const dayName = element.day.day
+//             const dayInfo = {
+//                 day: dayName,
+//                 start: element.day.startHour,
+//                 end: element.day.endHour
+//             }
+//             userInfo[dayName] = dayInfo
+//         }
+//     })
 
-    try {
-        registerAdminLoadingOn(dispatch)
+//     try {
+//         registerAdminLoadingOn(dispatch)
 
-        try {
-            await firebase.auth().createUserWithEmailAndPassword(email, password)
-        } catch (err) {
-            alert(err)
-            return
-        }
+//         try {
+//             await firebase.auth().createUserWithEmailAndPassword(email, password)
+//         } catch (err) {
+//             alert(err)
+//             return
+//         }
 
-        try {
-            const { currentUser } = await firebase.auth()
+//         try {
+//             const { currentUser } = await firebase.auth()
 
-            if (currentUser) {
+//             if (currentUser) {
 
-                const { uid } = currentUser
+//                 const { uid } = currentUser
 
-                try {
-                    await currentUser.updateProfile({ displayName: name })
-                } catch (err) {
-                    alert(err)
-                    return
-                }
+//                 try {
+//                     await currentUser.updateProfile({ displayName: name })
+//                 } catch (err) {
+//                     alert(err)
+//                     return
+//                 }
 
-                try {
-                    await firebase.database().ref(`/users/${uid}`).set(userInfo)
-                } catch (err) {
-                    alert(err)
-                    return
-                }
+//                 try {
+//                     await firebase.database().ref(`/users/${uid}`).set(userInfo)
+//                 } catch (err) {
+//                     alert(err)
+//                     return
+//                 }
 
-                try {
-                    await firebase.auth().signInWithEmailAndPassword(email, password)
-                } catch (err) {
-                    alert(err)
-                    return
-                }
-                dispatch({
-                    type: AUTH_LOADING_OFF,
-                    payload: false
-                })
+//                 try {
+//                     await firebase.auth().signInWithEmailAndPassword(email, password)
+//                 } catch (err) {
+//                     alert(err)
+//                     return
+//                 }
+//                 dispatch({
+//                     type: AUTH_LOADING_OFF,
+//                     payload: false
+//                 })
 
-                try{
-                    await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
-                        dispatch({
-                            type: LOAD_LOGGEDIN_USER,
-                            payload: snapshot.val()
-                        })
-                    })
-                }catch(err){
-                    alert(err)
-                    return
-                }
-            }
+//                 try{
+//                     await firebase.database().ref(`/users/${uid}`).on('value', snapshot =>{
+//                         dispatch({
+//                             type: LOAD_LOGGEDIN_USER,
+//                             payload: snapshot.val()
+//                         })
+//                     })
+//                 }catch(err){
+//                     alert(err)
+//                     return
+//                 }
+//             }
 
-        } catch (err) {
-            alert(err)
-            return
-        }
+//         } catch (err) {
+//             alert(err)
+//             return
+//         }
 
-        dispatch({
-            type: REGISTERING_OFF,
-            payload: false
-        })
-        NavigationService.navigate('picForm')
-        registerAdminLoadingOff(dispatch)
+//         dispatch({
+//             type: REGISTERING_OFF,
+//             payload: false
+//         })
+//         NavigationService.navigate('picForm')
+//         registerAdminLoadingOff(dispatch)
        
 
-    } catch (err) {
-        registerAdminLoadingOn(dispatch)
-        dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
-        registerAdminLoadingOff(dispatch)
-        alert(err)
-        return
-    }
-};
+//     } catch (err) {
+//         registerAdminLoadingOn(dispatch)
+//         dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
+//         registerAdminLoadingOff(dispatch)
+//         alert(err)
+//         return
+//     }
+// };
 
 export const continueRegisterAdmin = (userInfo) => {
     return {
@@ -612,3 +612,167 @@ export const removeAreaToAdmim = (item) => {
         payload: item
     }
 }
+
+
+
+//// START MONGODB SETUP
+
+export const registerAdminUser = (
+    {
+        name,
+        email,
+        companyName,
+        phone,
+        password,
+        passwordConfirmation,
+        startHour,
+        endHour,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday,
+        state,
+        city,
+        streetName,
+        number,
+        additionalInfo,
+        cep,
+        serviceAtHome,
+        saturdayHourStartSelected,
+        saturdayHourEndSelected,
+        sundayHourStartSelected,
+        sundayHourEndSelected,
+        areasSelected
+    }
+) => async (dispatch) => {
+    dispatch({
+        type: AUTH_LOADING_ON,
+        payload: true
+    })
+
+    let userInfo = {
+        name,
+        email,
+        companyName,
+        phone,
+        password,
+        passwordConfirmation,
+        startHour,
+        endHour,
+        seenWelcomePage: false,
+        role: 'admin',
+        imageUrl: '',
+        serviceAtHome,
+        state,
+        city,
+        areasSelected,
+        nameSearch: companyName.toLowerCase(),
+        citySearch: city.toLowerCase(),
+    }
+
+    if (!serviceAtHome) {
+        userInfo['streetName'] = streetName
+        userInfo['number'] = number
+        userInfo['additionalInfo'] = additionalInfo
+        userInfo['cep'] = cep
+    }
+    dispatch({
+        type: REGISTERING_ON,
+        payload: true
+    })
+    const days = [
+        {
+            day: {
+                selected: monday,
+                day: 'monday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: tuesday,
+                day: 'tuesday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: wednesday,
+                day: 'wednesday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: thursday,
+                day: 'thursday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: friday,
+                day: 'friday',
+                startHour,
+                endHour
+            }
+        },
+        {
+            day: {
+                selected: saturday,
+                day: 'saturday',
+                startHour: saturdayHourStartSelected,
+                endHour: saturdayHourEndSelected
+            }
+        },
+        {
+            day: {
+                selected: sunday,
+                day: 'sunday',
+                startHour: sundayHourStartSelected,
+                endHour: sundayHourEndSelected
+            }
+        }
+    ]
+
+    days.map((element) => {
+        if (element.day.selected) {
+            const dayName = element.day.day
+            const dayInfo = {
+                day: dayName,
+                start: element.day.startHour,
+                end: element.day.endHour
+            }
+            userInfo[dayName] = dayInfo
+        }
+    })
+
+    try {
+        registerAdminLoadingOn(dispatch)
+
+      
+      
+  
+
+        dispatch({
+            type: REGISTERING_OFF,
+            payload: false
+        })
+        NavigationService.navigate('picForm')
+        registerAdminLoadingOff(dispatch)
+       
+
+    } catch (err) {
+        dispatch({ type: ADMIN_USER_REGISTERED_FAILED, payload: err })
+        registerAdminLoadingOff(dispatch)
+        alert(err)
+        return
+    }
+};
