@@ -6,7 +6,7 @@ import BottomButton from '../components/BottomButton'
 import { connect } from 'react-redux';
 import {
     continueRegisterAdmin,
-    uploadPhoto,
+    uploadPhotoClient,
     checkIfClientEmailExistsAndRegister,
     setAvatarDefault
 } from '../actions'
@@ -68,14 +68,14 @@ class RegisterAdminPicScreen extends Component {
                                         if (!result.cancelled) {
 
                                             try {
-                                                const { currentUser } = await firebase.auth()
 
-                                                if (currentUser) {
-                                                    const { uid } = currentUser
-                                                    const uri = result.uri
+                                                const { _id } = this.props.currentUser
+                                                const userId = _id
+                                                if (userId) {
+                                                    // const { uid } = currentUser
+                                                    const { uri } = result
                                                     const successRouteName = 'mainAdminScreen'
-                                                    console.log('THIS>PROPS1', this.props)
-                                                    await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                    this.props.uploadPhotoClient({ uri, S3Options, userId, successRouteName })
                                                 }
 
                                             } catch (err) {
@@ -117,18 +117,13 @@ class RegisterAdminPicScreen extends Component {
 
 
                                                     try {
-                                                        const { currentUser } = await firebase.auth()
-
-                                                        if (currentUser) {
-
-                                                            if (!result.cancelled) {
-                                                                const { uid } = currentUser
-                                                                const uri = result.uri
-                                                                const successRouteName = 'mainAdminScreen'
-                                                                console.log('THIS>PROPS2', this.props)
-                                                                await this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
-                                                            }
-
+                                                        const { _id } = this.props.currentUser
+                                                        const userId = _id
+                                                        if (userId) {
+                                                            // const { uid } = currentUser
+                                                            const { uri } = result
+                                                            const successRouteName = 'mainAdminScreen'
+                                                            this.props.uploadPhotoClient({ uri, S3Options, userId, successRouteName })
                                                         }
 
                                                     } catch (err) {
@@ -184,13 +179,13 @@ class RegisterAdminPicScreen extends Component {
 
 
                                             try {
-                                                const { currentUser } = await firebase.auth()
-                                                if (currentUser) {
-                                                    const { uid } = currentUser
-                                                    const uri = result.uri
+                                                const { _id } = this.props.currentUser
+                                                const userId = _id
+                                                if (userId) {
+                                                    // const { uid } = currentUser
+                                                    const { uri } = result
                                                     const successRouteName = 'mainAdminScreen'
-                                                    console.log('UIDDD', uid)
-                                                    this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                    this.props.uploadPhotoClient({ uri, S3Options, userId, successRouteName })
                                                 }
                                             } catch (err) {
                                                 alert(err)
@@ -230,13 +225,13 @@ class RegisterAdminPicScreen extends Component {
                                                     if (!result.cancelled) {
 
                                                         try {
-                                                            const { currentUser } = await firebase.auth()
-                                                            if (currentUser) {
-                                                                const { uid } = currentUser
-                                                                const uri = result.uri
+                                                            const { _id } = this.props.currentUser
+                                                            const userId = _id
+                                                            if (userId) {
+                                                                // const { uid } = currentUser
+                                                                const { uri } = result
                                                                 const successRouteName = 'mainAdminScreen'
-                                                                console.log('THIS>PROPS4', this.props)
-                                                                this.props.uploadPhoto({ uri, S3Options, uid, successRouteName })
+                                                                this.props.uploadPhotoClient({ uri, S3Options, userId, successRouteName })
                                                             }
                                                         } catch (err) {
                                                             alert(err)
@@ -371,7 +366,7 @@ const mapStateToProps = ({ registerAdmin, auth }) => {
 
 export default connect(mapStateToProps, {
     continueRegisterAdmin,
-    uploadPhoto,
+    uploadPhotoClient,
     checkIfClientEmailExistsAndRegister,
     setAvatarDefault
 })(connectActionSheet(RegisterAdminPicScreen));

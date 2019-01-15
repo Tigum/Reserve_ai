@@ -19,6 +19,7 @@ class MainAdminScreen extends Component {
     }
 
     render() {
+        console.log('ADMIN PROPS', this.props)
         return (
             <View>
                 <Header icon='carryout' headerText='Hoje' iconAction={this.goToServicesScreen.bind(this)}/>
@@ -90,8 +91,8 @@ class MainAdminScreen extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { user } = auth
-    return { user }
+    const { user, currentUser } = auth
+    return { user, currentUser }
 }
 
 export default connect(mapStateToProps, {authLoadingOffExport, registeringOff})(MainAdminScreen);

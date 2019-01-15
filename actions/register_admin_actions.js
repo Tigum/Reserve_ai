@@ -628,7 +628,6 @@ export const registerAdminUser = (
         companyName,
         phone,
         password,
-        passwordConfirmation,
         startHour,
         endHour,
         monday,
@@ -683,6 +682,7 @@ export const registerAdminUser = (
         type: REGISTERING_ON,
         payload: true
     })
+
     const days = [
         {
             day: {
@@ -758,7 +758,7 @@ export const registerAdminUser = (
         registerAdminLoadingOn(dispatch)
 
         const newAdminUser = await axios.post(`${URI}/admSignup`, userInfo)
-        console.log('newAdminUser', newAdminUser)
+
         dispatch({
             type: REGISTERING_OFF,
             payload: false
@@ -775,7 +775,6 @@ export const registerAdminUser = (
             alert(err)
             return
         }
-
 
         registerAdminLoadingOff(dispatch)
         return NavigationService.navigate('picForm')
