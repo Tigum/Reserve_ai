@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import NavigationService from './actions/NavigationServices';
 import { connect } from 'react-redux'
@@ -41,110 +41,106 @@ class AppNavigation extends Component {
 
         const authStack = createStackNavigator({
             auth: {
-
-                screen: createStackNavigator({
-                    auth: {
-                        screen: LoginScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    adminTypeForm: {
-                        screen: RegisterAdminTypeScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    adminForm: {
-                        screen: RegisterAdminFormScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    hoursForm: {
-                        screen: RegisterAdminHoursScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    addressForm: {
-                        screen: RegisterAdminAddressScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    stateAndCityForm: {
-                        screen: RegisterAdminCityAndStateScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    daysForm: {
-                        screen: RegisterAdminDaysScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    picForm: {
-                        screen: RegisterAdminPicScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    picFormClient: {
-                        screen: RegisterClientPicScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    saturdayForm: {
-                        screen: RegisterSaturdayHoursScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    sundayForm: {
-                        screen: RegisterSundayHoursScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
-                    },
-                    clientForm: {
-                        screen: RegisterClientFormScreen,
-                        navigationOptions: () => ({
-                            headerStyle: {
-                                display: 'none'
-                            }
-                        })
+                screen: LoginScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
                     }
-                }),
+                })
+            },
+            adminTypeForm: {
+                screen: RegisterAdminTypeScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            adminForm: {
+                screen: RegisterAdminFormScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            hoursForm: {
+                screen: RegisterAdminHoursScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            addressForm: {
+                screen: RegisterAdminAddressScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            stateAndCityForm: {
+                screen: RegisterAdminCityAndStateScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            daysForm: {
+                screen: RegisterAdminDaysScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            picForm: {
+                screen: RegisterAdminPicScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            picFormClient: {
+                screen: RegisterClientPicScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            saturdayForm: {
+                screen: RegisterSaturdayHoursScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            sundayForm: {
+                screen: RegisterSundayHoursScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            },
+            clientForm: {
+                screen: RegisterClientFormScreen,
+                navigationOptions: () => ({
+                    headerStyle: {
+                        display: 'none'
+                    }
+                })
+            }
+        }, {
                 navigationOptions: () => ({
                     header: null
                 })
-            }
-        });
+            });
 
         const MainNavigatorAdmin = createBottomTabNavigator({
             mainAdminScreen: {
@@ -327,6 +323,7 @@ class AppNavigation extends Component {
                 },
             }
         );
+        
         return (
             <ActionSheetProvider>
                 <View style={styles.container}>
